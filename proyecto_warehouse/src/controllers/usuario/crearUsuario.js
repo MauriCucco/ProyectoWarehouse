@@ -15,10 +15,14 @@ const crearUsuario = (req, res) => {
 
     createUser(obj)
     .then( r => res.status(200).send({id: r}))
-    .catch( e => 
+    .catch( e => {
+        
+        if(e.keyPattern) return res.status(422).send({error: "Esta dirección de email ya fue utilizada"});
 
-        (e.errors.perfil.message)? res.status(500).send({error: e.errors.perfil.message}) : res.status(500).send({error: e.errors.nombre.message})
-    )
+        if(e.errors) return res.status(422).send({error: "El perfil no es válido"});
+        
+        res.status(500).send(e);
+    })
 }
 
 module.exports = crearUsuario;

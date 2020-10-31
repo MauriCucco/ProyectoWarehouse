@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <header>
+        <a id="logo" href="index.html">WAREHOUSE</a>
+        <!--<nav>
+            <ul id="menu-nav">
+                <li>
+                    <a href="">Contactos</a>
+                </li>
+                <li>
+                    <a href="">Compañias</a>
+                </li>
+                <li>
+                    <a href="">Usuarios</a>
+                </li>
+                <li>
+                    <a href="">Región / Ciudad</a>
+                </li>
+            </ul>
+        </nav>-->
+    </header>
+    <main>
+        <div id="login">
+            <h1>Bienvenido</h1>
+            <form id="form-login" method="post" action="http://localhost:3000/usuarios/login">
+                <input id="username-input" type="text" name="email" placeholder="Email">
+                <small id="small-user"></small>
+                <input id="password-input" type="password" name="password" placeholder="Contraseña">
+                <small id="small-password"></small>
+                <button class="primary-button" type="submit">Ingresar</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

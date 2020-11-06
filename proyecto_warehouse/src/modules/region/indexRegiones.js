@@ -1,0 +1,33 @@
+const express = require("express");
+const region = express.Router();
+const validarCreateRegion = require("../../middlewares/region/validarCreateRegion");
+const validarModifyRegion = require("../../middlewares/region/validarModifyRegion");
+const validarCreatePais = require("../../middlewares/region/pais/validarCreatePais");
+const validarModifyPais = require("../../middlewares/region/pais/validarModifyPais");
+const validarDeletePais = require("../../middlewares/region/pais/validarDeletePais");
+const validarCreateCiudad = require("../../middlewares/region/ciudad/validarCreateCiudad");
+const validarModifyCiudad = require("../../middlewares/region/ciudad/validarModifyCiudad");
+const validarDeleteCiudad = require("../../middlewares/region/ciudad/validarDeleteCiudad");
+const crearCiudad = require("../../controllers/region/ciudad/crearCiudad");
+const modificarCiudad = require("../../controllers/region/ciudad/modificarCiudad");
+const eliminarCiudad = require("../../controllers/region/ciudad/eliminarCiudad");
+const crearPais = require("../../controllers/region/pais/crearPais");
+const modificarPais = require("../../controllers/region/pais/modificarPais");
+const eliminarPais = require("../../controllers/region/pais/eliminarPais");
+const crearRegion = require("../../controllers/region/crearRegion");
+const modificarRegion = require("../../controllers/region/modificarRegion");
+const eliminarRegion = require("../../controllers/region/eliminarRegion");
+const obtenerRegiones = require("../../controllers/region/obtenerRegiones");
+
+region.post("/ciudades", validarCreateCiudad, crearCiudad);
+region.put("/ciudades", validarModifyCiudad, modificarCiudad);
+region.delete("/ciudades", validarDeleteCiudad, eliminarCiudad);
+region.post("/paises", validarCreatePais, crearPais);
+region.put("/paises", validarModifyPais, modificarPais);
+region.delete("/paises", validarDeletePais, eliminarPais);
+region.put("/:id", validarModifyRegion, modificarRegion);
+region.delete("/:id", eliminarRegion);
+region.post("/", validarCreateRegion, crearRegion);
+region.get("/", obtenerRegiones);
+
+module.exports = region;

@@ -1,7 +1,7 @@
 const { host, database, dbPort } = require("../config/config");
 const mongoose = require('mongoose');
 
-mongoose.connect(`mongodb://${host}:${dbPort}/${database}`, {useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(`mongodb://${host}:${dbPort}/${database}`, {useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
 
 const db = mongoose.connection;
 

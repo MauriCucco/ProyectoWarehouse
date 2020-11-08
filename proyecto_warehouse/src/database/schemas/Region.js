@@ -1,7 +1,6 @@
 const mongoose = require("../../config/db");
 
 const ciudadSchema = new mongoose.Schema({
-
     nombreCiudad: {
         type: String,
         required: true,
@@ -10,7 +9,6 @@ const ciudadSchema = new mongoose.Schema({
 })
 
 const paisSchema = new mongoose.Schema({
-
     nombrePais: {
         type: String,
         required: true,

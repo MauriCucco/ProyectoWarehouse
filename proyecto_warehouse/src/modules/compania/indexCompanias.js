@@ -1,6 +1,6 @@
 const express = require("express");
 const compania = express.Router();
-const validarLocacion = require("../../middlewares/compania/validarLocacion");
+const validarLocacion = require("../../middlewares/services/validarLocacion");
 const validarCreateCompania = require("../../middlewares/compania/validarCreateCompania");
 const validarModifyCompania = require("../../middlewares/compania/validarModifyCompania");
 const crearCompania = require("../../controllers/compania/crearCompania");

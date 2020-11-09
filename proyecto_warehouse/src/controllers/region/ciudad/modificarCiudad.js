@@ -2,9 +2,9 @@ const { modifyCity } = require("../../../models/region");
 
 const modificarCiudad = (req, res) => {
 
-    const { idRegion, idPais, idCiudad, nombreCiudad} = req.body;
+    const { idPais, idCiudad, nombreCiudad} = req.body;
 
-    modifyCity(idRegion, idPais, idCiudad, nombreCiudad)
+    modifyCity(req.params.id, idPais, idCiudad, nombreCiudad)
     .then(r => res.status(200).send({_id: r}))
     .catch(e => {
 

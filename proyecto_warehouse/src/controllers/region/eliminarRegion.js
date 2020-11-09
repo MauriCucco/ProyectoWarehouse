@@ -1,6 +1,6 @@
 const { deleteRegion } = require("../../models/region");
 
-const eliminarRegion = (req, res) => {
+const eliminarRegion = (req, res) => 
 
     deleteRegion(req.params.id)
     .then(r => res.status(200).send({mensaje: "La región fue eliminada exitósamente"}))
@@ -10,7 +10,6 @@ const eliminarRegion = (req, res) => {
 
         res.status(500).send(e);
     })
-}
 
 module.exports = eliminarRegion;
 

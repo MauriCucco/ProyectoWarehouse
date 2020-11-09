@@ -18,8 +18,6 @@ const crearUsuario = (req, res) => {
     .catch( e => {
         
         if(e.keyPattern) return res.status(422).send({error: "Esta dirección de email ya fue utilizada"});
-
-        if(e.errors) return res.status(422).send({error: "El perfil no es válido"});
         
         res.status(500).send(e);
     })

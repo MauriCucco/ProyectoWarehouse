@@ -2,9 +2,9 @@ const { createCity } = require("../../../models/region")
 
 const crearCiudad = (req, res) => {
 
-    const { idRegion, idPais, nombreCiudad } = req.body;
+    const { idPais, nombreCiudad } = req.body;
 
-    createCity(idRegion, idPais, nombreCiudad)
+    createCity(req.params.id, idPais, nombreCiudad)
     .then(r => res.status(200).send({mensaje: "La ciudad fue creada exitósamente"}))
     .catch(e => {
 

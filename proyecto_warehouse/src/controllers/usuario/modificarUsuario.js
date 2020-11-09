@@ -12,8 +12,6 @@ const modificarUsuario = (req, res) =>
 
         if(e.kind === "ObjectId") return res.status(422).send({error: "El id es incorrecto"});
 
-        if(e.errors) return res.status(422).send({error: "El perfil no es válido"});
-
         res.status(500).send(e);
     })
 

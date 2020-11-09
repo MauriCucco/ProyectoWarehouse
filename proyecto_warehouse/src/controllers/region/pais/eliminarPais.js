@@ -2,9 +2,9 @@ const { deleteCountry } = require("../../../models/region");
 
 const eliminarPais = (req, res) => {
 
-    const { idRegion, idPais } = req.body;
+    const { idPais } = req.body;
 
-    deleteCountry(idRegion, idPais)
+    deleteCountry(req.params.id, idPais)
     .then(r => res.status(200).send({_id: r}))
     .catch(e => {
 

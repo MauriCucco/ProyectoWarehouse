@@ -19,12 +19,12 @@ const modificarRegion = require("../../controllers/region/modificarRegion");
 const eliminarRegion = require("../../controllers/region/eliminarRegion");
 const obtenerRegiones = require("../../controllers/region/obtenerRegiones");
 
-region.post("/ciudades", validarCreateCiudad, crearCiudad);
-region.put("/ciudades", validarModifyCiudad, modificarCiudad);
-region.delete("/ciudades", validarDeleteCiudad, eliminarCiudad);
-region.post("/paises", validarCreatePais, crearPais);
-region.put("/paises", validarModifyPais, modificarPais);
-region.delete("/paises", validarDeletePais, eliminarPais);
+region.post("/ciudades/:id", validarCreateCiudad, crearCiudad);
+region.put("/ciudades/:id", validarModifyCiudad, modificarCiudad);
+region.delete("/ciudades/:id", validarDeleteCiudad, eliminarCiudad);
+region.post("/paises/:id", validarCreatePais, crearPais);
+region.put("/paises/:id", validarModifyPais, modificarPais);
+region.delete("/paises/:id", validarDeletePais, eliminarPais);
 region.put("/:id", validarModifyRegion, modificarRegion);
 region.delete("/:id", eliminarRegion);
 region.post("/", validarCreateRegion, crearRegion);

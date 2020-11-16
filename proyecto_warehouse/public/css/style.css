@@ -67,10 +67,17 @@ main {
     padding: 3rem;
     width: 50rem;
 }
-#login h1, #registro h1 {
+#registro {
+    margin-top: 3.5rem;
+    padding: 3rem 0 3rem 0
+}
+#login h2, #registro h2 {
     color: #333333;
-    font-size: 3rem;
+    font-size: 2rem;
     margin-bottom: 2rem;
+}
+#login h2 {
+    font-size: 3rem;
 }
 #form-login input, #form-registro input, #form-registro select, #form-modify input, #form-modify select {
     border: 0.1rem solid #CCCCCC;

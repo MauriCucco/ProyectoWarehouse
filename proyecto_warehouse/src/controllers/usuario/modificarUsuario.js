@@ -12,6 +12,8 @@ const modificarUsuario = (req, res) =>
 
         if(e.kind === "ObjectId") return res.status(422).send({error: "El id es incorrecto"});
 
+        if(e.keyPattern) return res.status(422).send({error: "Esta dirección de email ya fue utilizada"});
+
         res.status(500).send(e);
     })
 

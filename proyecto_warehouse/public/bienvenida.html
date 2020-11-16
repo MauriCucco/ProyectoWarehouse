@@ -10,34 +10,24 @@
 <body>
     <header>
         <a id="logo" href="index.html">WAREHOUSE</a>
-        <!--<nav>
-            <ul id="menu-nav">
-                <li>
-                    <a href="">Contactos</a>
-                </li>
-                <li>
-                    <a href="">Compañias</a>
-                </li>
-                <li>
-                    <a href="">Usuarios</a>
-                </li>
-                <li>
-                    <a href="">Región / Ciudad</a>
-                </li>
-            </ul>
-        </nav>-->
     </header>
     <main>
         <div id="login">
             <h1>Bienvenido</h1>
-            <form id="form-login" method="post" action="http://localhost:3000/usuarios/login">
-                <input id="username-input" type="text" name="email" placeholder="Email">
-                <small id="small-user"></small>
-                <input id="password-input" type="password" name="password" placeholder="Contraseña">
-                <small id="small-password"></small>
-                <button class="primary-button" type="submit">Ingresar</button>
+            <form id="form-login" class="central-column">
+                <div class="central-column">
+                    <input id="email-input" type="email" name="email" placeholder="Email">
+                    <small id="email-small"></small>
+                </div>
+                <div class="central-column">
+                    <input id="password-input" type="password" name="password" placeholder="Contraseña">
+                    <small id="password-small"></small>
+                </div>        
+                <button id="submit-button" class="primary-button" type="button">Ingresar</button>
+                <small id="data-small"></small>
             </form>
         </div>
     </main>
+    <script src="./js/bienvenida.js" type="module"></script>
 </body>
 </html>

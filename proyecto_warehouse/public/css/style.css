@@ -12,6 +12,8 @@ html  {
 body {
     font-family: 'Open Sans', sans-serif;
 }
+
+/*HEADER*/
 header {
     background-color: #1D72C1;
     height: 6.4rem;
@@ -42,53 +44,243 @@ header {
 }
 #menu-nav a:hover {
     color: white;
+}
+.item-habilitado {
+    color: white!important;
     border-bottom: 0.2rem white solid;
 }
+
+/*LOGIN y REGISTRO*/
 main {
     display: flex;
+    flex-direction: column;
     justify-content: center;
 }
-#login {
+#login, #registro {
     border: 0.3rem solid #0683F9;
     border-radius: 0.65rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 30rem;
-    margin-top: 8rem;
+    height: fit-content;
+    margin: 8rem auto 0 auto;
     padding: 3rem;
     width: 50rem;
 }
-#login h1 {
+#login h1, #registro h1 {
     color: #333333;
     font-size: 3rem;
     margin-bottom: 2rem;
 }
-#form-login {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-#form-login input {
+#form-login input, #form-registro input, #form-registro select, #form-modify input, #form-modify select {
     border: 0.1rem solid #CCCCCC;
     border-radius: 0.5rem;
     height: 3.55rem;
     padding-left: 1.55rem;
     width: 23rem;
 }
-#form-login small {
+#form-login input::placeholder, #form-registro input::placeholder {
+    font-style: italic;
+}
+.invalid {
+    border-color:#F03738 !important;
+}
+.invalid::placeholder {
+    color: rgb(19, 18, 18);
+}
+small {
+    color: #F03738;
     font-size: 1.2rem;
     font-style: italic;
     margin-bottom: 1.6rem;
     margin-top: 0.4rem;
 }
+.small-success {
+    color: rgb(9, 112, 9);
+}
+select {
+    color: #9C9C9C;
+    font-style: italic;
+}
 .primary-button {
     background-color: #0462BA;
     border-radius: 0.5rem;
-    font-weight: 700;
     font-size: 1.7rem;
     height: 4.2rem;
     width: 23rem;
     cursor: pointer;
     color: white;
+}
+
+/*ESTILO GENERAL PARA ALINEAR*/
+.central-column {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+/*SECCIÓN USUARIOS*/
+#usuarios {
+    display: none;
+}
+#sin-permiso {
+    border: 0.3rem solid #0683F9;
+    border-radius: 0.65rem;
+    display: none;
+    font-size: 1.4rem;
+    margin: 10rem auto 0 auto;
+    padding: 3rem;
+    width: fit-content;
+}
+
+/*TABLAS*/
+.tabla {
+    border: 1px solid rgba(0,0,0,0.10);
+    font-size: 1.25rem;
+    margin: 5rem auto 5rem auto;
+}
+tr {
+    display: flex;
+}
+th, td {
+    display: flex;
+    height: 6.75rem;
+    justify-content: start;
+    padding: 3.43rem 0 2.11rem 1.67rem;
+    width: 18.6rem;
+}
+th {
+    border-bottom: 1px solid rgba(0,0,0,0.10);
+}
+td {
+    align-items: center;
+    height: 5.6rem;
+    padding-top: unset;
+    padding-bottom: unset;
+}
+th.acciones, td.acciones {
+    display: flex;
+    justify-content: center;
+    padding-left: unset;
+    width: 8.2rem;
+}
+.dots {
+    color: rgba(0,0,0,0.50);
+    cursor: pointer;
+}
+.sort {
+    width: 1.93rem;
+    height: 1.2rem;
+    margin-left: 0.2rem;
+    cursor: pointer;
+    position: relative;
+    top: 0.2rem;
+}
+
+/*MODIFICAR y BORRAR USUARIOS*/
+.fa-pen {
+    margin-right: 1.2rem;
+    cursor: pointer;
+}
+.fa-pen:hover {
+    font-size: 2rem;
+    color: #0462BA;
+}
+.fa-trash {
+    cursor: pointer;
+}
+.fa-trash:hover {
+    font-size: 2rem;
+    color: #F03738;
+}
+
+/*MODALES*/
+.modal-bg {
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s;
+    z-index: 10;
+}
+.modal {
+    background-color: white;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 15rem;
+    margin-bottom: 7rem;
+    padding: 1.5rem;
+}
+#modal-eliminar {
+    display: none;
+}
+#modal-modify {
+    display: none;
+    height: 35rem;
+    padding: 3.5rem;
+}
+.succes {
+    display: flex;
+    font-size: 1.3rem;
+    flex-direction: row;
+    height: 8rem;
+    opacity: 0;
+    position: absolute;
+    transition: visibility 0s, opacity 0.5s;
+    visibility: hidden;
+}
+.bg-activate {
+    visibility: visible;
+    opacity: 1;
+}
+.fa-check-square, .fa-times-circle {
+    font-size: 2.2rem;
+    color: green;
+    margin-top: 0.3rem;
+    margin-left: 1rem;
+}
+.fa-times-circle {
+    color: #F03738;
+    margin-top: unset;
+}
+.buttons {
+    margin-top: 3rem;
+}
+.buttons-modify {
+    margin-top: 1.2rem;
+}
+.cerrar, .cerrar-modify {
+    background-color: #5A6268;
+    font-size: 1.5rem;
+    height: 3.2rem;
+    margin-right: 1rem;
+    width: 12rem;
+}
+.cerrar:hover, .cerrar-modify:hover {
+    background-color: white;
+    border: 0.3rem #5A6268 solid;
+    color: #5A6268;
+}
+.eliminar, .modificar {
+    font-size: 1.5rem;
+    height: 3.2rem;
+    width: 12rem;
+}
+.eliminar:hover, .modificar:hover {
+    background-color: white;
+    border: 0.3rem #0683F9 solid;
+    color: #0683F9;
+}
+.modificar, .cerrar-modify {
+    width: 11rem;
 }

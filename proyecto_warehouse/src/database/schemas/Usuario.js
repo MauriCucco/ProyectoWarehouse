@@ -16,7 +16,7 @@ const usuarioSchema = new mongoose.Schema({
     },
     perfil: {
         type: String,
-        enum: ['contactos', 'admin'],
+        enum: ['Contactos', 'Administrador'],
         required: true
     },
     password: {

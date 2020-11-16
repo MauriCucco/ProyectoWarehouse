@@ -3,7 +3,7 @@ const sha1 = require("sha1");
 
 const crearUsuario = (req, res) => {
     
-    const { perfil = "contactos", nombre, apellido, email, password } = req.body;
+    const { perfil = "Contactos", nombre, apellido, email, password } = req.body;
 
     const obj = {
         perfil,

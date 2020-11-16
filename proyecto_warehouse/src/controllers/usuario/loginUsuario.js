@@ -12,13 +12,13 @@ const loginUsuario = (req, res) => {
     }
 
     findUser(obj)
-    .then(r => {
-       
-        if(r === null) return res.status(401).send({mensaje: "No se encuentra registrado"})
+    .then(([r]) => {
+        
+        if(!r) return res.status(401).send({mensaje: "No se encuentra registrado"})
 
         const { _id, perfil } = r;
 
-        const token = crearToken({_id, perfil});
+        const token = crearToken({perfil});
 
         res.status(200).send({mensaje: "Autenticación exitosa", token});
     })

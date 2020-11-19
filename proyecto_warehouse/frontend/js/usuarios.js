@@ -425,26 +425,26 @@ const modifyUser = async (id) => {
 
         processInvalid(data, inputsModify, smallsModify);
 
-    }else if(response.status === 500) {
-
-        console.log(data)
     }
 }
 
 
 //event listener para cuando alguien escribe en los inputs
 
-nombreInputModify.addEventListener("keydown", (event) => {
-    
-    nombreInputModify.classList.remove("invalid");
-})
+Object.values(inputs).forEach( input =>
 
-apellidoInputModify.addEventListener("keydown", (event) => {
-    
-    apellidoInputModify.classList.remove("invalid");
-})
+    input.addEventListener("keydown", () => {
 
-emailInputModify.addEventListener("keydown", (event) => {
-    
-    emailInputModify.classList.remove("invalid");
-})
+        input.classList.remove("invalid");
+        resetInputsStyles(input, smalls);
+    })
+)
+
+Object.values(inputsModify).forEach( inputModify =>
+
+    inputModify.addEventListener("keydown", () => {
+
+        inputModify.classList.remove("invalid");
+        resetInputsStyles(inputsModify, smallsModify);
+    })
+)

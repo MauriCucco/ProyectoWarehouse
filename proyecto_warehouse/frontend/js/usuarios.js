@@ -1,18 +1,38 @@
-import { host, token, removeActive, checkInputs, processInvalid, seccionUsuarios, divSinPermiso, resetInputsStyles, resetInputsValues, sortTableByColumn } from "./modules/indexModules.js"
+import {
+  host,
+  token,
+  removeActive,
+  checkInputs,
+  processInvalid,
+  seccionUsuarios,
+  seccionContactos,
+  seccionRegiones,
+  divSinPermiso,
+  resetInputsStyles,
+  resetInputsValues,
+  sortTableByColumn,
+  resetDots,
+  createIcons,
+  crearModalCrud,
+  modalBg,
+  modalCrud,
+  resetModal,
+} from "./modules/indexModules.js";
 
 let usuariosItem = document.getElementById("usuarios-item");
-const modalBg = document.querySelector(".modal-bg");
-const modalEliminar = document.getElementById("modal-eliminar");
-const botonEliminar = document.querySelector(".primary-button.eliminar");
+const botonEliminar = document.querySelector(
+  ".primary-button.eliminar.usuario"
+);
 const modalModificar = document.getElementById("modal-modify");
-const botonModificar = document.querySelector(".primary-button.modificar");
+const botonModificar = document.querySelector(
+  ".primary-button.modificar.usuario"
+);
 const modalSucces = document.getElementById("modal-succes");
-const divRegistro = document.getElementById("registro");
 
 let nombreInput = document.getElementById("nombre-input");
 let nombreInputModify = document.getElementById("nombre-input-modify");
 let nombreSmall = document.getElementById("nombre-small");
-let nombreSmallModify = document.getElementById("nombre-small-modify")
+let nombreSmallModify = document.getElementById("nombre-small-modify");
 let apellidoInput = document.getElementById("apellido-input");
 let apellidoInputModify = document.getElementById("apellido-input-modify");
 let apellidoSmall = document.getElementById("apellido-small");
@@ -31,420 +51,327 @@ const submitButton = document.getElementById("submit-button");
 let dataSmall = document.getElementById("data-small");
 let dataSmallModify = document.getElementById("data-small-modify");
 
-const inputs = {nombreInput, apellidoInput, emailInput, passwordInput, confirmInput};
-const smalls = {nombreSmall, apellidoSmall, emailSmall, passwordSmall, confirmSmall, dataSmall};
-const inputsModify = {nombreInputModify, apellidoInputModify, emailInputModify};
-const smallsModify = {nombreSmallModify, apellidoSmallModify, emailSmallModify, dataSmallModify};
-
+const inputs = {
+  nombreInput,
+  apellidoInput,
+  emailInput,
+  passwordInput,
+  confirmInput,
+};
+const smalls = {
+  nombreSmall,
+  apellidoSmall,
+  emailSmall,
+  passwordSmall,
+  confirmSmall,
+  dataSmall,
+};
+const inputsModify = {
+  nombreInputModify,
+  apellidoInputModify,
+  emailInputModify,
+};
+const smallsModify = {
+  nombreSmallModify,
+  apellidoSmallModify,
+  emailSmallModify,
+  dataSmallModify,
+};
 
 //activar el item de usuarios en el nav
 
 usuariosItem.addEventListener("click", () => {
+  removeActive();
 
-    removeActive();
+  usuariosItem.classList.add("item-habilitado");
 
-    usuariosItem.classList.add("item-habilitado");
+  seccionContactos.style.display = "none";
+  seccionRegiones.style.display = "none";
 
-    resetInputsValues(inputs);
+  resetInputsValues(inputs);
 
-    resetInputsStyles(inputs, smalls);
+  resetInputsStyles(inputs, smalls);
 
-    getUsuarios();
-})
-
+  getUsuarios();
+});
 
 //función para hacer un GET al endpoint de usuarios
 
 const getUsuarios = () =>
-
-    fetch(`http://${host}/usuarios`, {
-        method: "GET",
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(r => processAdmin(r))
-    .catch(e => console.error(e))
-
+  fetch(`http://${host}/usuarios`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((r) => processAdmin(r))
+    .catch((e) => console.error(e));
 
 //función para verificar si es administrador
 
 const processAdmin = async (response) => {
+  try {
+    const data = await response.json();
 
-    try {
-    
-        const data = await response.json()
+    if (data.error === "No se encontró un token de autorización")
+      return window.open("bienvenida.html", "_self");
+    if (data.error === "No posee autorización de administrador")
+      return (divSinPermiso.style.display = "flex");
 
-        if(data.error === "No se encontró un token de autorización") return window.open("bienvenida.html", "_self");
-        if(data.error === "No posee autorización de administrador") return divSinPermiso.style.display = "flex";
+    seccionUsuarios.style.display = "unset";
 
-        seccionUsuarios.style.display = "unset";
+    deleteRows();
 
-        deleteRows();
-
-        createRows(data);
-
-    } catch (error) {
-
-        console.error(error)
-    }
-}
-
+    createRows(data);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 //función que "resetea" la tabla usuarios
 
 const deleteRows = () => {
+  const filasUsuarios = document.getElementsByClassName("fila-usuario");
 
-    const filasUsuarios = document.getElementsByClassName("fila-usuario");
-
-    for(let i = filasUsuarios.length - 1; i >= 0; i--) {
-
-        filasUsuarios[i].remove();
-    }
-}
-
+  for (let i = filasUsuarios.length - 1; i >= 0; i--) {
+    filasUsuarios[i].remove();
+  }
+};
 
 //función para crear las filas en la tabla de usuarios
 
 const createRows = (data) => {
+  data.forEach((element) => {
+    let tablaBody = document.getElementById("body-tabla");
+    let tr = document.createElement("tr");
+    let tdNombre = document.createElement("td");
+    let tdApellido = document.createElement("td");
+    let tdEmail = document.createElement("td");
+    let tdPerfil = document.createElement("td");
+    let tdAcciones = document.createElement("td");
+    let dotsIcon = document.createElement("i");
 
-    data.forEach(element => {
+    tr.classList.add("fila-usuario");
+    tdAcciones.classList.add("acciones");
+    dotsIcon.className = "fas fa-ellipsis-h dots";
+    dotsIcon.id = element._id;
 
-        let tablaBody = document.getElementById("body-tabla")
-        let tr = document.createElement("tr");
-        let tdNombre = document.createElement("td");
-        let tdApellido = document.createElement("td");
-        let tdEmail = document.createElement("td");
-        let tdPerfil = document.createElement("td");
-        let tdAcciones = document.createElement("td");
-        let dotsIcon = document.createElement("i");
+    tdNombre.innerHTML = element.nombre;
+    tdApellido.innerHTML = element.apellido;
+    tdEmail.innerHTML = element.email;
+    tdPerfil.innerHTML = element.perfil;
 
-        tr.classList.add("fila-usuario")
-        tdAcciones.classList.add("acciones");
-        dotsIcon.classList.add("fas");
-        dotsIcon.classList.add("fa-ellipsis-h");
-        dotsIcon.classList.add("dots");
-        dotsIcon.id = element._id;
-
-        tdNombre.innerHTML = element.nombre;
-        tdApellido.innerHTML = element.apellido;
-        tdEmail.innerHTML = element.email;
-        tdPerfil.innerHTML = element.perfil;
-
-        tablaBody.appendChild(tr);
-        tdAcciones.appendChild(dotsIcon);
-        tr.appendChild(tdNombre);
-        tr.appendChild(tdApellido);
-        tr.appendChild(tdEmail);
-        tr.appendChild(tdPerfil);
-        tr.appendChild(tdAcciones)
-    });
-}
-
+    tablaBody.appendChild(tr);
+    tdAcciones.appendChild(dotsIcon);
+    tr.appendChild(tdNombre);
+    tr.appendChild(tdApellido);
+    tr.appendChild(tdEmail);
+    tr.appendChild(tdPerfil);
+    tr.appendChild(tdAcciones);
+  });
+};
 
 //CREAR USUARIO
 
 submitButton.addEventListener("click", () => {
+  const nombre = nombreInput.value;
+  const apellido = apellidoInput.value;
+  const email = emailInput.value;
+  const perfil = perfilSelect.value;
+  const password = passwordInput.value;
+  const confirm_password = confirmInput.value;
 
-    const nombre = nombreInput.value;
-    const apellido = apellidoInput.value;
-    const email = emailInput.value;
-    const perfil = perfilSelect.value;
-    const password = passwordInput.value;
-    const confirm_password = confirmInput.value;
+  resetInputsStyles(inputs, smalls);
 
-    resetInputsStyles(inputs, smalls);
+  const data = { nombre, apellido, email, perfil, password, confirm_password };
 
-    const data = {nombre, apellido, email, perfil, password, confirm_password};
+  if (nombre && apellido && email && perfil && password && confirm_password)
+    return createUser(data);
 
-    if(nombre && apellido && email && perfil && password && confirm_password) return createUser(data);
-
-    checkInputs(data, inputs, dataSmall);
-})
-
+  checkInputs(data, inputs, dataSmall);
+});
 
 //función que crea un usuario
 
 const createUser = (obj) =>
-
-    fetch(`http://${host}/usuarios/registro`, {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(obj)
-    })
-    .then(r => processResponse(r))
-    .catch(e => console.error(e))
-    
+  fetch(`http://${host}/usuarios/registro`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(obj),
+  })
+    .then((r) => processResponse(r))
+    .catch((e) => console.error(e));
 
 //función que procesa las respuestas del servidor
 
 const processResponse = async (response) => {
+  try {
+    dataSmall.innerHTML = "";
 
-    try {
+    const jsonResponse = await response.json();
 
-        dataSmall.innerHTML = "";
+    if (response.status === 200) {
+      resetInputsStyles(inputs, smalls);
 
-        const jsonResponse =  await response.json();
+      dataSmall.classList.add("small-success");
 
-        if(response.status === 200) {
+      dataSmall.innerHTML = "El usuario fue creado exitósamente";
 
-            resetInputsStyles(inputs, smalls);
+      getUsuarios();
 
-            dataSmall.classList.add("small-success");
+      setTimeout(() => {
+        resetInputsValues(inputs);
 
-            dataSmall.innerHTML = "El usuario fue creado exitósamente"
-
-        }else if(response.status === 401) {
-    
-            window.open("bienvenida.html", "_self");
-
-        }else if(response.status === 422) {
-           
-            processInvalid(jsonResponse, inputs, smalls);
-        }
-
-    } catch (error) {
-
-        console.error(error);
+        resetInputsStyles(inputs, smalls);
+      }, 2000);
+    } else if (response.status === 401) {
+      window.open("bienvenida.html", "_self");
+    } else if (response.status === 422) {
+      processInvalid(jsonResponse, inputs, smalls);
     }
-}
-
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 //ELIMINAR Y MODIFICAR USUARIOS
 
 document.addEventListener("click", (event) => {
+  if (event.target.className === "fas fa-ellipsis-h dots") {
+    resetDots();
 
-    if(event.target.className === "fas fa-ellipsis-h dots") {
-
-        resetDots();
-
-        createIcons(event.target);
-
-    }else if(event.target.className === "fas fa-trash") {
-
-        modalBg.classList.add("bg-activate");
-        modalEliminar.style.display = "flex";
-        botonEliminar.id = event.target.id;
-
-    }else if(event.target.className === "primary-button cerrar"
-            || event.target.className === "primary-button cerrar-modify") {
-        
-        if(event.target.className === "primary-button cerrar") {
-
-            modalBg.classList.remove("bg-activate");
-            modalEliminar.style.display = "none";
-
-        }else {
-
-            modalBg.classList.remove("bg-activate");
-            modalModificar.style.display = "none";
-            resetInputsStyles(inputsModify, smallsModify);
-        }
-        
-    }else if(event.target.className === "primary-button eliminar") {
-
-        deleteUser(event.target.id); //ELIMINAR
-
-    }else if(event.target.className === "fas fa-pen") {
-
-        modalBg.classList.add("bg-activate");
-        modalModificar.style.display = "flex";
-        botonModificar.id = event.target.id;
-        
-        dataUser(event.target.id);
-
-    }else if(event.target.className === "primary-button modificar") {
-
-        modifyUser(event.target.id); //MODIFICAR
+    createIcons(event.target);
+  } else if (event.target.className === "fas fa-trash") {
+    modalBg.classList.add("bg-activate");
+    crearModalCrud("deleteUser", event.target.id);
+    modalCrud.style.display = "flex";
+  } else if (
+    event.target.className === "primary-button cerrar" ||
+    event.target.className === "primary-button cerrar-modify"
+  ) {
+    if (event.target.className === "primary-button cerrar") {
+      modalBg.classList.remove("bg-activate");
+      modalCrud.style.display = "none";
+      resetModal();
+    } else {
+      modalBg.classList.remove("bg-activate");
+      modalModificar.style.display = "none";
+      resetInputsStyles(inputsModify, smallsModify);
     }
-})
-
-
-//función que resetea los puntos de la columna acciones
-
-const resetDots = () => {
-
-    const dots = document.getElementsByClassName("fas fa-ellipsis-h dots");
-    const trashIcons = document.getElementsByClassName("fas fa-trash");
-    const modifyIcons = document.getElementsByClassName("fas fa-pen");
-
-    for(let dot of dots) {
-        dot.style.display = "unset";
-    }
-
-    for(let icon of trashIcons) {
-        icon.remove();
-    }
-
-    for(let icon of modifyIcons) {
-        icon.remove();
-    }
-}
-
-
-//función que crea los iconos para eliminar y modificar
-
-const createIcons = (target) => {
-
-    const editar = document.createElement("i");
-    const eliminar = document.createElement("i");
-
-    editar.className = "fas fa-pen";
-    editar.id = target.id;
-    eliminar.className = "fas fa-trash";
-    eliminar.id = target.id;
-
-    target.style.display = "none";
-    target.parentNode.appendChild(editar);
-    target.parentNode.appendChild(eliminar);
-}
-
+  } else if (
+    event.target.className === "primary-button crud eliminar usuario"
+  ) {
+    deleteUser(event.target.id); //ELIMINAR
+  } else if (event.target.className === "fas fa-pen") {
+    modalBg.classList.add("bg-activate");
+    modalModificar.style.display = "flex";
+    //dataUser(event.target.id);
+  } else if (event.target.className === "primary-button modificar") {
+    modifyUser(event.target.id); //MODIFICAR
+  }
+});
 
 //función para eliminar un usuario
 
-const deleteUser = (id) => 
-
-fetch(`http://${host}/usuarios/${id}`, {
+const deleteUser = (id) =>
+  fetch(`http://${host}/usuarios/${id}`, {
     method: "DELETE",
     headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-    }
-})
-.then(r => {
-
-    if(r.status === 200) {
-
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((r) => {
+      if (r.status === 200) {
         getUsuarios();
-        modalEliminar.classList.remove("bg-activate");
-
-    }else if(r.status === 401) {
-
+        modalBg.classList.remove("bg-activate");
+      } else if (r.status === 401) {
         window.open("bienvenida.html", "_self");
-    }
-})
-.catch(e => console.error(e))
-
+      }
+    })
+    .catch((e) => console.error(e));
 
 //Llamo a la función sorTableByColumn al tocar una imagen .sort
 
-document.querySelectorAll(".tabla th").forEach(headerCell => {
-    headerCell.addEventListener("click", (e) => {
+document.querySelectorAll(".tabla th").forEach((headerCell) => {
+  headerCell.addEventListener("click", (e) => {
+    if (e.target.localName === "p") return;
+    const tableElement = headerCell.parentElement.parentElement.parentElement;
+    const headerIndex = Array.prototype.indexOf.call(
+      headerCell.parentElement.children,
+      headerCell
+    );
+    const currentIsAscending = headerCell.classList.contains("th-sort-asc");
 
-        if(e.target.localName === "p") return;
-        const tableElement = headerCell.parentElement.parentElement.parentElement;
-        const headerIndex = Array.prototype.indexOf.call(headerCell.parentElement.children, headerCell);
-        const currentIsAscending = headerCell.classList.contains("th-sort-asc");
-
-        sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
-    });
+    sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
+  });
 });
-
-
-//función que trae los datos del usuario que quiero modificar
-
-const dataUser = async (id) => {
-
-    const response = await fetch(`http://${host}/usuarios/${id}`, {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
-    });
-
-    const data = await response.json();
-
-    if(response.status === 200) {
-
-        chargeValues(data);
-
-    }else if(response.status === 401) {
-
-        window.open("bienvenida.html", "_self");
-    }
-}
-
 
 //función que carga los datos del usuario en los inputs al modificar
 
 const chargeValues = (data) => {
-
-    nombreInputModify.value = data.nombre;
-    apellidoInputModify.value = data.apellido;
-    emailInputModify.value = data.email;
-    perfilSelectModify.value = data.perfil;
-}
-
+  nombreInputModify.value = data.nombre;
+  apellidoInputModify.value = data.apellido;
+  emailInputModify.value = data.email;
+  perfilSelectModify.value = data.perfil;
+};
 
 //función para modificar un usuario
 
 const modifyUser = async (id) => {
+  const obj = {
+    nombre: nombreInputModify.value,
+    apellido: apellidoInputModify.value,
+    email: emailInputModify.value,
+    perfil: perfilSelectModify.value,
+  };
 
-    const obj = { 
-        nombre: nombreInputModify.value,
-        apellido: apellidoInputModify.value,
-        email: emailInputModify.value,
-        perfil: perfilSelectModify.value
-    }
+  if (!obj.nombre || !obj.apellido || !obj.email)
+    return checkInputs(obj, inputsModify, dataSmallModify);
 
-    if(!obj.nombre || !obj.apellido || !obj.email) return checkInputs(obj, inputsModify, dataSmallModify);
+  const response = await fetch(`http://${host}/usuarios/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(obj),
+  });
 
-    const response = await fetch(`http://${host}/usuarios/${id}`, {
-        method: "PUT",
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(obj)
-    });
+  const data = await response.json();
 
-    const data = await response.json();
+  if (response.status === 200) {
+    modalModificar.style.display = "none";
+    modalSucces.classList.add("bg-activate");
 
-    if(response.status === 200) {
-
-        modalModificar.style.display = "none";
-        modalSucces.classList.add("bg-activate");
-
-        setTimeout(() => {
-
-            modalBg.classList.remove("bg-activate");
-            modalSucces.classList.remove("bg-activate");
-            usuariosItem.click();
-
-        }, 2000)
-
-    }else if(response.status === 401) {
-
-        window.open("bienvenida.html", "_self");
-
-    }else if(response.status === 422) {
-
-        processInvalid(data, inputsModify, smallsModify);
-
-    }
-}
-
+    setTimeout(() => {
+      modalBg.classList.remove("bg-activate");
+      modalSucces.classList.remove("bg-activate");
+      usuariosItem.click();
+    }, 2000);
+  } else if (response.status === 401) {
+    window.open("bienvenida.html", "_self");
+  } else if (response.status === 422) {
+    processInvalid(data, inputsModify, smallsModify);
+  }
+};
 
 //event listener para cuando alguien escribe en los inputs
 
-Object.values(inputs).forEach( input =>
+Object.values(inputs).forEach((input) =>
+  input.addEventListener("keydown", () => {
+    input.classList.remove("invalid");
+    resetInputsStyles(input, smalls);
+  })
+);
 
-    input.addEventListener("keydown", () => {
-
-        input.classList.remove("invalid");
-        resetInputsStyles(input, smalls);
-    })
-)
-
-Object.values(inputsModify).forEach( inputModify =>
-
-    inputModify.addEventListener("keydown", () => {
-
-        inputModify.classList.remove("invalid");
-        resetInputsStyles(inputsModify, smallsModify);
-    })
-)
+Object.values(inputsModify).forEach((inputModify) =>
+  inputModify.addEventListener("keydown", () => {
+    inputModify.classList.remove("invalid");
+    resetInputsStyles(inputsModify, smallsModify);
+  })
+);

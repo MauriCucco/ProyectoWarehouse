@@ -1,144 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Warehouse</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css">
-</head>
-<body>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
     <header>
-        <a id="logo" href="index.html">WAREHOUSE</a>
-        <nav>
-            <ul id="menu-nav">
-                <li>
-                    <a id="contactos-item" class="nav-item" href="#">Contactos</a>
-                </li>
-                <li>
-                    <a id="companias-item" class="nav-item" href="">Compañias</a>
-                </li>
-                <li>
-                    <a id="usuarios-item" class="nav-item" href="#">Usuarios</a>
-                </li>
-                <li>
-                    <a id="regiones-item" class="nav-item" href="#">Región / Ciudad</a>
-                </li>
-            </ul>
-        </nav>
+      <a id="logo" href="index.html">WAREHOUSE</a>
+      <nav>
+        <ul id="menu-nav">
+          <li>
+            <a id="contactos-item" class="nav-item" href="#">Contactos</a>
+          </li>
+          <li>
+            <a id="companias-item" class="nav-item" href="">Compañias</a>
+          </li>
+          <li>
+            <a id="usuarios-item" class="nav-item" href="#">Usuarios</a>
+          </li>
+          <li>
+            <a id="regiones-item" class="nav-item" href="#">Región / Ciudad</a>
+          </li>
+        </ul>
+      </nav>
     </header>
     <main>
-        <div id="sin-permiso">
-            <h3>No posee permiso de Administrador para ésta sección</h3>
-            <i class="fas fa-times-circle"></i>
+      <div id="sin-permiso">
+        <h3>No posee permiso de Administrador para ésta sección</h3>
+        <i class="fas fa-times-circle"></i>
+      </div>
+      <div class="modal-bg">
+        <div id="modal-crud" class="modal">
+          <h2 id="h2-crud"></h2>
+          <div class="buttons">
+            <button class="primary-button cerrar" type="button">Cerrar</button>
+            <button class="primary-button crud" type="button"></button>
+          </div>
         </div>
-        <div class="modal-bg">
-            <div id="modal-eliminar" class="modal">
-                <h2>¿Está seguro de eliminar a éste usuario?</h2>
-                <div class="buttons">
-                    <button class="primary-button cerrar" type="button">Cerrar</button>
-                    <button class="primary-button eliminar" type="button">Eliminar</button> 
-                </div>
+        <div id="modal-modify" class="modal">
+          <form id="form-modify" class="central-column">
+            <div class="central-column">
+              <input
+                id="nombre-input-modify"
+                type="text"
+                name="nombre"
+                placeholder="Nombre"
+              />
+              <small id="nombre-small-modify"></small>
             </div>
-            <div id="modal-modify" class="modal">
-                <form id="form-modify" class="central-column">
-                    <div class="central-column">
-                        <input id="nombre-input-modify" type="text" name="nombre" placeholder="Nombre">
-                        <small id="nombre-small-modify"></small> 
-                    </div>
-                    <div class="central-column">
-                        <input id="apellido-input-modify" type="text" name="apellido" placeholder="Apellido">
-                        <small id="apellido-small-modify"></small>
-                    </div>
-                    <div class="central-column">
-                        <input id="email-input-modify" type="email" name="email" placeholder="Email">
-                        <small id="email-small-modify"></small> 
-                    </div>
-                    <div class="central-column">
-                        <select name="perfil-modify" id="perfil-select-modify">
-                            <option value="Contactos">Contactos</option>
-                            <option value="Administrador">Administrador</option>
-                        </select>
-                        <small id="perfil-small-modify"></small>
-                    </div>
-                    <div class="buttons-modify">
-                        <button class="primary-button cerrar-modify" type="button">Cerrar</button>
-                        <button class="primary-button modificar" type="button">Modificar</button> 
-                    </div>
-                    <small id="data-small-modify"></small>
-                </form>
+            <div class="central-column">
+              <input
+                id="apellido-input-modify"
+                type="text"
+                name="apellido"
+                placeholder="Apellido"
+              />
+              <small id="apellido-small-modify"></small>
             </div>
-            <div id="modal-succes" class="modal succes">
-                <h3>El usuario fue modificado con éxito</h3>
-                <i class="fas fa-check-square"></i>
+            <div class="central-column">
+              <input
+                id="email-input-modify"
+                type="email"
+                name="email"
+                placeholder="Email"
+              />
+              <small id="email-small-modify"></small>
             </div>
+            <div class="central-column">
+              <select name="perfil-modify" id="perfil-select-modify">
+                <option value="Contactos">Contactos</option>
+                <option value="Administrador">Administrador</option>
+              </select>
+              <small id="perfil-small-modify"></small>
+            </div>
+            <div class="buttons-modify">
+              <button class="primary-button cerrar-modify" type="button">
+                Cerrar
+              </button>
+              <button class="primary-button modificar" type="button">
+                Modificar
+              </button>
+            </div>
+            <small id="data-small-modify"></small>
+          </form>
         </div>
-        <section id="usuarios">
-            <div id="registro">
-                <h2>Crear usuario</h2>
-                <form id="form-registro" class="central-column">
-                    <div class="central-column">
-                        <input id="nombre-input" type="text" name="nombre" placeholder="Nombre">
-                        <small id="nombre-small"></small> 
-                    </div>
-                    <div class="central-column">
-                        <input id="apellido-input" type="text" name="apellido" placeholder="Apellido">
-                        <small id="apellido-small"></small>
-                    </div>
-                    <div class="central-column">
-                        <input id="email-input" type="email" name="email" placeholder="Email">
-                        <small id="email-small"></small> 
-                    </div>
-                    <div class="central-column">
-                        <select name="perfil" id="perfil-select">
-                            <option value="Contactos">Contactos</option>
-                            <option value="Administrador">Administrador</option>
-                        </select>
-                        <small id="perfil-small"></small>
-                    </div>
-                    <div class="central-column">
-                        <input id="password-input" type="password" name="password" placeholder="Password">
-                        <small id="password-small"></small> 
-                    </div>
-                    <div class="central-column">
-                        <input id="confirm-password-input" type="password" name="confirm-password" placeholder="Repetir password">
-                        <small id="confirm-password-small"></small>
-                    </div>
-                    <button id="submit-button" class="primary-button" type="button">Crear</button>
-                    <small id="data-small"></small>
-                </form>
+        <div id="modal-succes" class="modal succes">
+          <h3>El usuario fue modificado con éxito</h3>
+          <i class="fas fa-check-square"></i>
+        </div>
+      </div>
+      <section id="contactos"></section>
+      <section id="usuarios">
+        <div id="registro">
+          <h2>Crear usuario</h2>
+          <form id="form-registro" class="central-column">
+            <div class="central-column">
+              <input
+                id="nombre-input"
+                type="text"
+                name="nombre"
+                placeholder="Nombre"
+              />
+              <small id="nombre-small"></small>
             </div>
-            <table id="tabla-usuarios" class="tabla">
-                <thead>
-                    <tr>
-                        <th>
-                            <p>Nombre</p>
-                            <img class="sort" src="./images/sort.svg" alt="Sort image">
-                        </th>
-                        <th>
-                            <p>Apellido</p>
-                            <img class="sort" src="./images/sort.svg" alt="Sort image">
-                        </th>
-                        <th>
-                            <p>Email</p>
-                            <img class="sort" src="./images/sort.svg" alt="Sort image">
-                        </th>
-                        <th>
-                            <p>Perfil</p>
-                            <img class="sort" src="./images/sort.svg" alt="Sort image">
-                        </th>
-                        <th class="acciones">
-                            <p>Acciones</p>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="body-tabla"></tbody>
-            </table>
-        </section>
+            <div class="central-column">
+              <input
+                id="apellido-input"
+                type="text"
+                name="apellido"
+                placeholder="Apellido"
+              />
+              <small id="apellido-small"></small>
+            </div>
+            <div class="central-column">
+              <input
+                id="email-input"
+                type="email"
+                name="email"
+                placeholder="Email"
+              />
+              <small id="email-small"></small>
+            </div>
+            <div class="central-column">
+              <select name="perfil" id="perfil-select">
+                <option value="Contactos">Contactos</option>
+                <option value="Administrador">Administrador</option>
+              </select>
+              <small id="perfil-small"></small>
+            </div>
+            <div class="central-column">
+              <input
+                id="password-input"
+                type="password"
+                name="password"
+                placeholder="Password"
+              />
+              <small id="password-small"></small>
+            </div>
+            <div class="central-column">
+              <input
+                id="confirm-password-input"
+                type="password"
+                name="confirm-password"
+                placeholder="Repetir password"
+              />
+              <small id="confirm-password-small"></small>
+            </div>
+            <button id="submit-button" class="primary-button" type="button">
+              Crear
+            </button>
+            <small id="data-small"></small>
+          </form>
+        </div>
+        <table id="tabla-usuarios" class="tabla">
+          <thead>
+            <tr>
+              <th>
+                <p>Nombre</p>
+                <img class="sort" src="./images/sort.svg" alt="Sort image" />
+              </th>
+              <th>
+                <p>Apellido</p>
+                <img class="sort" src="./images/sort.svg" alt="Sort image" />
+              </th>
+              <th>
+                <p>Email</p>
+                <img class="sort" src="./images/sort.svg" alt="Sort image" />
+              </th>
+              <th>
+                <p>Perfil</p>
+                <img class="sort" src="./images/sort.svg" alt="Sort image" />
+              </th>
+              <th class="acciones">
+                <p>Acciones</p>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="body-tabla"></tbody>
+        </table>
+      </section>
+      <section id="regiones">
+        <div id="div-regiones">
+          <button id="boton-region" class="primary-button">
+            Agregar región
+          </button>
+          <ul id="arbol-regiones"></ul>
+        </div>
+      </section>
     </main>
-    <script src="https://kit.fontawesome.com/a027afbbf3.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/a027afbbf3.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="./js/index.js" type="module"></script>
     <script src="./js/usuarios.js" type="module"></script>
     <script src="./js/regiones.js" type="module"></script>
-</body>
+  </body>
 </html>

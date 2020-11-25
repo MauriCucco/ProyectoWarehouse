@@ -6,6 +6,7 @@ export let seccionContactos = document.getElementById("contactos");
 export const divSinPermiso = document.getElementById("sin-permiso");
 export const modalBg = document.querySelector(".modal-bg");
 export const modalCrud = document.getElementById("modal-crud");
+let emptyInput = false;
 
 //FUNCIÓN PARA DEJAR DE RESALTAR UNA SECCIÓN DEL NAV
 
@@ -20,189 +21,43 @@ export const removeActive = () => {
 
 //FUNCIÓN QUE CHEQUEA SI EL USUARIO LLENÓ TODOS LOS CAMPOS REQUERIDOS
 
-export const checkInputs = (data, inputs, dataSmall) => {
-  const { email, password, nombre, apellido, confirm_password } = data;
+export const checkInputs = () => {
+  const allInputs = document.getElementsByClassName("input-add");
+  const dataSmall = document.querySelector(".small-data-empty");
 
-  const {
-    nombreInput,
-    apellidoInput,
-    emailInput,
-    passwordInput,
-    confirmInput,
-    emailInputModify,
-    nombreInputModify,
-    apellidoInputModify,
-    inputRegion,
-    inputCountry,
-    inputCities,
-    inputCity,
-  } = inputs;
-
-  if (!data.nombreRegion && inputRegion) inputRegion.classList.add("invalid");
-
-  if (data.paises) {
-    if (!data.paises[0].nombrePais && inputCountry)
-      inputCountry.classList.add("invalid");
-    if (!data.paises[0].ciudades[0].nombreCiudad && inputCities)
-      inputCities[0].classList.add("invalid");
-  }
-
-  if (Object.keys(data)[0] === "nombrePais") {
-    if (!data.nombrePais && inputCountry) inputCountry.classList.add("invalid");
-    if (data.ciudades) {
-      if (!data.ciudades[0].nombreCiudad && inputCities)
-        inputCities[0].classList.add("invalid");
+  for (let input of allInputs) {
+    if (input.value === "") {
+      input.classList.add("invalid");
+      emptyInput = true;
     }
   }
 
-  if (Object.keys(data)[0] === "idPais")
-    inputCities[0].classList.add("invalid");
+  if (emptyInput) dataSmall.innerHTML = "Ingrese todos los datos requeridos";
 
-  if (!email && emailInput) emailInput.classList.add("invalid");
-
-  if (!email && emailInputModify) emailInputModify.classList.add("invalid");
-
-  if (!password && passwordInput) passwordInput.classList.add("invalid");
-
-  if (!nombre && nombreInput) nombreInput.classList.add("invalid");
-
-  if (!nombre && nombreInputModify) nombreInputModify.classList.add("invalid");
-
-  if (!apellido && apellidoInput) apellidoInput.classList.add("invalid");
-
-  if (!apellido && apellidoInputModify)
-    apellidoInputModify.classList.add("invalid");
-
-  if (!confirm_password && confirmInput) confirmInput.classList.add("invalid");
-
-  return (dataSmall.innerHTML = "Ingrese todos los datos requeridos");
+  return emptyInput;
 };
 
 //FUNCIÓN PARA RESETEAR LOS ESTILOS DE TODOS LOS INPUTS Y EL CONTENIDO DE SUS SMALLS
 
-export const resetInputsStyles = (inputs, smalls) => {
-  const {
-    nombreInput,
-    apellidoInput,
-    emailInput,
-    passwordInput,
-    confirmInput,
-    emailInputModify,
-    nombreInputModify,
-    apellidoInputModify,
-    inputRegion,
-    inputCountry,
-    inputCities,
-    inputCity,
-  } = inputs;
+export const resetInputsStyles = () => {
+  let allInputs = document.getElementsByTagName("INPUT");
+  const dataSmall = document.querySelector(".small-data-empty");
 
-  const {
-    nombreSmall,
-    apellidoSmall,
-    emailSmall,
-    passwordSmall,
-    confirmSmall,
-    dataSmall,
-    nombreSmallModify,
-    apellidoSmallModify,
-    emailSmallModify,
-    dataSmallModify,
-    smallRegion,
-    smallCountry,
-    smallCities,
-    smallCity,
-    smallDataEmpty,
-  } = smalls;
-
-  if (inputRegion) {
-    inputRegion.classList.remove("invalid");
-    smallRegion.innerHTML = "";
+  for (let input of allInputs) {
+    input.classList.remove("invalid");
   }
-
-  if (inputCountry) {
-    inputCountry.classList.remove("invalid");
-    smallCountry.innerHTML = "";
-  }
-
-  if (inputCities) {
-    for (let input of inputCities) {
-      input.classList.remove("invalid");
-    }
-    for (let small of smallCities) {
-      small.innerHTML = "";
-    }
-  }
-
-  if (inputCity) {
-    inputCity.classList.remove("invalid");
-    smallCity.innerHTML = "";
-  }
-
-  if (smallDataEmpty) {
-    smallDataEmpty.classList.remove("invalid");
-    smallDataEmpty.innerHTML = "";
-  }
-  if (emailInput) {
-    emailInput.classList.remove("invalid");
-    emailSmall.innerHTML = "";
-  }
-
-  if (emailInputModify) {
-    emailInputModify.classList.remove("invalid");
-    emailSmallModify.innerHTML = "";
-  }
-
-  if (passwordInput) {
-    passwordInput.classList.remove("invalid");
-    passwordSmall.innerHTML = "";
-  }
-
-  if (dataSmall) dataSmall.innerHTML = "";
-
-  if (dataSmallModify) dataSmallModify.innerHTML = "";
-
-  if (nombreInput) {
-    nombreInput.classList.remove("invalid");
-    nombreSmall.innerHTML = "";
-  }
-
-  if (nombreInputModify) {
-    nombreInputModify.classList.remove("invalid");
-    nombreSmallModify.innerHTML = "";
-  }
-
-  if (apellidoInput) {
-    apellidoInput.classList.remove("invalid");
-    apellidoSmall.innerHTML = "";
-  }
-
-  if (apellidoInputModify) {
-    apellidoInputModify.classList.remove("invalid");
-    apellidoSmallModify.innerHTML = "";
-  }
-
-  if (confirmInput) {
-    confirmInput.classList.remove("invalid");
-    confirmSmall.innerHTML = "";
-  }
+  dataSmall.innerHTML = "";
+  emptyInput = false;
 };
 
 //FUNCIÓN PARA RESETEAR LOS VALUES DE LOS INPUTS AL CREAR UN USUARIO
 
-export const resetInputsValues = (inputs) => {
-  const {
-    nombreInput,
-    apellidoInput,
-    emailInput,
-    passwordInput,
-    confirmInput,
-  } = inputs;
+export const resetInputsValues = () => {
+  let allInputs = document.getElementsByTagName("INPUT");
 
-  emailInput.value = "";
-  passwordInput.value = "";
-  if (nombreInput) nombreInput.value = "";
-  if (apellidoInput) apellidoInput.value = "";
-  if (confirmInput) confirmInput.value = "";
+  for (let input of allInputs) {
+    input.value = "";
+  }
 };
 
 //FUNCIÓN QUE PROCESA UNA RESPUESTA 422 DEL SERVIDOR
@@ -220,7 +75,6 @@ export const processInvalid = (response, inputs, smalls) => {
     inputRegion,
     inputCountry,
     inputCities,
-    inputCity,
   } = inputs;
 
   const {
@@ -235,7 +89,6 @@ export const processInvalid = (response, inputs, smalls) => {
     smallRegion,
     smallCountry,
     smallCities,
-    smallCity,
   } = smalls;
 
   if (response.error === "Ya existe una region con ese nombre") {
@@ -251,10 +104,7 @@ export const processInvalid = (response, inputs, smalls) => {
     smallCountry.innerHTML = response.error;
   } else if (response.error === "El nombre de la ciudad es inválido") {
     resetInputsStyles(inputs, smalls);
-    if (inputCity) {
-      inputCity.classList.add("invalid");
-      smallCity.innerHTML = response.error;
-    } else {
+    if (inputCities) {
       inputCities[response.path].classList.add("invalid");
       smallCities[response.path].innerHTML = response.error;
     }
@@ -423,8 +273,6 @@ export const createIcons = (target) => {
 //FUNCIÓN QUE LLAMA A crearModalCrud()
 
 export const callModal = (operacion, elemento = "") => {
-  modalBg.classList.add("bg-activate");
-
   elemento
     ? crearModalCrud(
         operacion,
@@ -432,6 +280,7 @@ export const callModal = (operacion, elemento = "") => {
       )
     : crearModalCrud(operacion);
 
+  modalBg.classList.add("bg-activate");
   modalCrud.style.display = "flex";
 };
 
@@ -493,6 +342,8 @@ export const crearModalCrud = (operacion, name = {}) => {
   if (operacion === "deleteUser") {
     h2Crud.innerHTML = "¿Está seguro de eliminar a éste usuario?";
     buttonCrud.className = "primary-button crud eliminar usuario";
+    h2Name.innerHTML = `"${name}"`;
+    h2Crud.after(h2Name);
     buttonCrud.innerHTML = "Eliminar";
   } else if (
     operacion === "deleteRegion" ||

@@ -12,6 +12,10 @@ html {
 body {
   font-family: "Open Sans", sans-serif;
 }
+body input,
+body button {
+  outline: none;
+}
 
 /*HEADER*/
 header {
@@ -342,6 +346,7 @@ td.acciones {
   font-size: 1.7rem;
   font-style: italic;
 }
+
 /*ÁRBOL DE REGIONES*/
 #regiones {
   display: none;

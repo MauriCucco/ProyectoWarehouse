@@ -88,9 +88,9 @@ usuariosItem.addEventListener("click", () => {
   seccionContactos.style.display = "none";
   seccionRegiones.style.display = "none";
 
-  resetInputsValues(inputs);
+  resetInputsValues();
 
-  resetInputsStyles(inputs, smalls);
+  resetInputsStyles();
 
   getUsuarios();
 });
@@ -182,14 +182,17 @@ submitButton.addEventListener("click", () => {
   const password = passwordInput.value;
   const confirm_password = confirmInput.value;
 
-  resetInputsStyles(inputs, smalls);
-
   const data = { nombre, apellido, email, perfil, password, confirm_password };
 
-  if (nombre && apellido && email && perfil && password && confirm_password)
-    return createUser(data);
+  resetInputsStyles();
 
-  checkInputs(data, inputs, dataSmall);
+  const emptyInput = checkInputs();
+
+  if (emptyInput) {
+    return "Hay inputs vacíos";
+  } else {
+    createUser(data);
+  }
 });
 
 //función que crea un usuario
@@ -215,7 +218,7 @@ const processResponse = async (response) => {
     const jsonResponse = await response.json();
 
     if (response.status === 200) {
-      resetInputsStyles(inputs, smalls);
+      resetInputsStyles();
 
       dataSmall.classList.add("small-success");
 
@@ -224,9 +227,9 @@ const processResponse = async (response) => {
       getUsuarios();
 
       setTimeout(() => {
-        resetInputsValues(inputs);
+        resetInputsValues();
 
-        resetInputsStyles(inputs, smalls);
+        resetInputsStyles();
       }, 2000);
     } else if (response.status === 401) {
       window.open("bienvenida.html", "_self");
@@ -246,8 +249,9 @@ document.addEventListener("click", (event) => {
 
     createIcons(event.target);
   } else if (event.target.className === "fas fa-trash") {
+    const userName = `${event.target.parentElement.parentElement.firstElementChild.innerHTML} ${event.target.parentElement.parentElement.firstElementChild.nextElementSibling.innerHTML}`;
     modalBg.classList.add("bg-activate");
-    crearModalCrud("deleteUser", event.target.id);
+    crearModalCrud("deleteUser", userName);
     modalCrud.style.display = "flex";
   } else if (
     event.target.className === "primary-button cerrar" ||
@@ -260,7 +264,7 @@ document.addEventListener("click", (event) => {
     } else {
       modalBg.classList.remove("bg-activate");
       modalModificar.style.display = "none";
-      resetInputsStyles(inputsModify, smallsModify);
+      resetInputsStyles();
     }
   } else if (
     event.target.className === "primary-button crud eliminar usuario"
@@ -321,33 +325,36 @@ const modifyUser = async (id) => {
     perfil: perfilSelectModify.value,
   };
 
-  if (!obj.nombre || !obj.apellido || !obj.email)
-    return checkInputs(obj, inputsModify, dataSmallModify);
+  const emptyInput = checkInputs();
 
-  const response = await fetch(`http://${host}/usuarios/${id}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(obj),
-  });
+  if (emptyInput) {
+    return "Hay inputs vacíos";
+  } else {
+    const response = await fetch(`http://${host}/usuarios/${id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(obj),
+    });
 
-  const data = await response.json();
+    const data = await response.json();
 
-  if (response.status === 200) {
-    modalModificar.style.display = "none";
-    modalSucces.classList.add("bg-activate");
+    if (response.status === 200) {
+      modalModificar.style.display = "none";
+      modalSucces.classList.add("bg-activate");
 
-    setTimeout(() => {
-      modalBg.classList.remove("bg-activate");
-      modalSucces.classList.remove("bg-activate");
-      usuariosItem.click();
-    }, 2000);
-  } else if (response.status === 401) {
-    window.open("bienvenida.html", "_self");
-  } else if (response.status === 422) {
-    processInvalid(data, inputsModify, smallsModify);
+      setTimeout(() => {
+        modalBg.classList.remove("bg-activate");
+        modalSucces.classList.remove("bg-activate");
+        usuariosItem.click();
+      }, 2000);
+    } else if (response.status === 401) {
+      window.open("bienvenida.html", "_self");
+    } else if (response.status === 422) {
+      processInvalid(data, inputsModify, smallsModify);
+    }
   }
 };
 
@@ -356,18 +363,18 @@ const modifyUser = async (id) => {
 Object.values(inputs).forEach((input) =>
   input.addEventListener("keydown", () => {
     input.classList.remove("invalid");
-    resetInputsStyles(input, smalls);
+    resetInputsStyles();
   })
 );
 
 Object.values(inputsModify).forEach((inputModify) =>
   inputModify.addEventListener("keydown", () => {
     inputModify.classList.remove("invalid");
-    resetInputsStyles(inputsModify, smallsModify);
+    resetInputsStyles();
   })
 );
 
-//función para carga la info del usuario al querer modificarlo
+//función para cargar la info del usuario al querer modificarlo
 
 const chargeUserInfo = (elemento) => {
   document.getElementById("nombre-input-modify").value =

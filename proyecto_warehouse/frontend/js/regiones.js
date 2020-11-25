@@ -20,7 +20,7 @@ import {
 const regionesItem = document.getElementById("regiones-item");
 const arbolRegiones = document.getElementById("arbol-regiones");
 const botonAgregarRegion = document.getElementById("boton-region");
-let smalls, inputs, idRegion, idPais, idCiudad;
+let idRegion, idPais, idCiudad;
 
 //activar el item de usuarios en el nav y preparar la sección Regiones
 
@@ -341,98 +341,73 @@ const crud = (obj, url, operacion) =>
     .then((r) => processResponse(r))
     .catch((e) => console.error(e));
 
-//función que chequea los inputs y su información antes de mandarla al servidor
+//función que chequea los inputs y reune su información antes de mandarla al servidor
 const checkAll = (elemento) => {
   const inputRegion = document.getElementById("input-nuevo");
   const inputCountry = document.getElementById("input-country");
   const inputCities = document.querySelectorAll(".input-add.city");
-  const smallRegion = document.querySelector(".small-add");
-  const smallCountry = document.querySelector(".small-add.country");
-  const smallCities = document.querySelectorAll(".small-add.city");
-  const smallDataEmpty = document.querySelector(".small-data-empty");
 
-  const inputs = { inputRegion, inputCountry, inputCities };
-  const smalls = { smallRegion, smallCountry, smallCities, smallDataEmpty };
+  resetInputsStyles();
 
-  resetInputsStyles(inputs, smalls);
+  const emptyInput = checkInputs();
 
-  if (elemento.className === "primary-button crud agregar regiones") {
-    const region = {
-      nombreRegion: inputRegion.value,
-      paises: [
-        {
-          nombrePais: inputCountry.value,
-          ciudades: [],
-        },
-      ],
-    };
+  if (emptyInput) {
+    return false;
+  } else {
+    if (elemento.className === "primary-button crud agregar regiones") {
+      const region = {
+        nombreRegion: inputRegion.value,
+        paises: [
+          {
+            nombrePais: inputCountry.value,
+            ciudades: [],
+          },
+        ],
+      };
 
-    inputCities.forEach((city) => {
-      region.paises[0].ciudades.push({
-        nombreCiudad: city.value,
+      inputCities.forEach((city) => {
+        region.paises[0].ciudades.push({
+          nombreCiudad: city.value,
+        });
       });
-    });
 
-    if (
-      !region.nombreRegion ||
-      !region.paises[0].nombrePais ||
-      !region.paises[0].ciudades[0].nombreCiudad
+      return region;
+    } else if (
+      elemento.className === "primary-button crud modificar regiones"
     ) {
-      checkInputs(region, inputs, smallDataEmpty);
-    } else {
+      const region = { nombreRegion: inputRegion.value };
+
       return region;
-    }
-  } else if (elemento.className === "primary-button crud modificar regiones") {
-    const region = { nombreRegion: inputRegion.value };
+    } else if (elemento.className === "primary-button crud agregar paises") {
+      const pais = {
+        nombrePais: inputCountry.value,
+        ciudades: [],
+      };
 
-    if (!region.nombreRegion) {
-      checkInputs(region, inputs, smallDataEmpty);
-    } else {
-      return region;
-    }
-  } else if (elemento.className === "primary-button crud agregar paises") {
-    const pais = {
-      nombrePais: inputCountry.value,
-      ciudades: [],
-    };
-
-    inputCities.forEach((city) => {
-      pais.ciudades.push({
-        nombreCiudad: city.value,
+      inputCities.forEach((city) => {
+        pais.ciudades.push({
+          nombreCiudad: city.value,
+        });
       });
-    });
-
-    if (!pais.nombrePais || !pais.ciudades[0].nombreCiudad) {
-      checkInputs(pais, inputs, smallDataEmpty);
-    } else {
       return pais;
-    }
-  } else if (elemento.className === "primary-button crud modificar paises") {
-    const pais = { nombrePais: inputCountry.value, idPais };
-
-    if (!pais.nombrePais) {
-      checkInputs(pais, inputs, smallDataEmpty);
-    } else {
+    } else if (elemento.className === "primary-button crud modificar paises") {
+      const pais = { nombrePais: inputCountry.value, idPais };
       return pais;
-    }
-  } else if (elemento.className === "primary-button crud agregar ciudades") {
-    const ciudadOCiudades = { idPais, ciudades: [] };
+    } else if (elemento.className === "primary-button crud agregar ciudades") {
+      const ciudadOCiudades = { idPais, ciudades: [] };
 
-    inputCities.forEach((city) => {
-      ciudadOCiudades.ciudades.push({
-        nombreCiudad: city.value,
+      inputCities.forEach((city) => {
+        ciudadOCiudades.ciudades.push({
+          nombreCiudad: city.value,
+        });
       });
-    });
-    if (!ciudadOCiudades.ciudades[0].nombreCiudad) {
-      checkInputs(ciudadOCiudades, inputs, smallDataEmpty);
-    } else {
+
       return ciudadOCiudades;
-    }
-  } else if (elemento.className === "primary-button crud modificar ciudades") {
-    const ciudad = { idPais, idCiudad, nombreCiudad: inputCities[0].value };
-    if (!ciudad.nombreCiudad) {
-      checkInputs(ciudad, inputs, smallDataEmpty);
-    } else {
+    } else if (
+      elemento.className === "primary-button crud modificar ciudades"
+    ) {
+      const ciudad = { idPais, idCiudad, nombreCiudad: inputCities[0].value };
+
       return ciudad;
     }
   }

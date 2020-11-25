@@ -404,17 +404,9 @@ li {
   width: 35.8rem;
 }
 .ciudad {
-  border-radius: 0.3rem;
   font-style: italic;
-  margin-bottom: unset;
-  padding: 1.1rem;
   user-select: none; /* Prevent text selection */
-  /*width: 30.8rem;*/
-  width: 32rem;
-}
-.ciudad:hover {
-  background-color: #8fc8fd;
-  color: white;
+  width: 30.8rem;
 }
 li:last-child {
   margin-bottom: unset;

@@ -267,9 +267,9 @@ document.addEventListener("click", (event) => {
   ) {
     deleteUser(event.target.id); //ELIMINAR
   } else if (event.target.className === "fas fa-pen") {
+    chargeUserInfo(event.target);
     modalBg.classList.add("bg-activate");
     modalModificar.style.display = "flex";
-    //dataUser(event.target.id);
   } else if (event.target.className === "primary-button modificar") {
     modifyUser(event.target.id); //MODIFICAR
   }
@@ -310,15 +310,6 @@ document.querySelectorAll(".tabla th").forEach((headerCell) => {
     sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
   });
 });
-
-//función que carga los datos del usuario en los inputs al modificar
-
-const chargeValues = (data) => {
-  nombreInputModify.value = data.nombre;
-  apellidoInputModify.value = data.apellido;
-  emailInputModify.value = data.email;
-  perfilSelectModify.value = data.perfil;
-};
 
 //función para modificar un usuario
 
@@ -375,3 +366,16 @@ Object.values(inputsModify).forEach((inputModify) =>
     resetInputsStyles(inputsModify, smallsModify);
   })
 );
+
+//función para carga la info del usuario al querer modificarlo
+
+const chargeUserInfo = (elemento) => {
+  document.getElementById("nombre-input-modify").value =
+    elemento.parentElement.parentElement.firstElementChild.innerHTML;
+  document.getElementById("apellido-input-modify").value =
+    elemento.parentElement.parentElement.firstElementChild.nextElementSibling.innerHTML;
+  document.getElementById("email-input-modify").value =
+    elemento.parentElement.previousElementSibling.previousElementSibling.innerHTML;
+  document.getElementById("perfil-select-modify").value =
+    elemento.parentElement.previousElementSibling.innerHTML;
+};

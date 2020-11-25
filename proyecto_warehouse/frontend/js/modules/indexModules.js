@@ -47,13 +47,16 @@ export const checkInputs = (data, inputs, dataSmall) => {
       inputCities[0].classList.add("invalid");
   }
 
-  if (!data.nombrePais && inputCountry) inputCountry.classList.add("invalid");
-
-  if (data.ciudades) {
-    if (!data.ciudades[0].nombreCiudad && inputCities)
-      inputCities[0].classList.add("invalid");
+  if (Object.keys(data)[0] === "nombrePais") {
+    if (!data.nombrePais && inputCountry) inputCountry.classList.add("invalid");
+    if (data.ciudades) {
+      if (!data.ciudades[0].nombreCiudad && inputCities)
+        inputCities[0].classList.add("invalid");
+    }
   }
-  if (!data.nombreCiudad) inputCity.classList.add("invalid");
+
+  if (Object.keys(data)[0] === "idPais")
+    inputCities[0].classList.add("invalid");
 
   if (!email && emailInput) emailInput.classList.add("invalid");
 
@@ -475,7 +478,9 @@ export const crearModalCrud = (operacion, name = {}) => {
   inputCountry.setAttribute("type", "text");
   inputCity.setAttribute("type", "text");
   inputNuevo.className = "input-add";
+  inputNuevo.id = "input-nuevo";
   inputCountry.className = "input-add country";
+  inputCountry.id = "input-country";
   inputCity.className = "input-add city";
   smallAdd.className = "small-add";
   smallCountry.className = "small-add country";

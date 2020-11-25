@@ -148,7 +148,7 @@ const resetRegiones = () => {
   document.querySelectorAll("#arbol-regiones li").forEach((li) => li.remove());
 };
 
-//AGREGAR, MODIFICAR Y ELIMINAR REGIONES
+// EventListener para AGREGAR, MODIFICAR Y ELIMINAR REGIONES
 
 document.addEventListener("click", (event) => {
   if (event.target.className === "fas fa-ellipsis-h dots regiones") {
@@ -163,110 +163,41 @@ document.addEventListener("click", (event) => {
     resetDots();
     createIcons(event.target);
     idCiudad = event.target.id;
+  } else if (event.target.className === "fas fa-plus city") {
+    addInputCity(); //agregar un input para ciudades
+  } else if (event.target.className === "fas fa-trash city") {
+    event.target.parentElement.nextElementSibling.remove();
+    event.target.parentElement.remove(); //remueve el input para ciuades
   } else if (
     event.target.className === "primary-button crud agregar regiones" //CREAR UNA REGIÓN
   ) {
-    const inputRegion = document.querySelector(".input-add");
-    const inputCountry = document.querySelector(".input-add.country");
-    const inputCities = document.querySelectorAll(".input-add.city");
-    const smallRegion = document.querySelector(".small-add");
-    const smallCountry = document.querySelector(".small-add.country");
-    const smallCities = document.querySelectorAll(".small-add.city");
-    const smallDataEmpty = document.querySelector(".small-data-empty");
+    const data = checkAll(event.target);
 
-    const region = {
-      nombreRegion: inputRegion.value,
-      paises: [
-        {
-          nombrePais: inputCountry.value,
-          ciudades: [],
-        },
-      ],
-    };
-
-    inputCities.forEach((city) => {
-      region.paises[0].ciudades.push({
-        nombreCiudad: city.value,
-      });
-    });
-    const inputs = { inputRegion, inputCountry, inputCities };
-    const smalls = { smallRegion, smallCountry, smallCities, smallDataEmpty };
-
-    resetInputsStyles(inputs, smalls);
-
-    if (
-      !region.nombreRegion ||
-      !region.paises[0].nombrePais ||
-      !region.paises[0].ciudades[0].nombreCiudad
-    )
-      return checkInputs(region, inputs, smallDataEmpty);
-
-    //createRegion(region);
-    crud(region, `http://${host}/regiones`, "POST");
-  } else if (event.target.className === "fas fa-plus city") {
-    addInputCity();
-  } else if (event.target.className === "fas fa-trash city") {
-    event.target.parentElement.nextElementSibling.remove();
-    event.target.parentElement.remove();
-  } else if (event.target.className === "fas fa-trash regiones") {
-    callModal("deleteRegion", event.target);
-  } else if (
-    event.target.className === "primary-button crud eliminar regiones" //ELIMINAR UNA REGIÓN
-  ) {
-    //deleteRegion(idRegion);
-    const obj = {};
-    crud(obj, `http://${host}/regiones/${idRegion}`, "DELETE");
+    if (data) crud(data, `http://${host}/regiones`, "POST");
   } else if (event.target.className === "fas fa-pen regiones") {
+    //MODIFICAR UNA REGIÓN
     callModal("modifyRegion", event.target);
   } else if (
-    event.target.className === "primary-button crud modificar regiones" //MODIFICAR UNA REGIÓN
+    event.target.className === "primary-button crud modificar regiones"
   ) {
-    const inputRegion = document.querySelector(".input-add");
-    const smallRegion = document.querySelector(".small-add");
-    const smallDataEmpty = document.querySelector(".small-data-empty");
+    const data = checkAll(event.target);
 
-    const region = { nombreRegion: inputRegion.value };
-
-    const inputs = { inputRegion };
-    const smalls = { smallRegion, smallDataEmpty };
-
-    resetInputsStyles(inputs, smalls);
-
-    if (!region.nombreRegion)
-      return checkInputs(region, inputs, smallDataEmpty);
-
-    //modifyRegion(region, idRegion);
-    crud(region, `http://${host}/regiones/${idRegion}`, "PUT");
+    if (data) crud(data, `http://${host}/regiones/${idRegion}`, "PUT");
+  } else if (event.target.className === "fas fa-trash regiones") {
+    //ELIMINAR UNA REGIÓN
+    callModal("deleteRegion", event.target);
+  } else if (
+    event.target.className === "primary-button crud eliminar regiones"
+  ) {
+    const obj = {};
+    crud(obj, `http://${host}/regiones/${idRegion}`, "DELETE");
   } else if (event.target.className === "fas fa-plus regiones") {
     //AGREGAR UN PAÍS
     callModal("addCountry", event.target);
   } else if (event.target.className === "primary-button crud agregar paises") {
-    const inputCountry = document.querySelector(".input-add.country");
-    const inputCities = document.querySelectorAll(".input-add.city");
-    const smallCountry = document.querySelector(".small-add.country");
-    const smallCities = document.querySelectorAll(".small-add.city");
-    const smallDataEmpty = document.querySelector(".small-data-empty");
+    const data = checkAll(event.target);
 
-    const pais = {
-      nombrePais: inputCountry.value,
-      ciudades: [],
-    };
-
-    inputCities.forEach((city) => {
-      pais.ciudades.push({
-        nombreCiudad: city.value,
-      });
-    });
-
-    const inputs = { inputCountry, inputCities };
-    const smalls = { smallCountry, smallCities, smallDataEmpty };
-
-    resetInputsStyles(inputs, smalls);
-
-    if (!pais.nombrePais || !pais.ciudades[0].nombreCiudad)
-      return checkInputs(pais, inputs, smallDataEmpty);
-
-    addCountry(pais, idRegion);
+    if (data) crud(data, `http://${host}/regiones/paises/${idRegion}`, "POST");
   } else if (event.target.className === "fas fa-pen paises") {
     //MODIFICAR UN PAÍS
 
@@ -278,20 +209,9 @@ document.addEventListener("click", (event) => {
   } else if (
     event.target.className === "primary-button crud modificar paises"
   ) {
-    const inputCountry = document.querySelector(".input-add.country");
-    const smallCountry = document.querySelector(".small-add.country");
-    const smallDataEmpty = document.querySelector(".small-data-empty");
+    const data = checkAll(event.target);
 
-    const pais = { nombrePais: inputCountry.value, idPais };
-
-    const inputs = { inputCountry };
-    const smalls = { smallCountry, smallDataEmpty };
-
-    resetInputsStyles(inputs, smalls);
-
-    if (!pais.nombrePais) return checkInputs(pais, inputs, smallDataEmpty);
-
-    modifyCountry(pais, idRegion);
+    if (data) crud(data, `http://${host}/regiones/paises/${idRegion}`, "PUT");
   } else if (event.target.className === "fas fa-trash paises") {
     //ELIMINAR UN PAÍS
     idRegion =
@@ -300,7 +220,7 @@ document.addEventListener("click", (event) => {
     callModal("deleteCountry", event.target);
   } else if (event.target.className === "primary-button crud eliminar paises") {
     const pais = { idPais };
-    deleteCountry(pais, idRegion);
+    crud(pais, `http://${host}/regiones/paises/${idRegion}`, "DELETE");
   } else if (event.target.className === "fas fa-plus paises") {
     //AGREGAR UNA CIUDAD
     idRegion =
@@ -310,27 +230,9 @@ document.addEventListener("click", (event) => {
   } else if (
     event.target.className === "primary-button crud agregar ciudades"
   ) {
-    const inputCities = document.querySelectorAll(".input-add.city");
-    const smallCities = document.querySelectorAll(".small-add.city");
-    const smallDataEmpty = document.querySelector(".small-data-empty");
-
-    const ciudadOCiudades = { idPais, ciudades: [] };
-
-    inputCities.forEach((city) => {
-      ciudadOCiudades.ciudades.push({
-        nombreCiudad: city.value,
-      });
-    });
-
-    const inputs = { inputCities };
-    const smalls = { smallCities, smallDataEmpty };
-
-    resetInputsStyles(inputs, smalls);
-
-    if (!ciudadOCiudades.ciudades[0].nombreCiudad)
-      return checkInputs(ciudadOCiudades, inputs, smallDataEmpty);
-
-    addCity(ciudadOCiudades, idRegion);
+    const data = checkAll(event.target);
+    if (data)
+      crud(data, `http://${host}/regiones/ciudades/${idRegion}`, "POST");
   } else if (event.target.className === "fas fa-pen ciudades") {
     //MODIFICAR UNA CIUDAD
     idRegion =
@@ -344,21 +246,8 @@ document.addEventListener("click", (event) => {
   } else if (
     event.target.className === "primary-button crud modificar ciudades"
   ) {
-    const inputCity = document.querySelector(".input-add.city");
-    const smallCity = document.querySelector(".small-add.city");
-    const smallDataEmpty = document.querySelector(".small-data-empty");
-
-    const ciudad = { idPais, idCiudad, nombreCiudad: inputCity.value };
-
-    const inputs = { inputCity };
-    const smalls = { smallCity, smallDataEmpty };
-
-    resetInputsStyles(inputs, smalls);
-
-    if (!ciudad.nombreCiudad)
-      return checkInputs(ciudad, inputs, smallDataEmpty);
-
-    modifyCity(ciudad, idRegion);
+    const data = checkAll(event.target);
+    if (data) crud(data, `http://${host}/regiones/ciudades/${idRegion}`, "PUT");
   } else if (event.target.className === "fas fa-trash ciudades") {
     //ELIMINAR UNA CIUDAD
     idRegion =
@@ -373,7 +262,7 @@ document.addEventListener("click", (event) => {
     event.target.className === "primary-button crud eliminar ciudades"
   ) {
     const ciudad = { idPais, idCiudad };
-    deleteCity(ciudad, idRegion);
+    crud(ciudad, `http://${host}/regiones/ciudades/${idRegion}`, "DELETE");
   }
 });
 
@@ -433,136 +322,12 @@ const processResponse = async (response) => {
   }
 };
 
-//AGREGAR UNA REGIÓN
+//EventListener del botón para agregar una región
 botonAgregarRegion.addEventListener("click", () => {
   callModal("addRegion");
 });
 
-/*const createRegion = (obj) =>
-  fetch(`http://${host}/regiones`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(obj),
-  })
-    .then((r) => processResponse(r))
-    .catch((e) => console.error(e));
-
-//ELIMINAR UNA REGIÓN
-
-const deleteRegion = (id) =>
-  fetch(`http://${host}/regiones/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  })
-    .then((r) => processResponse(r))
-    .catch((e) => console.error(e));
-
-//MODIFICAR UNA REGIÓN
-
-const modifyRegion = (obj, id) =>
-  fetch(`http://${host}/regiones/${id}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(obj),
-  })
-    .then((r) => processResponse(r))
-    .catch((e) => console.error(e));
-
-//AGREGAR UN PAÍS
-
-const addCountry = (obj, id) =>
-  fetch(`http://${host}/regiones/paises/${id}`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(obj),
-  })
-    .then((r) => processResponse(r))
-    .catch((e) => console.error(e));
-
-//MODIFICAR UN PAÍS
-
-const modifyCountry = (obj, id) =>
-  fetch(`http://${host}/regiones/paises/${id}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(obj),
-  })
-    .then((r) => processResponse(r))
-    .catch((e) => console.error(e));
-
-//ELIMINAR UN PAÍS
-
-const deleteCountry = (obj, id) =>
-  fetch(`http://${host}/regiones/paises/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(obj),
-  })
-    .then((r) => processResponse(r))
-    .catch((e) => console.error(e));
-
-//AGREGAR UNA CIUDAD
-
-const addCity = (obj, id) =>
-  fetch(`http://${host}/regiones/ciudades/${id}`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(obj),
-  })
-    .then((r) => processResponse(r))
-    .catch((e) => console.error(e));
-
-//MODIFICAR UNA CIUDAD
-
-const modifyCity = (obj, id) => {
-  fetch(`http://${host}/regiones/ciudades/${id}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(obj),
-  })
-    .then((r) => processResponse(r))
-    .catch((e) => console.error(e));
-};
-
-//ELIMINAR UNA CIUDAD
-
-const deleteCity = (obj, id) =>
-  fetch(`http://${host}/regiones/ciudades/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(obj),
-  })
-    .then((r) => processResponse(r))
-    .catch((e) => console.error(e));*/
-
-//FUNCIÓN GENERAL PARA AGREGAR, MODIFICAR Y ELIMINAR
+//función general para el CRUD de regiones, paises y ciudades
 
 const crud = (obj, url, operacion) =>
   fetch(url, {
@@ -575,3 +340,100 @@ const crud = (obj, url, operacion) =>
   })
     .then((r) => processResponse(r))
     .catch((e) => console.error(e));
+
+//función que chequea los inputs y su información antes de mandarla al servidor
+const checkAll = (elemento) => {
+  const inputRegion = document.getElementById("input-nuevo");
+  const inputCountry = document.getElementById("input-country");
+  const inputCities = document.querySelectorAll(".input-add.city");
+  const smallRegion = document.querySelector(".small-add");
+  const smallCountry = document.querySelector(".small-add.country");
+  const smallCities = document.querySelectorAll(".small-add.city");
+  const smallDataEmpty = document.querySelector(".small-data-empty");
+
+  const inputs = { inputRegion, inputCountry, inputCities };
+  const smalls = { smallRegion, smallCountry, smallCities, smallDataEmpty };
+
+  resetInputsStyles(inputs, smalls);
+
+  if (elemento.className === "primary-button crud agregar regiones") {
+    const region = {
+      nombreRegion: inputRegion.value,
+      paises: [
+        {
+          nombrePais: inputCountry.value,
+          ciudades: [],
+        },
+      ],
+    };
+
+    inputCities.forEach((city) => {
+      region.paises[0].ciudades.push({
+        nombreCiudad: city.value,
+      });
+    });
+
+    if (
+      !region.nombreRegion ||
+      !region.paises[0].nombrePais ||
+      !region.paises[0].ciudades[0].nombreCiudad
+    ) {
+      checkInputs(region, inputs, smallDataEmpty);
+    } else {
+      return region;
+    }
+  } else if (elemento.className === "primary-button crud modificar regiones") {
+    const region = { nombreRegion: inputRegion.value };
+
+    if (!region.nombreRegion) {
+      checkInputs(region, inputs, smallDataEmpty);
+    } else {
+      return region;
+    }
+  } else if (elemento.className === "primary-button crud agregar paises") {
+    const pais = {
+      nombrePais: inputCountry.value,
+      ciudades: [],
+    };
+
+    inputCities.forEach((city) => {
+      pais.ciudades.push({
+        nombreCiudad: city.value,
+      });
+    });
+
+    if (!pais.nombrePais || !pais.ciudades[0].nombreCiudad) {
+      checkInputs(pais, inputs, smallDataEmpty);
+    } else {
+      return pais;
+    }
+  } else if (elemento.className === "primary-button crud modificar paises") {
+    const pais = { nombrePais: inputCountry.value, idPais };
+
+    if (!pais.nombrePais) {
+      checkInputs(pais, inputs, smallDataEmpty);
+    } else {
+      return pais;
+    }
+  } else if (elemento.className === "primary-button crud agregar ciudades") {
+    const ciudadOCiudades = { idPais, ciudades: [] };
+
+    inputCities.forEach((city) => {
+      ciudadOCiudades.ciudades.push({
+        nombreCiudad: city.value,
+      });
+    });
+    if (!ciudadOCiudades.ciudades[0].nombreCiudad) {
+      checkInputs(ciudadOCiudades, inputs, smallDataEmpty);
+    } else {
+      return ciudadOCiudades;
+    }
+  } else if (elemento.className === "primary-button crud modificar ciudades") {
+    const ciudad = { idPais, idCiudad, nombreCiudad: inputCities[0].value };
+    if (!ciudad.nombreCiudad) {
+      checkInputs(ciudad, inputs, smallDataEmpty);
+    } else {
+      return ciudad;
+    }
+  }
+};

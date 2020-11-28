@@ -18,7 +18,12 @@ const crearRegion = require("../../controllers/region/crearRegion");
 const modificarRegion = require("../../controllers/region/modificarRegion");
 const eliminarRegion = require("../../controllers/region/eliminarRegion");
 const obtenerRegiones = require("../../controllers/region/obtenerRegiones");
+const obtenerNombreRegiones = require("../../controllers/region/obtenerNombreRegiones");
+const obtenerNombrePaises = require("../../controllers/region/pais/obtenerNombrePaises");
+const obtenerNombreCiudades = require("../../controllers/region/ciudad/obtenerNombreCiudades");
 
+region.post("/paises/nombres", obtenerNombrePaises);
+region.post("/ciudades/nombres", obtenerNombreCiudades);
 region.post("/ciudades/:id", validarCreateCiudad, crearCiudad);
 region.put("/ciudades/:id", validarModifyCiudad, modificarCiudad);
 region.delete("/ciudades/:id", validarDeleteCiudad, eliminarCiudad);
@@ -28,6 +33,7 @@ region.delete("/paises/:id", validarDeletePais, eliminarPais);
 region.put("/:id", validarModifyRegion, modificarRegion);
 region.delete("/:id", eliminarRegion);
 region.post("/", validarCreateRegion, crearRegion);
+region.post("/nombres", obtenerNombreRegiones);
 region.get("/", obtenerRegiones);
 
 module.exports = region;

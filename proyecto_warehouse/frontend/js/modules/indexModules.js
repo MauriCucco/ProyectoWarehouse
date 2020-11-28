@@ -3,9 +3,12 @@ export const token = localStorage.getItem("token");
 export let seccionUsuarios = document.getElementById("usuarios");
 export let seccionRegiones = document.getElementById("regiones");
 export let seccionContactos = document.getElementById("contactos");
+export let seccionCompanias = document.getElementById("companias");
 export const divSinPermiso = document.getElementById("sin-permiso");
 export const modalBg = document.querySelector(".modal-bg");
 export const modalCrud = document.getElementById("modal-crud");
+export const modalSucces = document.getElementById("modal-succes");
+export const h3Succes = document.getElementById("h3-modal-succes");
 let emptyInput = false;
 
 //FUNCIÓN PARA DEJAR DE RESALTAR UNA SECCIÓN DEL NAV
@@ -19,20 +22,192 @@ export const removeActive = () => {
   }
 };
 
+//FUNCIÓN QUE PROCESA LA INFO DEL SERVIDOR PARA CREAR UNA TABLA
+
+export const processAdminTable = async (response, seccion) => {
+  try {
+    const data = await response.json();
+
+    if (data.error === "No se encontró un token de autorización")
+      return window.open("bienvenida.html", "_self");
+    if (seccion === "usuarios") {
+      if (data.error === "No posee autorización de administrador")
+        return (divSinPermiso.style.display = "flex");
+
+      seccionUsuarios.style.display = "unset";
+    } else {
+      seccionCompanias.style.display = "unset";
+    }
+
+    deleteRows(seccion);
+
+    createRows(data, seccion);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+//FUNCIÓN QUE CREA LA TABLA CON LA INFO DEL SERVIDOR
+
+const createRows = (data, seccion) => {
+  data.forEach((element) => {
+    let tablaBodyUsuarios = document.getElementById("body-tabla");
+    let tablaBodyCompania = document.getElementById("body-tabla-companias");
+    let tr = document.createElement("tr");
+    let tdNombre = document.createElement("td");
+    let tdApellido = document.createElement("td");
+    let tdEmail = document.createElement("td");
+    let tdPerfil = document.createElement("td");
+    let tdRegionPais = document.createElement("td");
+    let regionP = document.createElement("p");
+    let paisP = document.createElement("p");
+    let tdCiudad = document.createElement("td");
+    let tdDireccion = document.createElement("td");
+    let tdTelefono = document.createElement("td");
+    let tdAcciones = document.createElement("td");
+    let dotsIcon = document.createElement("i");
+
+    tdAcciones.classList.add("acciones");
+    dotsIcon.className = "fas fa-ellipsis-h dots";
+    dotsIcon.id = element._id;
+    tdNombre.innerHTML = element.nombre;
+    tdEmail.innerHTML = element.email;
+    tr.appendChild(tdNombre);
+
+    if (seccion === "usuarios") {
+      tr.classList.add("fila-usuario");
+      tdApellido.innerHTML = element.apellido;
+      tdPerfil.innerHTML = element.perfil;
+      tablaBodyUsuarios.appendChild(tr);
+      tr.appendChild(tdApellido);
+      tr.appendChild(tdEmail);
+      tr.appendChild(tdPerfil);
+      tr.appendChild(tdAcciones);
+    } else {
+      tr.classList.add("fila-compania");
+      dotsIcon.className = "fas fa-ellipsis-h dots company";
+      tdRegionPais.className = "td-region-pais";
+      regionP.className = "region-p";
+      tdPerfil.innerHTML = element.perfil;
+      regionP.innerHTML = element.region;
+      paisP.innerHTML = element.pais;
+      tdCiudad.innerHTML = element.ciudad;
+      tdDireccion.innerHTML = element.direccion;
+      tdTelefono.innerHTML = element.telefono;
+      tablaBodyCompania.appendChild(tr);
+      tdRegionPais.appendChild(paisP);
+      tdRegionPais.appendChild(regionP);
+      tr.appendChild(tdRegionPais);
+      tr.appendChild(tdCiudad);
+      tr.appendChild(tdDireccion);
+      tr.appendChild(tdEmail);
+      tr.appendChild(tdTelefono);
+      tr.appendChild(tdAcciones);
+    }
+    tdAcciones.appendChild(dotsIcon);
+  });
+};
+
+//FUNCIÓN QUE RESETEA LAS TABLAS
+
+const deleteRows = (seccion) => {
+  const filasCompanias = document.getElementsByClassName("fila-compania");
+  const filasUsuarios = document.getElementsByClassName("fila-usuario");
+  if (seccion === "usuarios") {
+    for (let i = filasUsuarios.length - 1; i >= 0; i--) {
+      filasUsuarios[i].remove();
+    }
+  } else {
+    for (let i = filasCompanias.length - 1; i >= 0; i--) {
+      filasCompanias[i].remove();
+    }
+  }
+};
+
 //FUNCIÓN QUE CHEQUEA SI EL USUARIO LLENÓ TODOS LOS CAMPOS REQUERIDOS
 
-export const checkInputs = () => {
-  const allInputs = document.getElementsByClassName("input-add");
-  const dataSmall = document.querySelector(".small-data-empty");
+export const checkInputs = (seccion = "") => {
+  const inputsRegiones = document.getElementsByClassName("input-add");
+  const inputsUser = document.getElementsByClassName("input-form");
+  const inputsCompania = document.getElementsByClassName("input-form-company");
+  const inputsCompaniaModify = document.getElementsByClassName(
+    "input-form-company modify"
+  );
+  const regionCompany = document.getElementById("region-company");
+  const regionCompanyModify = document.getElementById("region-modify-company");
+  const paisCompany = document.getElementById("country-company");
+  const paisCompanyModify = document.getElementById("country-modify-company");
+  const ciudadCompany = document.getElementById("city-company");
+  const ciudadCompanyModify = document.getElementById("city-modify-company");
+  const inputsModifyUser = document.getElementsByClassName("input-form-modify");
+  const divCompania = document.getElementById("div-nueva-compania");
+  const dataSmall = document.querySelectorAll(".small-data-empty");
 
-  for (let input of allInputs) {
-    if (input.value === "") {
-      input.classList.add("invalid");
-      emptyInput = true;
+  if (seccion === "regiones") {
+    for (let input of inputsRegiones) {
+      if (input.value === "") {
+        input.classList.add("invalid");
+        emptyInput = true;
+      }
+    }
+  } else if (seccion === "usuarios-create") {
+    for (let input of inputsUser) {
+      if (input.value === "") {
+        input.classList.add("invalid");
+        emptyInput = true;
+      }
+    }
+  } else if (seccion === "companias") {
+    if (divCompania.style.display === "flex") {
+      for (let input of inputsCompania) {
+        if (input.value === "") {
+          input.classList.add("invalid");
+          emptyInput = true;
+        }
+      }
+
+      if (regionCompany.value === "none") {
+        regionCompany.classList.add("invalid");
+        emptyInput = true;
+      } else if (paisCompany.value === "none") {
+        paisCompany.classList.add("invalid");
+        emptyInput = true;
+      } else if (ciudadCompany.value === "none") {
+        ciudadCompany.classList.add("invalid");
+        emptyInput = true;
+      }
+    } else {
+      for (let input of inputsCompaniaModify) {
+        if (input.value === "") {
+          input.classList.add("invalid");
+          emptyInput = true;
+        }
+      }
+
+      if (regionCompanyModify.value === "none") {
+        regionCompanyModify.classList.add("invalid");
+        emptyInput = true;
+      } else if (paisCompanyModify.value === "none") {
+        paisCompanyModify.classList.add("invalid");
+        emptyInput = true;
+      } else if (ciudadCompanyModify.value === "none") {
+        ciudadCompanyModify.classList.add("invalid");
+        emptyInput = true;
+      }
+    }
+  } else {
+    for (let input of inputsModifyUser) {
+      if (input.value === "") {
+        input.classList.add("invalid");
+        emptyInput = true;
+      }
     }
   }
 
-  if (emptyInput) dataSmall.innerHTML = "Ingrese todos los datos requeridos";
+  if (emptyInput)
+    dataSmall.forEach(
+      (small) => (small.innerHTML = "Ingrese todos los datos requeridos")
+    );
 
   return emptyInput;
 };
@@ -41,12 +216,16 @@ export const checkInputs = () => {
 
 export const resetInputsStyles = () => {
   let allInputs = document.getElementsByTagName("INPUT");
-  const dataSmall = document.querySelector(".small-data-empty");
+  let allSelects = document.getElementsByTagName("SELECT");
+  const dataSmall = document.querySelectorAll(".small-data-empty");
 
   for (let input of allInputs) {
     input.classList.remove("invalid");
   }
-  dataSmall.innerHTML = "";
+  for (let select of allSelects) {
+    select.classList.remove("invalid");
+  }
+  dataSmall.forEach((small) => (small.innerHTML = ""));
   emptyInput = false;
 };
 
@@ -131,13 +310,10 @@ export const processInvalid = (response, inputs, smalls) => {
   } else if (response.error === "Email inválido") {
     resetInputsStyles(inputs, smalls);
 
-    if (emailInput) {
-      emailInput.classList.add("invalid");
-      emailSmall.innerHTML = "Debe ingresar un email válido";
-    } else if (emailInputModify) {
-      emailInputModify.classList.add("invalid");
-      emailSmallModify.innerHTML = "Debe ingresar un email válido";
-    }
+    emailInput.classList.add("invalid");
+    emailSmall.innerHTML = "Debe ingresar un email válido";
+    emailInputModify.classList.add("invalid");
+    emailSmallModify.innerHTML = "Debe ingresar un email válido";
   } else if (response.error === "Esta dirección de email ya fue utilizada") {
     resetInputsStyles(inputs, smalls);
 
@@ -241,7 +417,10 @@ export const createIcons = (target) => {
     editar.className = "fas fa-pen paises";
   } else if (target.className === "fas fa-ellipsis-h dots ciudades") {
     editar.className = "fas fa-pen ciudades";
+  } else if (target.className === "fas fa-ellipsis-h dots company") {
+    editar.className = "fas fa-pen company";
   }
+
   if (target.className === "fas fa-ellipsis-h dots") {
     eliminar.className = "fas fa-trash";
   } else if (target.className === "fas fa-ellipsis-h dots regiones") {
@@ -250,7 +429,10 @@ export const createIcons = (target) => {
     eliminar.className = "fas fa-trash paises";
   } else if (target.className === "fas fa-ellipsis-h dots ciudades") {
     eliminar.className = "fas fa-trash ciudades";
+  } else if (target.className === "fas fa-ellipsis-h dots company") {
+    eliminar.className = "fas fa-trash company";
   }
+
   if (target.className === "fas fa-ellipsis-h dots") {
     agregar.className = "fas fa-plus";
   } else if (target.className === "fas fa-ellipsis-h dots regiones") {
@@ -339,9 +521,14 @@ export const crearModalCrud = (operacion, name = {}) => {
   dataSmallEmpty.className = "small-data-empty";
   h2Name.className = "h2-name";
 
-  if (operacion === "deleteUser") {
-    h2Crud.innerHTML = "¿Está seguro de eliminar a éste usuario?";
-    buttonCrud.className = "primary-button crud eliminar usuario";
+  if (operacion === "deleteUser" || operacion === "deleteCompany") {
+    if (operacion === "deleteUser") {
+      h2Crud.innerHTML = "¿Está seguro de eliminar a éste usuario?";
+      buttonCrud.className = "primary-button crud eliminar usuario";
+    } else {
+      h2Crud.innerHTML = "¿Está seguro de eliminar ésta compañia?";
+      buttonCrud.className = "primary-button crud eliminar compania";
+    }
     h2Name.innerHTML = `"${name}"`;
     h2Crud.after(h2Name);
     buttonCrud.innerHTML = "Eliminar";

@@ -58,8 +58,8 @@ const createCity = async (idRegion, idPais, ciudades) => {
   }
 };
 
-const findRegions = (obj) =>
-  Regiones.find(obj)
+const findRegions = (obj, proyection = {}) =>
+  Regiones.find(obj, proyection)
     .then((r) => r)
     .catch((e) => {
       throw e;

@@ -4,6 +4,7 @@ import {
   removeActive,
   seccionUsuarios,
   seccionContactos,
+  seccionCompanias,
   divSinPermiso,
   seccionRegiones,
   resetDots,
@@ -28,14 +29,15 @@ regionesItem.addEventListener("click", () => {
   removeActive();
 
   regionesItem.classList.add("item-habilitado");
-  seccionUsuarios.style.display = "none";
-  seccionContactos.style.display = "none";
-  divSinPermiso.style.display = "none";
-  seccionRegiones.style.display = "unset";
 
   resetRegiones();
-
   getRegiones();
+
+  seccionUsuarios.style.display = "none";
+  seccionContactos.style.display = "none";
+  seccionCompanias.style.display = "none";
+  divSinPermiso.style.display = "none";
+  seccionRegiones.style.display = "unset";
 });
 
 //función para obtener la info del servidor
@@ -200,7 +202,6 @@ document.addEventListener("click", (event) => {
     if (data) crud(data, `http://${host}/regiones/paises/${idRegion}`, "POST");
   } else if (event.target.className === "fas fa-pen paises") {
     //MODIFICAR UN PAÍS
-
     idRegion =
       event.target.parentElement.parentElement.parentElement.previousSibling
         .firstElementChild.id;
@@ -289,7 +290,7 @@ const addInputCity = () => {
 
 //función que procesa las respuestas del servidor
 
-const processResponse = async (response) => {
+const processResponseRegion = async (response) => {
   try {
     const jsonResponse = await response.json();
 
@@ -338,7 +339,7 @@ const crud = (obj, url, operacion) =>
     },
     body: JSON.stringify(obj),
   })
-    .then((r) => processResponse(r))
+    .then((r) => processResponseRegion(r))
     .catch((e) => console.error(e));
 
 //función que chequea los inputs y reune su información antes de mandarla al servidor
@@ -349,7 +350,7 @@ const checkAll = (elemento) => {
 
   resetInputsStyles();
 
-  const emptyInput = checkInputs();
+  const emptyInput = checkInputs("regiones");
 
   if (emptyInput) {
     return false;

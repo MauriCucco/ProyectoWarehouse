@@ -2,6 +2,7 @@ import {
   removeActive,
   seccionUsuarios,
   seccionRegiones,
+  seccionCompanias,
   divSinPermiso,
 } from "./modules/indexModules.js";
 
@@ -18,5 +19,6 @@ contactosItem.addEventListener("click", () => {
 
   seccionUsuarios.style.display = "none";
   seccionRegiones.style.display = "none";
+  seccionCompanias.style.display = "none";
   divSinPermiso.style.display = "none";
 });

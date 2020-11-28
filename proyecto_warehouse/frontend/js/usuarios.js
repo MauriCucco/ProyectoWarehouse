@@ -4,10 +4,9 @@ import {
   removeActive,
   checkInputs,
   processInvalid,
-  seccionUsuarios,
   seccionContactos,
+  seccionCompanias,
   seccionRegiones,
-  divSinPermiso,
   resetInputsStyles,
   resetInputsValues,
   sortTableByColumn,
@@ -16,18 +15,13 @@ import {
   crearModalCrud,
   modalBg,
   modalCrud,
+  modalSucces,
   resetModal,
+  processAdminTable,
 } from "./modules/indexModules.js";
 
 let usuariosItem = document.getElementById("usuarios-item");
-const botonEliminar = document.querySelector(
-  ".primary-button.eliminar.usuario"
-);
-const modalModificar = document.getElementById("modal-modify");
-const botonModificar = document.querySelector(
-  ".primary-button.modificar.usuario"
-);
-const modalSucces = document.getElementById("modal-succes");
+const modalModificar = document.getElementById("modal-modify-user");
 
 let nombreInput = document.getElementById("nombre-input");
 let nombreInputModify = document.getElementById("nombre-input-modify");
@@ -50,6 +44,7 @@ let confirmSmall = document.getElementById("confirm-password-small");
 const submitButton = document.getElementById("submit-button");
 let dataSmall = document.getElementById("data-small");
 let dataSmallModify = document.getElementById("data-small-modify");
+let userId;
 
 const inputs = {
   nombreInput,
@@ -87,6 +82,7 @@ usuariosItem.addEventListener("click", () => {
 
   seccionContactos.style.display = "none";
   seccionRegiones.style.display = "none";
+  seccionCompanias.style.display = "none";
 
   resetInputsValues();
 
@@ -105,72 +101,8 @@ const getUsuarios = () =>
       "Content-Type": "application/json",
     },
   })
-    .then((r) => processAdmin(r))
+    .then((r) => processAdminTable(r, "usuarios"))
     .catch((e) => console.error(e));
-
-//función para verificar si es administrador
-
-const processAdmin = async (response) => {
-  try {
-    const data = await response.json();
-
-    if (data.error === "No se encontró un token de autorización")
-      return window.open("bienvenida.html", "_self");
-    if (data.error === "No posee autorización de administrador")
-      return (divSinPermiso.style.display = "flex");
-
-    seccionUsuarios.style.display = "unset";
-
-    deleteRows();
-
-    createRows(data);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-//función que "resetea" la tabla usuarios
-
-const deleteRows = () => {
-  const filasUsuarios = document.getElementsByClassName("fila-usuario");
-
-  for (let i = filasUsuarios.length - 1; i >= 0; i--) {
-    filasUsuarios[i].remove();
-  }
-};
-
-//función para crear las filas en la tabla de usuarios
-
-const createRows = (data) => {
-  data.forEach((element) => {
-    let tablaBody = document.getElementById("body-tabla");
-    let tr = document.createElement("tr");
-    let tdNombre = document.createElement("td");
-    let tdApellido = document.createElement("td");
-    let tdEmail = document.createElement("td");
-    let tdPerfil = document.createElement("td");
-    let tdAcciones = document.createElement("td");
-    let dotsIcon = document.createElement("i");
-
-    tr.classList.add("fila-usuario");
-    tdAcciones.classList.add("acciones");
-    dotsIcon.className = "fas fa-ellipsis-h dots";
-    dotsIcon.id = element._id;
-
-    tdNombre.innerHTML = element.nombre;
-    tdApellido.innerHTML = element.apellido;
-    tdEmail.innerHTML = element.email;
-    tdPerfil.innerHTML = element.perfil;
-
-    tablaBody.appendChild(tr);
-    tdAcciones.appendChild(dotsIcon);
-    tr.appendChild(tdNombre);
-    tr.appendChild(tdApellido);
-    tr.appendChild(tdEmail);
-    tr.appendChild(tdPerfil);
-    tr.appendChild(tdAcciones);
-  });
-};
 
 //CREAR USUARIO
 
@@ -245,8 +177,8 @@ const processResponse = async (response) => {
 
 document.addEventListener("click", (event) => {
   if (event.target.className === "fas fa-ellipsis-h dots") {
+    userId = event.target.id;
     resetDots();
-
     createIcons(event.target);
   } else if (event.target.className === "fas fa-trash") {
     const userName = `${event.target.parentElement.parentElement.firstElementChild.innerHTML} ${event.target.parentElement.parentElement.firstElementChild.nextElementSibling.innerHTML}`;
@@ -271,11 +203,12 @@ document.addEventListener("click", (event) => {
   ) {
     deleteUser(event.target.id); //ELIMINAR
   } else if (event.target.className === "fas fa-pen") {
+    resetInputsStyles();
     chargeUserInfo(event.target);
     modalBg.classList.add("bg-activate");
     modalModificar.style.display = "flex";
   } else if (event.target.className === "primary-button modificar") {
-    modifyUser(event.target.id); //MODIFICAR
+    modifyUser(userId); //MODIFICAR
   }
 });
 

@@ -54,14 +54,15 @@ header {
   border-bottom: 0.2rem white solid;
 }
 
-/*LOGIN y REGISTRO*/
+/*LOGIN y REGISTRO y FORMULARIO NUEVA COMPAÑIA*/
 main {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 #login,
-#registro {
+#registro,
+#div-nueva-compania {
   border: 0.3rem solid #0683f9;
   border-radius: 0.65rem;
   display: flex;
@@ -72,12 +73,17 @@ main {
   padding: 3rem;
   width: 50rem;
 }
-#registro {
+#registro,
+#div-nueva-compania {
   margin-top: 3.5rem;
   padding: 3rem 0 3rem 0;
 }
+#div-nueva-compania {
+  margin-bottom: 5rem;
+}
 #login h2,
-#registro h2 {
+#registro h2,
+#div-nueva-compania h2 {
   color: #333333;
   font-size: 2rem;
   margin-bottom: 2rem;
@@ -89,7 +95,11 @@ main {
 #form-registro input,
 #form-registro select,
 #form-modify input,
-#form-modify select {
+#form-modify select,
+#form-compania input,
+#form-compania select,
+#form-compania-modify input,
+#form-compania-modify select {
   border: 0.1rem solid #cccccc;
   border-radius: 0.5rem;
   height: 3.55rem;
@@ -129,6 +139,11 @@ select {
   cursor: pointer;
   color: white;
 }
+#country-company:disabled,
+#city-company:disabled,
+#city-modify-company:disabled {
+  background-color: #e5e5e5;
+}
 
 /*ESTILO GENERAL PARA ALINEAR*/
 .central-column {
@@ -154,7 +169,7 @@ select {
 /*TABLAS*/
 .tabla {
   border: 1px solid rgba(0, 0, 0, 0.1);
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   margin: 5rem auto 5rem auto;
 }
 tr {
@@ -244,10 +259,18 @@ td.acciones {
 #modal-crud {
   display: none;
 }
-#modal-modify {
+#modal-modify-user {
   display: none;
   height: 35rem;
-  padding: 3.5rem;
+  padding: 3.5rem 3.5rem 2rem 3.5rem;
+}
+#modal-modify-company {
+  display: none;
+  margin-bottom: unset;
+  width: 30rem;
+}
+#h2-modify-company {
+  margin-bottom: 1.2rem;
 }
 .succes {
   display: flex;
@@ -258,6 +281,7 @@ td.acciones {
   position: absolute;
   transition: visibility 0s, opacity 0.5s;
   visibility: hidden;
+  width: 30rem;
 }
 .bg-activate {
   visibility: visible;
@@ -275,11 +299,11 @@ td.acciones {
   margin-top: unset;
 }
 .buttons {
-  margin-top: 3rem;
+  margin-top: 2rem;
 }
 .buttons-modify,
 .buttons-add {
-  margin-top: 1.5rem;
+  margin-top: 2rem;
 }
 .cerrar,
 .cerrar-modify {
@@ -361,7 +385,7 @@ ul,
 #arbol-regiones {
   font-size: 1.5rem;
   list-style-type: none;
-  margin: 2rem 0rem 0rem 5rem;
+  margin: 2rem 0rem 0rem 0rem;
 }
 #arbol-regiones {
   border: 0.1rem solid rgba(0, 0, 0, 0.1);
@@ -406,12 +430,14 @@ li {
   font-weight: 700;
 }
 .pais {
-  width: 35.8rem;
+  margin-left: 5rem;
+  width: 40.8rem;
 }
 .ciudad {
   font-style: italic;
+  margin-left: 5rem;
   user-select: none; /* Prevent text selection */
-  width: 30.8rem;
+  width: 35.8rem;
 }
 li:last-child {
   margin-bottom: unset;
@@ -432,4 +458,38 @@ li:last-child {
 }
 .fa-plus.city:hover {
   font-size: 1.5rem;
+}
+
+/*SECCIÓN COMPAÑIAS*/
+#companias {
+  display: none;
+}
+#div-companias {
+  display: block;
+  margin: 5rem auto;
+  position: relative;
+  width: fit-content;
+}
+#tabla-companias {
+  margin-top: 2rem;
+}
+#boton-compania {
+  display: block;
+  margin-left: auto;
+}
+th.fila {
+  font-weight: unset;
+}
+.td-region-pais {
+  align-items: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.region-p {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 1.3rem;
+}
+#div-nueva-compania {
+  display: none;
 }

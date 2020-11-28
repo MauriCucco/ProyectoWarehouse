@@ -6,20 +6,19 @@ import {
   seccionContactos,
   divSinPermiso,
   seccionRegiones,
-  seccionCompanias,
   resetDots,
   createIcons,
   modalBg,
   modalCrud,
   modalSucces,
   processInvalid,
-  callModal,
   resetModal,
   checkInputs,
   resetInputsStyles,
   processAdminTable,
   resetInputsValues,
   crearModalCrud,
+  modalModifyCompany,
 } from "./modules/indexModules.js";
 
 const companiasItem = document.getElementById("companias-item");
@@ -48,7 +47,6 @@ const telefonoCompania = document.getElementById("telefono-compania");
 const telefonoCompaniaModify = document.getElementById(
   "telefono-compania-modify"
 );
-const modalModifyCompany = document.getElementById("modal-modify-company");
 let idCompany;
 
 const inputs = { emailInput, emailInputModify };
@@ -67,6 +65,7 @@ companiasItem.addEventListener("click", () => {
   botonCompania.style.display = "block";
 
   resetInputsValues();
+  resetInputsStyles();
   resetOptions("pais");
   resetOptions("ciudad");
 
@@ -163,6 +162,7 @@ const crearOptions = (array, locacion) => {
 regionCompany.addEventListener("click", (e) => {
   resetOptions("pais");
   resetOptions("ciudad");
+  paisCompany.disabled = true;
   ciudadCompany.disabled = true;
   e.target.value === "none"
     ? console.log("Debe elegir una región")
@@ -174,6 +174,7 @@ regionCompany.addEventListener("click", (e) => {
 regionCompanyModify.addEventListener("click", (e) => {
   resetOptions("pais-modify");
   resetOptions("ciudad-modify");
+  paisCompanyModify.disabled = true;
   ciudadCompanyModify.disabled = true;
   e.target.value === "none"
     ? console.log("Debe elegir una región")
@@ -262,9 +263,7 @@ const processResponseCompany = async (response) => {
         modalSucces.classList.remove("bg-activate");
         companiasItem.click();
       }, 2000);
-      /*modalBg.classList.remove("bg-activate");
-      modalCrud.style.display = "none";
-      resetModal();*/
+      resetModal();
     } else if (response.status === 401) {
       window.open("bienvenida.html", "_self");
     } else if (response.status === 422) {
@@ -283,6 +282,7 @@ document.addEventListener("click", (event) => {
     createIcons(event.target);
     idCompany = event.target.id;
   } else if (event.target.className === "fas fa-pen company") {
+    resetInputsStyles();
     resetOptions("region-modify");
     chargeCompanyInfo(event.target);
     modalBg.classList.add("bg-activate");

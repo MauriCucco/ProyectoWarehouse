@@ -44,6 +44,8 @@ let confirmSmall = document.getElementById("confirm-password-small");
 const submitButton = document.getElementById("submit-button");
 let dataSmall = document.getElementById("data-small");
 let dataSmallModify = document.getElementById("data-small-modify");
+const botonUsuario = document.getElementById("boton-usuario");
+const registroForm = document.getElementById("registro");
 let userId;
 
 const inputs = {
@@ -83,6 +85,8 @@ usuariosItem.addEventListener("click", () => {
   seccionContactos.style.display = "none";
   seccionRegiones.style.display = "none";
   seccionCompanias.style.display = "none";
+  botonUsuario.style.display = "block";
+  registroForm.style.display = "none";
 
   resetInputsValues();
 
@@ -104,6 +108,14 @@ const getUsuarios = () =>
     .then((r) => processAdminTable(r, "usuarios"))
     .catch((e) => console.error(e));
 
+//EventListener del botón para agregar companias
+
+botonUsuario.addEventListener("click", () => {
+  botonUsuario.style.display = "none";
+  registroForm.style.display = "flex";
+  window.scrollBy(0, 80);
+});
+
 //CREAR USUARIO
 
 submitButton.addEventListener("click", () => {
@@ -118,7 +130,7 @@ submitButton.addEventListener("click", () => {
 
   resetInputsStyles();
 
-  const emptyInput = checkInputs();
+  const emptyInput = checkInputs("usuarios-create");
 
   if (emptyInput) {
     return "Hay inputs vacíos";
@@ -151,18 +163,15 @@ const processResponse = async (response) => {
 
     if (response.status === 200) {
       resetInputsStyles();
-
-      dataSmall.classList.add("small-success");
-
-      dataSmall.innerHTML = "El usuario fue creado exitósamente";
-
-      getUsuarios();
-
+      modalBg.classList.add("bg-activate");
+      modalSucces.classList.add("bg-activate");
       setTimeout(() => {
-        resetInputsValues();
-
-        resetInputsStyles();
+        modalBg.classList.remove("bg-activate");
+        modalSucces.classList.remove("bg-activate");
+        usuariosItem.click();
       }, 2000);
+      resetModal();
+      getUsuarios();
     } else if (response.status === 401) {
       window.open("bienvenida.html", "_self");
     } else if (response.status === 422) {

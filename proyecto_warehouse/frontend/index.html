@@ -45,6 +45,7 @@
         </div>
         <div id="modal-modify-user" class="modal">
           <form id="form-modify" class="central-column">
+            <h2 class="h2-modify">Modificar usuario:</h2>
             <div class="central-column">
               <input
                 id="nombre-input-modify"
@@ -95,7 +96,7 @@
         </div>
         <div id="modal-modify-company" class="modal">
           <form id="form-compania-modify" class="central-column">
-            <h2 id="h2-modify-company">Modificar compañia:</h2>
+            <h2 class="h2-modify">Modificar compañia:</h2>
             <div class="central-column">
               <input
                 id="nombre-compania-modify"
@@ -186,98 +187,103 @@
       </div>
       <section id="contactos"></section>
       <section id="usuarios">
-        <div id="registro">
-          <h2>Crear usuario</h2>
-          <form id="form-registro" class="central-column">
-            <div class="central-column">
-              <input
-                id="nombre-input"
-                class="input-form nombre"
-                type="text"
-                name="nombre"
-                placeholder="Nombre"
-              />
-              <small id="nombre-small"></small>
-            </div>
-            <div class="central-column">
-              <input
-                id="apellido-input"
-                class="input-form apellido"
-                type="text"
-                name="apellido"
-                placeholder="Apellido"
-              />
-              <small id="apellido-small"></small>
-            </div>
-            <div class="central-column">
-              <input
-                id="email-input"
-                class="input-form email"
-                type="email"
-                name="email"
-                placeholder="Email"
-              />
-              <small id="email-small"></small>
-            </div>
-            <div class="central-column">
-              <select name="perfil" id="perfil-select">
-                <option value="Contactos">Contactos</option>
-                <option value="Administrador">Administrador</option>
-              </select>
-              <small id="perfil-small"></small>
-            </div>
-            <div class="central-column">
-              <input
-                id="password-input"
-                class="input-form password"
-                type="password"
-                name="password"
-                placeholder="Password"
-              />
-              <small id="password-small"></small>
-            </div>
-            <div class="central-column">
-              <input
-                id="confirm-password-input"
-                class="input-form confirm"
-                type="password"
-                name="confirm-password"
-                placeholder="Repetir password"
-              />
-              <small id="confirm-password-small"></small>
-            </div>
-            <button id="submit-button" class="primary-button" type="button">
-              Crear
-            </button>
-            <small id="data-small" class="small-data-empty"></small>
-          </form>
+        <div id="div-usuarios">
+          <button id="boton-usuario" class="primary-button">
+            Agregar usuario
+          </button>
+          <div id="registro">
+            <h2>Crear usuario</h2>
+            <form id="form-registro" class="central-column">
+              <div class="central-column">
+                <input
+                  id="nombre-input"
+                  class="input-form nombre"
+                  type="text"
+                  name="nombre"
+                  placeholder="Nombre"
+                />
+                <small id="nombre-small"></small>
+              </div>
+              <div class="central-column">
+                <input
+                  id="apellido-input"
+                  class="input-form apellido"
+                  type="text"
+                  name="apellido"
+                  placeholder="Apellido"
+                />
+                <small id="apellido-small"></small>
+              </div>
+              <div class="central-column">
+                <input
+                  id="email-input"
+                  class="input-form email"
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                />
+                <small id="email-small"></small>
+              </div>
+              <div class="central-column">
+                <select name="perfil" id="perfil-select">
+                  <option value="Contactos">Contactos</option>
+                  <option value="Administrador">Administrador</option>
+                </select>
+                <small id="perfil-small"></small>
+              </div>
+              <div class="central-column">
+                <input
+                  id="password-input"
+                  class="input-form password"
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                />
+                <small id="password-small"></small>
+              </div>
+              <div class="central-column">
+                <input
+                  id="confirm-password-input"
+                  class="input-form confirm"
+                  type="password"
+                  name="confirm-password"
+                  placeholder="Repetir password"
+                />
+                <small id="confirm-password-small"></small>
+              </div>
+              <button id="submit-button" class="primary-button" type="button">
+                Crear
+              </button>
+              <small id="data-small" class="small-data-empty"></small>
+            </form>
+          </div>
+          <table id="tabla-usuarios" class="tabla">
+            <thead>
+              <tr>
+                <th>
+                  <p>Nombre</p>
+                  <img class="sort" src="./images/sort.svg" alt="Sort image" />
+                </th>
+                <th>
+                  <p>Apellido</p>
+                  <img class="sort" src="./images/sort.svg" alt="Sort image" />
+                </th>
+                <th>
+                  <p>Email</p>
+                  <img class="sort" src="./images/sort.svg" alt="Sort image" />
+                </th>
+                <th>
+                  <p>Perfil</p>
+                  <img class="sort" src="./images/sort.svg" alt="Sort image" />
+                </th>
+                <th class="acciones">
+                  <p>Acciones</p>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="body-tabla"></tbody>
+          </table>
         </div>
-        <table id="tabla-usuarios" class="tabla">
-          <thead>
-            <tr>
-              <th>
-                <p>Nombre</p>
-                <img class="sort" src="./images/sort.svg" alt="Sort image" />
-              </th>
-              <th>
-                <p>Apellido</p>
-                <img class="sort" src="./images/sort.svg" alt="Sort image" />
-              </th>
-              <th>
-                <p>Email</p>
-                <img class="sort" src="./images/sort.svg" alt="Sort image" />
-              </th>
-              <th>
-                <p>Perfil</p>
-                <img class="sort" src="./images/sort.svg" alt="Sort image" />
-              </th>
-              <th class="acciones">
-                <p>Acciones</p>
-              </th>
-            </tr>
-          </thead>
-          <tbody id="body-tabla"></tbody>
-        </table>
       </section>
       <section id="regiones">
         <div id="div-regiones">

@@ -8,7 +8,9 @@ export const divSinPermiso = document.getElementById("sin-permiso");
 export const modalBg = document.querySelector(".modal-bg");
 export const modalCrud = document.getElementById("modal-crud");
 export const modalSucces = document.getElementById("modal-succes");
-export const h3Succes = document.getElementById("h3-modal-succes");
+export const modalModifyCompany = document.getElementById(
+  "modal-modify-company"
+);
 let emptyInput = false;
 
 //FUNCIÓN PARA DEJAR DE RESALTAR UNA SECCIÓN DEL NAV

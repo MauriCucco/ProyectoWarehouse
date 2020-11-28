@@ -78,6 +78,10 @@ main {
   margin-top: 3.5rem;
   padding: 3rem 0 3rem 0;
 }
+#registro {
+  display: none;
+  margin-bottom: 5rem;
+}
 #div-nueva-compania {
   margin-bottom: 5rem;
 }
@@ -99,7 +103,8 @@ main {
 #form-compania input,
 #form-compania select,
 #form-compania-modify input,
-#form-compania-modify select {
+#form-compania-modify select,
+#div-input input {
   border: 0.1rem solid #cccccc;
   border-radius: 0.5rem;
   height: 3.55rem;
@@ -141,6 +146,7 @@ select {
 }
 #country-company:disabled,
 #city-company:disabled,
+#country-modify-company:disabled,
 #city-modify-company:disabled {
   background-color: #e5e5e5;
 }
@@ -171,6 +177,9 @@ select {
   border: 1px solid rgba(0, 0, 0, 0.1);
   font-size: 1.35rem;
   margin: 5rem auto 5rem auto;
+}
+#tabla-usuarios {
+  margin-top: 2.5rem;
 }
 tr {
   display: flex;
@@ -269,7 +278,7 @@ td.acciones {
   margin-bottom: unset;
   width: 30rem;
 }
-#h2-modify-company {
+.h2-modify {
   margin-bottom: 1.2rem;
 }
 .succes {
@@ -464,7 +473,8 @@ li:last-child {
 #companias {
   display: none;
 }
-#div-companias {
+#div-companias,
+#div-usuarios {
   display: block;
   margin: 5rem auto;
   position: relative;
@@ -473,7 +483,8 @@ li:last-child {
 #tabla-companias {
   margin-top: 2rem;
 }
-#boton-compania {
+#boton-compania,
+#boton-usuario {
   display: block;
   margin-left: auto;
 }

@@ -11,11 +11,13 @@ import {
   createIcons,
   modalBg,
   modalCrud,
+  modalSucces,
   processInvalid,
   callModal,
   resetModal,
   checkInputs,
   resetInputsStyles,
+  modalModifyCompany,
 } from "./modules/indexModules.js";
 
 const regionesItem = document.getElementById("regiones-item");
@@ -37,6 +39,7 @@ regionesItem.addEventListener("click", () => {
   seccionContactos.style.display = "none";
   seccionCompanias.style.display = "none";
   divSinPermiso.style.display = "none";
+  modalModifyCompany.style.display = "none";
   seccionRegiones.style.display = "unset";
 });
 
@@ -295,10 +298,13 @@ const processResponseRegion = async (response) => {
     const jsonResponse = await response.json();
 
     if (response.status === 200) {
-      resetRegiones();
-      getRegiones();
-      modalBg.classList.remove("bg-activate");
       modalCrud.style.display = "none";
+      modalSucces.classList.add("bg-activate");
+      setTimeout(() => {
+        modalBg.classList.remove("bg-activate");
+        modalSucces.classList.remove("bg-activate");
+        regionesItem.click();
+      }, 2000);
       resetModal();
     } else if (response.status === 401) {
       window.open("bienvenida.html", "_self");

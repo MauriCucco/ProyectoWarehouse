@@ -10,7 +10,7 @@
     />
     <link rel="stylesheet" href="./css/style.css" />
   </head>
-  <body>
+  <body id="body">
     <header>
       <a id="logo" href="index.html">WAREHOUSE</a>
       <nav>
@@ -31,10 +31,6 @@
       </nav>
     </header>
     <main>
-      <div id="sin-permiso">
-        <h3>No posee permiso de Administrador para ésta sección</h3>
-        <i class="fas fa-times-circle"></i>
-      </div>
       <div class="modal-bg">
         <div id="modal-crud" class="modal">
           <h2 id="h2-crud"></h2>
@@ -100,7 +96,7 @@
             <div class="central-column">
               <input
                 id="nombre-compania-modify"
-                class="input-form-company modify"
+                class="input-form-company-modify"
                 type="text"
                 name="nombre-compania"
                 placeholder="Nombre"
@@ -142,7 +138,7 @@
             <div class="central-column">
               <input
                 id="direccion-compania-modify"
-                class="input-form-company modify"
+                class="input-form-company-modify"
                 type="text"
                 name="direccion"
                 placeholder="Dirección"
@@ -152,7 +148,7 @@
             <div class="central-column">
               <input
                 id="email-compania-modify"
-                class="input-form-company modify"
+                class="input-form-company-modify"
                 type="email"
                 name="email"
                 placeholder="Email"
@@ -162,7 +158,7 @@
             <div class="central-column">
               <input
                 id="telefono-compania-modify"
-                class="input-form-company modify"
+                class="input-form-company-modify"
                 type="text"
                 name="telefono"
                 placeholder="Teléfono"
@@ -185,7 +181,338 @@
           <i class="fas fa-check-square"></i>
         </div>
       </div>
-      <section id="contactos"></section>
+      <section id="contactos">
+        <div class="modal-bg contacto">
+          <div id="eliminar-contacto" class="modal">
+            <div id="icons-eliminar">
+              <i class="far fa-user eliminar"></i>
+              <i class="fas fa-times-circle eliminar"></i>
+            </div>
+            <p id="p-delete">
+              ¿Seguro que desear eliminar los contactos seleccionados?
+            </p>
+            <div>
+              <button id="cancel-delete" type="button" class="button-delete">
+                Cancelar
+              </button>
+              <button id="confirm-delete" type="button" class="button-delete">
+                Eliminar
+              </button>
+            </div>
+          </div>
+          <div id="nuevo-contacto" class="modal">
+            <div id="header-contacto">
+              <h2 id="h2-contacto">Nuevo contacto</h2>
+              <i class="fas fa-times"></i>
+            </div>
+            <div id="datos-principales">
+              <div id="subir-imagen">
+                <div id="imagen-contacto">
+                  <i class="fas fa-user contacto"></i>
+                </div>
+                <div id="upload-imagen">
+                  <input
+                    id="input-file"
+                    type="file"
+                    accept=".png, .jpg, .jpeg"
+                  />
+                  <i class="fas fa-camera"></i>
+                </div>
+              </div>
+              <div class="div-input-contacto superior">
+                <label for="nombre-contacto" id="label-nombre">Nombre</label>
+                <input
+                  id="nombre-contacto"
+                  class="input-contacto obligatorio"
+                  type="text"
+                />
+                <small
+                  class="small-contacto"
+                  id="small-nombre-contacto"
+                ></small>
+              </div>
+              <div class="div-input-contacto superior">
+                <label for="apellido-contacto" id="label-apellido"
+                  >Apellido</label
+                >
+                <input
+                  id="apellido-contacto"
+                  class="input-contacto obligatorio"
+                  type="text"
+                />
+                <small
+                  class="small-contacto"
+                  id="small-apellido-contacto"
+                ></small>
+              </div>
+              <div class="div-input-contacto superior">
+                <label for="cargo-contacto" id="label-cargo">Cargo</label>
+                <input
+                  id="cargo-contacto"
+                  class="input-contacto obligatorio"
+                  type="text"
+                />
+                <small class="small-contacto" id="small-cargo-contacto"></small>
+              </div>
+              <div class="div-input-contacto superior">
+                <label for="email-contacto" id="label-email">Email</label>
+                <input
+                  id="email-contacto"
+                  class="input-contacto obligatorio"
+                  type="text"
+                />
+                <small class="small-contacto" id="small-email-contacto"></small>
+              </div>
+              <div class="div-input-contacto">
+                <label for="compania-contacto" id="label-compania"
+                  >Compañia</label
+                >
+                <select
+                  name="select-compania"
+                  id="compania-contacto"
+                  class="input-contacto"
+                >
+                  <option value="none">Ingresar una compañia</option>
+                </select>
+              </div>
+            </div>
+            <div id="datos-secundarios">
+              <div id="secundarios-superior">
+                <div class="div-input-contacto">
+                  <label for="region-contacto">Región</label>
+                  <select
+                    name="region"
+                    id="region-contacto"
+                    class="region-select"
+                  >
+                    <option value="none">Elija una región</option>
+                  </select>
+                </div>
+                <div class="div-input-contacto">
+                  <label for="pais-contacto">País</label>
+                  <select
+                    name="pais"
+                    id="pais-contacto"
+                    class="pais-select"
+                    disabled
+                  >
+                    <option value="none">Elija un país</option>
+                  </select>
+                  <small id="small-pais-contacto"></small>
+                </div>
+                <div class="div-input-contacto">
+                  <label for="ciudad-contacto">Ciudad</label>
+                  <select
+                    name="ciudad"
+                    id="ciudad-contacto"
+                    class="ciudad-select"
+                    disabled
+                  >
+                    <option value="none">Elija una ciudad</option>
+                  </select>
+                  <small id="small-ciudad-contacto"></small>
+                </div>
+                <div class="div-input-contacto">
+                  <label for="direccion-contacto">Dirección</label>
+                  <input
+                    id="direccion-contacto"
+                    class="input-form-company-contact"
+                    type="text"
+                    name="direccion"
+                    placeholder="Ingresar una dirección"
+                    disabled
+                  />
+                </div>
+                <div class="div-input-contacto">
+                  <label for="barra-interes">Interés</label>
+                  <div id="barra-interes">
+                    <div id="selector-barra"></div>
+                    <div id="cero" class="barra"></div>
+                    <div id="cuarto" class="barra"></div>
+                    <div id="mitad" class="barra"></div>
+                    <div id="tres-cuartos" class="barra"></div>
+                  </div>
+                </div>
+              </div>
+              <div id="secundarios-inferior">
+                <div class="canal">
+                  <div class="div-input-contacto">
+                    <label for="canal-contacto">Canal de contacto</label>
+                    <select name="canal" id="canal-contacto">
+                      <option value="none">Elija un canal</option>
+                      <option value="Teléfono">Teléfono</option>
+                      <option value="Whatsapp">Whatsapp</option>
+                      <option value="Instagram">Instagram</option>
+                      <option value="Facebook">Facebook</option>
+                      <option value="Linkedin">Linkedin</option>
+                    </select>
+                  </div>
+                  <div class="div-input-contacto">
+                    <label for="cuenta-contacto">Cuenta de usuario</label>
+                    <input
+                      id="cuenta-contacto"
+                      type="text"
+                      name="cuenta"
+                      disabled
+                    />
+                    <small id="small-cuenta-contacto"></small>
+                  </div>
+                  <div class="div-input-contacto preferencias">
+                    <label for="preferencias-contacto">Preferencias</label>
+                    <select
+                      name="preferencias"
+                      id="preferencias-contacto"
+                      class="select-definitivo"
+                      disabled
+                    >
+                      <option value="Sin preferencia">Sin preferencia</option>
+                      <option value="Canal favorito">Canal favorito</option>
+                      <option value="No molestar">No molestar</option>
+                    </select>
+                  </div>
+                  <button
+                    type="button"
+                    id="button-agregar-canal"
+                    class="button-canal"
+                  >
+                    <div class="agregar-canal">
+                      <i class="fas fa-plus"></i>
+                      <p>Agregar canal</p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+              <div id="botones-guardar">
+                <div id="guardar-cancelar">
+                  <p id="cancelar">Cancelar</p>
+                  <button
+                    id="boton-guardar-contacto"
+                    class="primary-button guardar"
+                    type="button"
+                  >
+                    Guardar contacto
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="div-contactos">
+          <h1 id="h1-contactos">Contactos</h1>
+          <div id="div-superior">
+            <div id="buscador">
+              <input id="input-contactos" type="text" />
+              <button id="button-contactos">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+            <div id="export-add">
+              <button id="button-export"><i class="fas fa-upload"></i></button>
+              <button id="export-contacts" class="secondary-button">
+                <p>Exportar contactos</p>
+                <i class="fas fa-sort-down"></i>
+              </button>
+              <button
+                id="button-nuevo-contacto"
+                class="primary-button contactos"
+              >
+                Agregar contactos
+              </button>
+            </div>
+          </div>
+          <div id="div-inferior">
+            <div id="no-results">
+              <h2>No se encontraron resultados</h2>
+            </div>
+            <div id="div-select-delete">
+              <div id="div-count"></div>
+              <div id="div-delete">
+                <i class="fas fa-trash"></i>
+                <p>Eliminar contactos</p>
+              </div>
+            </div>
+            <table id="tabla-contactos" class="tabla">
+              <thead>
+                <tr>
+                  <th class="check-table">
+                    <label class="container">
+                      <input id="check-all" type="checkbox" />
+                      <span class="checkmark main"></span>
+                    </label>
+                  </th>
+                  <th class="th-contacto">
+                    <p>Contacto</p>
+                    <img
+                      class="sort"
+                      src="./images/sort.svg"
+                      alt="Sort image"
+                    />
+                  </th>
+                  <th>
+                    <p>País/Región</p>
+                    <img
+                      class="sort"
+                      src="./images/sort.svg"
+                      alt="Sort image"
+                    />
+                  </th>
+                  <th>
+                    <p>Compañia</p>
+                    <img
+                      class="sort"
+                      src="./images/sort.svg"
+                      alt="Sort image"
+                    />
+                  </th>
+                  <th>
+                    <p>Cargo</p>
+                    <img
+                      class="sort"
+                      src="./images/sort.svg"
+                      alt="Sort image"
+                    />
+                  </th>
+                  <th>
+                    <p>Canal preferido</p>
+                    <img
+                      class="sort"
+                      src="./images/sort.svg"
+                      alt="Sort image"
+                    />
+                  </th>
+                  <th>
+                    <p>Interés</p>
+                    <img
+                      class="sort"
+                      src="./images/sort.svg"
+                      alt="Sort image"
+                    />
+                  </th>
+                  <th class="acciones">
+                    <p>Acciones</p>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="body-tabla-contactos"></tbody>
+            </table>
+            <div id="div-paginado">
+              <div id="div-filas-pagina">
+                <p>Filas por página</p>
+                <select name="fila-pagina" id="cantidad-pagin">
+                  <option value="10">10</option>
+                </select>
+              </div>
+              <div id="div-numero-pagina">
+                <p>1-10 de 30 páginas</p>
+                <div id="div-cambio-pagina">
+                  <i class="fas fa-chevron-left"></i>
+                  <i class="fas fa-chevron-right"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <section id="usuarios">
         <div id="div-usuarios">
           <button id="boton-usuario" class="primary-button">

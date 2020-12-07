@@ -7,10 +7,12 @@ const crearCompania = require("../../controllers/compania/crearCompania");
 const obtenerCompanias = require("../../controllers/compania/obtenerCompanias");
 const modificarCompania = require("../../controllers/compania/modificarCompania");
 const eliminarCompania = require("../../controllers/compania/eliminarCompania");
+const obtenerNombresCompanias = require("../../controllers/compania/obtenerNombresCompanias");
 
-compania.post("/", validarCreateCompania, validarLocacion , crearCompania);
-compania.get("/", obtenerCompanias);
+compania.get("/nombres", obtenerNombresCompanias);
 compania.put("/:id", validarModifyCompania, validarLocacion, modificarCompania);
 compania.delete("/:id", eliminarCompania);
+compania.post("/", validarCreateCompania, validarLocacion, crearCompania);
+compania.get("/", obtenerCompanias);
 
 module.exports = compania;

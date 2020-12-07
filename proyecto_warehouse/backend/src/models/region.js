@@ -1,9 +1,9 @@
-const { Regiones } = require("../database/schemas/Region");
+const { Regiones, Paises } = require("../database/schemas/Region");
 
 const createRegion = async (obj) => {
   try {
+    //const { nombreRegion, paises } = obj;
     const nuevaRegion = new Regiones(obj);
-
     const { _id } = await nuevaRegion.save();
 
     return _id;

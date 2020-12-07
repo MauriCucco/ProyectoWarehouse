@@ -1,19 +1,29 @@
 const { createChannel } = require("../../../models/contacto");
 
-const crearCanal = (req, res) => {
+const crearCanal = async (req, res) => {
+  try {
+    const arrayCanales = req.body;
 
-    const obj = ({ nombreCanal, cuentaUsuario, preferencia } = req.body);
+    for (let canal of arrayCanales) {
+      await createChannel(req.params.id, canal);
+    }
 
-    createChannel(req.params.id, obj)
-    .then(r => res.status(200).send({mensaje: "El canal de contacto fue creado exitósamente"}))
-    .catch(e => {
+    res.status(200).send({ mensaje: "La operación fue exitosa" });
+  } catch (e) {
+    if (e.path === "_id")
+      return res
+        .status(422)
+        .send({ error: "El id del contacto es incorrecto" });
 
-        if(e.path === "_id") return res.status(422).send({error: "El id del contacto es incorrecto"});
+    if (e.code === 11000)
+      return res.status(422).send({
+        error: `Esta cuenta ya ha sido registrada: ${Object.values(
+          e.keyValue
+        )}`,
+      });
 
-        if(e.code === 11000) return res.status(422).send({error: "La cuenta de usuario ya existe"});
-
-        res.status(500).send({error: e});
-    })
-}
+    res.status(500).send({ error: e });
+  }
+};
 
 module.exports = crearCanal;

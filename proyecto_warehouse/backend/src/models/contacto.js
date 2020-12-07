@@ -1,119 +1,104 @@
 const { Contactos } = require("../database/schemas/Contacto");
 
 const createContact = async (obj) => {
-     
-    try {
-        const nuevoContacto = new Contactos(obj);
-        
-        const { _id } = await nuevoContacto.save();
-    
-        return _id;
-            
-    } catch (error) {
-    
-        throw error;
-    } 
-}
+  try {
+    const nuevoContacto = new Contactos(obj);
 
+    const { _id } = await nuevoContacto.save();
+
+    return _id;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const createChannel = async (idContacto, obj) => {
+  try {
+    const contacto = await Contactos.findById(idContacto);
 
-    try {
-        
-        const contacto = await Contactos.findById(idContacto);
+    if (contacto === null) throw "El id del contacto es incorrecto";
 
-        if(contacto === null) throw "El id del contacto es incorrecto";
-
-        const data = await contacto.canalesContacto.push(obj);
-
-        await contacto.save();
-
-        return data;
-
-    } catch (error) {
-        
-        throw error;
+    if (contacto.canalesContacto) {
+      const data = await contacto.canalesContacto.push(obj);
+      await contacto.save();
+      return data;
+    } else {
+      //si no existe canalesContacto, lo creo
+      const data = await modifyContact(idContacto, {
+        canalesContacto: [obj],
+      });
+      return data;
     }
-}
-
+  } catch (error) {
+    throw error;
+  }
+};
 
 const findContacts = (obj) =>
+  Contactos.find(obj)
+    .then((r) => r)
+    .catch((e) => {
+      throw e;
+    });
 
-    Contactos.find(obj)
-    .then(r => r )
-    .catch(e => { throw e })
+const modifyContact = (id, obj) =>
+  Contactos.updateOne({ _id: id }, obj, { runValidators: true, upsert: true }) //el runValidators sirve como validador para los updates
+    .then((r) => r)
+    .catch((e) => {
+      throw e;
+    });
 
+const modifyChannel = async (idContacto, idCanal, obj) => {
+  try {
+    const contacto = await Contactos.findById(idContacto);
 
-const modifyContact = (id, obj) =>     
+    if (contacto === null) throw "El id del contacto es incorrecto";
 
-    Contactos.updateOne({_id: id}, obj, { runValidators: true }) //el runValidators sirve como validador para los updates
-    .then(r => r )
-    .catch(e => { throw e })
+    const canal = await contacto.canalesContacto.id(idCanal);
 
+    if (canal === null) throw "El id del canal es incorrecto";
 
-const modifyChannels = async (idContacto, idCanal, obj) => {
+    await canal.set(obj);
 
-    try {
-            
-        const contacto = await Contactos.findById(idContacto);
-        
-        if(contacto === null) throw "El id del contacto es incorrecto";
-    
-        const canal = await contacto.canalesContacto.id(idCanal);
-        
-        if(canal === null) throw "El id del canal de usuario es incorrecto";
-        
-        const { _id: id } = await canal.set(obj);
-        
-        await contacto.save();
-    
-        return id;
-    
-    } catch (error) {
-    
-        throw error;
-    }
-}
-
+    await contacto.save();
+  } catch (error) {
+    throw error;
+  }
+};
 
 const deleteContact = (id) =>
-
-    Contactos.deleteOne({_id: id})
-    .then(r => r )
-    .catch(e => { throw e })
-
+  Contactos.deleteOne({ _id: id })
+    .then((r) => r)
+    .catch((e) => {
+      throw e;
+    });
 
 const deleteChannel = async (idContacto, idCanal) => {
+  try {
+    const contacto = await Contactos.findById(idContacto);
 
-    try {
-        
-        const contacto = await Contactos.findById(idContacto);
+    if (contacto === null) throw "El id del contacto es incorrecto";
 
-        if(contacto === null) throw "El id del contacto es incorrecto";
+    const canal = await contacto.canalesContacto.id(idCanal);
 
-        const canal = await contacto.canalesContacto.id(idCanal);
+    if (canal === null) throw "El id del canal de usuario es incorrecto";
 
-        if(canal === null) throw "El id del canal de usuario es incorrecto";
+    const { _id: id } = canal.remove();
 
-        const { _id: id } = canal.remove();
+    await contacto.save();
 
-        await contacto.save();
-
-        return id;
-
-    } catch (error) {
-        
-        throw error;
-    }
-}
-
+    return id;
+  } catch (error) {
+    throw error;
+  }
+};
 
 module.exports = {
-    createContact,
-    createChannel,
-    findContacts,
-    modifyContact,
-    modifyChannels,
-    deleteContact,
-    deleteChannel
-}
+  createContact,
+  createChannel,
+  findContacts,
+  modifyContact,
+  modifyChannel,
+  deleteContact,
+  deleteChannel,
+};

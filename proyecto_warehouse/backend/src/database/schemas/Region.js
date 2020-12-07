@@ -1,4 +1,5 @@
 const mongoose = require("../../config/db");
+const Schema = mongoose.Schema;
 
 const ciudadSchema = new mongoose.Schema({
   nombreCiudad: {
@@ -13,7 +14,8 @@ const paisSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  ciudades: [ciudadSchema],
+  //ciudades: [ciudadSchema],
+  ciudades: [{ type: Schema.Types.ObjectId, ref: "Ciudades" }],
 });
 
 const regionSchema = new mongoose.Schema({
@@ -22,9 +24,12 @@ const regionSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  paises: [paisSchema],
+  //paises: [paisSchema],
+  paises: [{ type: Schema.Types.ObjectId, ref: "Paises" }],
 });
 
 const Regiones = mongoose.model("Regiones", regionSchema);
+const Paises = mongoose.model("Paises", paisSchema);
+const Ciudades = mongoose.model("Ciudades", ciudadSchema);
 
-module.exports = { Regiones };
+module.exports = { Regiones, Paises, Ciudades };

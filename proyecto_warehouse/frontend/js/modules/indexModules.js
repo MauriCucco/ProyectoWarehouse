@@ -3,15 +3,33 @@ export const token = localStorage.getItem("token");
 export let seccionUsuarios = document.getElementById("usuarios");
 export let seccionRegiones = document.getElementById("regiones");
 export let seccionContactos = document.getElementById("contactos");
+export let divContactos = document.getElementById("div-contactos");
 export let seccionCompanias = document.getElementById("companias");
-export const divSinPermiso = document.getElementById("sin-permiso");
 export const modalBg = document.querySelector(".modal-bg");
 export const modalCrud = document.getElementById("modal-crud");
 export const modalSucces = document.getElementById("modal-succes");
 export const modalModifyCompany = document.getElementById(
   "modal-modify-company"
 );
+export const regionCompany = document.getElementById("region-company");
+export const regionCompanyModify = document.getElementById(
+  "region-modify-company"
+);
+export const paisCompany = document.getElementById("country-company");
+export const paisCompanyModify = document.getElementById(
+  "country-modify-company"
+);
+export const ciudadCompany = document.getElementById("city-company");
+export const ciudadCompanyModify = document.getElementById(
+  "city-modify-company"
+);
+export const regionContacto = document.getElementById("region-contacto");
+export const paisContacto = document.getElementById("pais-contacto");
+export const ciudadContacto = document.getElementById("ciudad-contacto");
+export const canalContacto = document.getElementById("canal-contacto");
 let emptyInput = false;
+export let arrayContactos;
+export let contactosServidor;
 
 //FUNCIÓN PARA DEJAR DE RESALTAR UNA SECCIÓN DEL NAV
 
@@ -32,13 +50,14 @@ export const processAdminTable = async (response, seccion) => {
 
     if (data.error === "No se encontró un token de autorización")
       return window.open("bienvenida.html", "_self");
-    if (seccion === "usuarios") {
-      if (data.error === "No posee autorización de administrador")
-        return (divSinPermiso.style.display = "flex");
 
-      seccionUsuarios.style.display = "unset";
-    } else {
+    if (seccion === "companias") {
       seccionCompanias.style.display = "unset";
+    } else if (seccion === "contactos") {
+      contactosServidor = data;
+      arrayContactos = data;
+      seccionContactos.style.display = "block";
+      divContactos.style.display = "block";
     }
 
     deleteRows(seccion);
@@ -51,11 +70,28 @@ export const processAdminTable = async (response, seccion) => {
 
 //FUNCIÓN QUE CREA LA TABLA CON LA INFO DEL SERVIDOR
 
-const createRows = (data, seccion) => {
+export const createRows = (data, seccion) => {
   data.forEach((element) => {
     let tablaBodyUsuarios = document.getElementById("body-tabla");
     let tablaBodyCompania = document.getElementById("body-tabla-companias");
+    let tablaBodyContactos = document.getElementById("body-tabla-contactos");
     let tr = document.createElement("tr");
+    let tdCheck = document.createElement("td");
+    let labelCheck = document.createElement("label");
+    let inputCheck = document.createElement("input");
+    let spanCheck = document.createElement("span");
+    let tdContacto = document.createElement("td");
+    let divImagen = document.createElement("div");
+    let userI = document.createElement("i");
+    let divInfoContacto = document.createElement("div");
+    let nombreP = document.createElement("p");
+    let emailP = document.createElement("p");
+    let tdCompania = document.createElement("td");
+    let tdCargo = document.createElement("td");
+    let tdCanalPreferido = document.createElement("td");
+    let tdInteres = document.createElement("td");
+    let interesP = document.createElement("p");
+    let progressBar = document.createElement("progress");
     let tdNombre = document.createElement("td");
     let tdApellido = document.createElement("td");
     let tdEmail = document.createElement("td");
@@ -72,56 +108,134 @@ const createRows = (data, seccion) => {
     tdAcciones.classList.add("acciones");
     dotsIcon.className = "fas fa-ellipsis-h dots";
     dotsIcon.id = element._id;
-    tdNombre.innerHTML = element.nombre;
-    tdEmail.innerHTML = element.email;
-    tr.appendChild(tdNombre);
 
-    if (seccion === "usuarios") {
-      tr.classList.add("fila-usuario");
-      tdApellido.innerHTML = element.apellido;
-      tdPerfil.innerHTML = element.perfil;
-      tablaBodyUsuarios.appendChild(tr);
-      tr.appendChild(tdApellido);
-      tr.appendChild(tdEmail);
-      tr.appendChild(tdPerfil);
-      tr.appendChild(tdAcciones);
-    } else {
-      tr.classList.add("fila-compania");
-      dotsIcon.className = "fas fa-ellipsis-h dots company";
-      tdRegionPais.className = "td-region-pais";
-      regionP.className = "region-p";
-      tdPerfil.innerHTML = element.perfil;
-      regionP.innerHTML = element.region;
-      paisP.innerHTML = element.pais;
-      tdCiudad.innerHTML = element.ciudad;
-      tdDireccion.innerHTML = element.direccion;
-      tdTelefono.innerHTML = element.telefono;
-      tablaBodyCompania.appendChild(tr);
+    if (seccion === "contactos") {
+      dotsIcon.classList.add("contactos");
+      labelCheck.className = "container";
+      inputCheck.setAttribute("type", "checkbox");
+      inputCheck.className = "check-contacto";
+      inputCheck.id = element._id;
+      spanCheck.className = "checkmark";
+      tdCheck.className = "check-table";
+      tdContacto.className = "td-contacto";
+      divImagen.classList.add("div-imagen");
+      userI.className = "fas fa-user";
+      nombreP.innerHTML = `${element.nombre} ${element.apellido}`;
+      emailP.innerHTML = element.email;
+      emailP.className = "email-p contactos";
+      tdRegionPais.className = "td-region-pais contactos";
+      regionP.className = "region-p contactos";
+      if (element.region) regionP.innerHTML = element.region;
+      if (element.pais) paisP.innerHTML = element.pais;
+      tdCompania.innerHTML = element.compania;
+      tdCargo.innerHTML = element.cargo;
+      if (element.canalesContacto)
+        element.canalesContacto.map((canal) => {
+          let divCanal = document.createElement("div");
+          divCanal.className = "div-canal";
+          divCanal.innerHTML = canal.nombreCanal;
+          tdCanalPreferido.appendChild(divCanal);
+        });
+      tdCanalPreferido.className = "td-canal-preferido";
+      tdInteres.className = "td-interes";
+      interesP.innerHTML = `${element.interes}%`;
+      progressBar.setAttribute("value", `${element.interes}`);
+      progressBar.setAttribute("max", "100");
+
+      if (tdCanalPreferido.childElementCount > 2)
+        manageChannel(tdCanalPreferido);
+
+      tr.classList.add("fila-contacto");
+      tablaBodyContactos.appendChild(tr);
+      tr.appendChild(tdCheck);
+      tdCheck.appendChild(labelCheck);
+      labelCheck.appendChild(inputCheck);
+      labelCheck.appendChild(spanCheck);
+      tr.appendChild(tdContacto);
+      tdContacto.appendChild(divImagen);
+      divImagen.appendChild(userI);
+      tdContacto.appendChild(divInfoContacto);
+      divInfoContacto.appendChild(nombreP);
+      divInfoContacto.appendChild(emailP);
       tdRegionPais.appendChild(paisP);
       tdRegionPais.appendChild(regionP);
       tr.appendChild(tdRegionPais);
-      tr.appendChild(tdCiudad);
-      tr.appendChild(tdDireccion);
-      tr.appendChild(tdEmail);
-      tr.appendChild(tdTelefono);
+      tr.appendChild(tdCompania);
+      tr.appendChild(tdCargo);
+      tr.appendChild(tdCanalPreferido);
+      tdInteres.appendChild(interesP);
+      tdInteres.appendChild(progressBar);
+      tr.appendChild(tdInteres);
       tr.appendChild(tdAcciones);
+    } else {
+      tdNombre.innerHTML = element.nombre;
+      tdEmail.innerHTML = element.email;
+      tr.appendChild(tdNombre);
+
+      if (seccion === "usuarios") {
+        dotsIcon.classList.add("usuarios");
+        tr.classList.add("fila-usuario");
+        tdApellido.innerHTML = element.apellido;
+        tdPerfil.innerHTML = element.perfil;
+        tablaBodyUsuarios.appendChild(tr);
+        tr.appendChild(tdApellido);
+        tr.appendChild(tdEmail);
+        tr.appendChild(tdPerfil);
+        tr.appendChild(tdAcciones);
+      } else if (seccion === "companias") {
+        tr.classList.add("fila-compania");
+        dotsIcon.className = "fas fa-ellipsis-h dots company";
+        tdRegionPais.className = "td-region-pais";
+        regionP.className = "region-p";
+        tdPerfil.innerHTML = element.perfil;
+        regionP.innerHTML = element.region;
+        paisP.innerHTML = element.pais;
+        tdCiudad.innerHTML = element.ciudad;
+        tdDireccion.innerHTML = element.direccion;
+        tdTelefono.innerHTML = element.telefono;
+        tablaBodyCompania.appendChild(tr);
+        tdRegionPais.appendChild(paisP);
+        tdRegionPais.appendChild(regionP);
+        tr.appendChild(tdRegionPais);
+        tr.appendChild(tdCiudad);
+        tr.appendChild(tdDireccion);
+        tr.appendChild(tdEmail);
+        tr.appendChild(tdTelefono);
+        tr.appendChild(tdAcciones);
+      }
     }
     tdAcciones.appendChild(dotsIcon);
   });
 };
 
+//FUNCIÓN QUE ORDENA LA CANTIDAD DE CANALES PREFERIDOS DE UN USUARIO
+
+function manageChannel(td) {
+  const dots = document.createElement("i");
+  dots.className = "fas fa-ellipsis-h dots canales";
+  td.insertBefore(dots, td.childNodes[2]);
+  for (let j = 3; j < td.childElementCount; j++) {
+    td.childNodes[j].style.display = "none";
+  }
+}
+
 //FUNCIÓN QUE RESETEA LAS TABLAS
 
-const deleteRows = (seccion) => {
+export const deleteRows = (seccion) => {
   const filasCompanias = document.getElementsByClassName("fila-compania");
   const filasUsuarios = document.getElementsByClassName("fila-usuario");
+  const filasContactos = document.getElementsByClassName("fila-contacto");
   if (seccion === "usuarios") {
     for (let i = filasUsuarios.length - 1; i >= 0; i--) {
       filasUsuarios[i].remove();
     }
-  } else {
+  } else if (seccion === "companias") {
     for (let i = filasCompanias.length - 1; i >= 0; i--) {
       filasCompanias[i].remove();
+    }
+  } else {
+    for (let i = filasContactos.length - 1; i >= 0; i--) {
+      filasContactos[i].remove();
     }
   }
 };
@@ -129,11 +243,11 @@ const deleteRows = (seccion) => {
 //FUNCIÓN QUE CHEQUEA SI EL USUARIO LLENÓ TODOS LOS CAMPOS REQUERIDOS
 
 export const checkInputs = (seccion = "") => {
-  const inputsRegiones = document.getElementsByClassName("input-add");
-  const inputsUser = document.getElementsByClassName("input-form");
-  const inputsCompania = document.getElementsByClassName("input-form-company");
-  const inputsCompaniaModify = document.getElementsByClassName(
-    "input-form-company modify"
+  const inputsRegiones = document.querySelectorAll(".input-add");
+  const inputsUser = document.querySelectorAll(".input-form");
+  const inputsCompania = document.querySelectorAll(".input-form-company");
+  const inputsCompaniaModify = document.querySelectorAll(
+    ".input-form-company-modify"
   );
   const regionCompany = document.getElementById("region-company");
   const regionCompanyModify = document.getElementById("region-modify-company");
@@ -141,7 +255,7 @@ export const checkInputs = (seccion = "") => {
   const paisCompanyModify = document.getElementById("country-modify-company");
   const ciudadCompany = document.getElementById("city-company");
   const ciudadCompanyModify = document.getElementById("city-modify-company");
-  const inputsModifyUser = document.getElementsByClassName("input-form-modify");
+  const inputsModifyUser = document.querySelectorAll("input-form-modify");
   const divCompania = document.getElementById("div-nueva-compania");
   const dataSmall = document.querySelectorAll(".small-data-empty");
 
@@ -235,10 +349,16 @@ export const resetInputsStyles = () => {
 
 export const resetInputsValues = () => {
   let allInputs = document.getElementsByTagName("INPUT");
+  let allSelects = document.getElementsByTagName("SELECT");
 
   for (let input of allInputs) {
     input.value = "";
   }
+  for (let select of allSelects) {
+    select.value = "none";
+  }
+  if (regionContacto) regionContacto.click();
+  if (canalContacto) canalContacto.click();
 };
 
 //FUNCIÓN QUE PROCESA UNA RESPUESTA 422 DEL SERVIDOR
@@ -382,9 +502,9 @@ export function sortTableByColumn(table, column, asc = true) {
 
 export const resetDots = () => {
   const dots = document.getElementsByClassName("fas fa-ellipsis-h dots");
-  const trashIcons = document.getElementsByClassName("fas fa-trash");
-  const modifyIcons = document.getElementsByClassName("fas fa-pen");
-  const addIcons = document.getElementsByClassName("fas fa-plus");
+  const trashIcons = document.querySelectorAll(".fas.fa-trash");
+  const modifyIcons = document.querySelectorAll(".fas.fa-pen");
+  const addIcons = document.querySelectorAll("fas fa-plus");
 
   for (let dot of dots) {
     dot.style.display = "unset";
@@ -411,8 +531,8 @@ export const createIcons = (target) => {
   const eliminar = document.createElement("i");
   const agregar = document.createElement("i");
 
-  if (target.className === "fas fa-ellipsis-h dots") {
-    editar.className = "fas fa-pen";
+  if (target.className === "fas fa-ellipsis-h dots usuarios") {
+    editar.className = "fas fa-pen usuarios";
   } else if (target.className === "fas fa-ellipsis-h dots regiones") {
     editar.className = "fas fa-pen regiones";
   } else if (target.className === "fas fa-ellipsis-h dots paises") {
@@ -421,10 +541,12 @@ export const createIcons = (target) => {
     editar.className = "fas fa-pen ciudades";
   } else if (target.className === "fas fa-ellipsis-h dots company") {
     editar.className = "fas fa-pen company";
+  } else if (target.className === "fas fa-ellipsis-h dots contactos") {
+    editar.className = "fas fa-pen contacto";
   }
 
-  if (target.className === "fas fa-ellipsis-h dots") {
-    eliminar.className = "fas fa-trash";
+  if (target.className === "fas fa-ellipsis-h dots usuarios") {
+    eliminar.className = "fas fa-trash usuarios";
   } else if (target.className === "fas fa-ellipsis-h dots regiones") {
     eliminar.className = "fas fa-trash regiones";
   } else if (target.className === "fas fa-ellipsis-h dots paises") {
@@ -435,16 +557,17 @@ export const createIcons = (target) => {
     eliminar.className = "fas fa-trash company";
   }
 
-  if (target.className === "fas fa-ellipsis-h dots") {
-    agregar.className = "fas fa-plus";
+  if (target.className === "fas fa-ellipsis-h dots usuarios") {
+    agregar.className = "fas fa-plus usuarios";
   } else if (target.className === "fas fa-ellipsis-h dots regiones") {
     agregar.className = "fas fa-plus regiones";
   } else if (target.className === "fas fa-ellipsis-h dots paises") {
     agregar.className = "fas fa-plus paises";
   }
+
   target.style.display = "none";
   target.parentNode.appendChild(editar);
-  target.parentNode.appendChild(eliminar);
+  if (target !== "contactos") target.parentNode.appendChild(eliminar);
 
   if (
     target.className === "fas fa-ellipsis-h dots regiones" ||
@@ -630,4 +753,103 @@ export const resetModal = () => {
   if (smallDataEmpty) smallDataEmpty.remove();
   if (h2Name) h2Name.remove();
   h2Crud.innerHTML = "";
+};
+
+//función que obtiene los nombres de las locaciones existentes
+
+export const getLocations = async (url, locacion, obj = {}) => {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(obj),
+  });
+
+  const data = await response.json();
+
+  crearOptions(data, locacion);
+  /*response.status === 200
+    ? crearOptions(data, locacion)
+    : window.open("bienvenida.html", "_self");*/
+};
+
+//función para crear las options de los selects de regiones, países y ciudades
+
+const crearOptions = (array, locacion) => {
+  if (
+    locacion === "region-modify" ||
+    locacion === "pais-modify" ||
+    locacion === "ciudad-modify"
+  ) {
+    array.forEach((element) => {
+      const option = document.createElement("option");
+      option.innerHTML = element;
+      option.className = `${locacion}-company`;
+      if (locacion === "region-modify") {
+        regionCompanyModify.appendChild(option);
+      }
+      if (locacion === "pais-modify") {
+        paisCompanyModify.appendChild(option);
+        paisCompanyModify.disabled = false;
+      }
+      if (locacion === "ciudad-modify") {
+        ciudadCompanyModify.appendChild(option);
+        ciudadCompanyModify.disabled = false;
+      }
+    });
+    return;
+  } else if (
+    locacion === "region" ||
+    locacion === "region-contacto" ||
+    locacion === "pais" ||
+    locacion === "pais-contacto" ||
+    locacion === "ciudad" ||
+    locacion === "ciudad-contacto"
+  ) {
+    array.forEach((element) => {
+      const option = document.createElement("option");
+      option.innerHTML = element;
+      locacion.includes("contacto")
+        ? (option.className = `${locacion}`)
+        : (option.className = `${locacion}-company`);
+      if (locacion === "region") {
+        regionCompany.appendChild(option);
+      }
+      if (locacion === "pais") {
+        paisCompany.disabled = false;
+        paisCompany.appendChild(option);
+      }
+      if (locacion === "ciudad") {
+        ciudadCompany.disabled = false;
+        ciudadCompany.appendChild(option);
+      }
+      if (locacion === "region-contacto") {
+        regionContacto.appendChild(option);
+      }
+      if (locacion === "pais-contacto") {
+        paisContacto.disabled = false;
+        paisContacto.appendChild(option);
+      }
+      if (locacion === "ciudad-contacto") {
+        ciudadContacto.disabled = false;
+        ciudadContacto.appendChild(option);
+      }
+    });
+  }
+};
+
+//función que resetea los options
+
+export const resetOptions = (locacion, seccion = "") => {
+  if (seccion === "contactos") {
+    document
+      .querySelectorAll(`.${locacion}-contacto`)
+      .forEach((option) => option.remove());
+  } else {
+    document
+      .querySelectorAll(`.${locacion}-company`)
+      .forEach((option) => option.remove());
+  }
 };

@@ -1,42 +1,50 @@
 const { Companias } = require("../database/schemas/Compania");
+const { Regiones, Paises, Ciudades } = require("../database/schemas/Region");
 
 const createCompany = async (obj) => {
+  try {
+    const nuevaCompania = new Companias(obj);
 
-    try {
-        const nuevaCompania = new Companias(obj);
-    
-        const { _id } = await nuevaCompania.save();
+    const { _id } = await nuevaCompania.save();
 
-        return _id;
-        
-    } catch (error) {
+    return _id;
+  } catch (error) {
+    throw error;
+  }
+};
 
-        throw error;
-    }
-}
+const findCompanies = (obj, proyection = {}) =>
+  Companias.find(obj, proyection)
+    .populate({
+      path: "region",
+      select: { _id: 0, nombreRegion: 1 },
+    })
+    .populate({
+      path: "pais",
+    })
+    .populate({ path: "ciudad" })
+    .then((r) => r)
+    .catch((e) => {
+      throw e;
+    });
 
-
-const findCompanies = async (obj) => 
-    Companias.find(obj)
-    .then(r => r )
-    .catch(e => { throw e })
-
-
-const modifyCompany = (id, obj) => 
-    Companias.updateOne({_id: id}, obj, { runValidators: true }) //el runValidators sirve como validador para los updates
-    .then(r => r )
-    .catch(e => { throw e })
-
+const modifyCompany = (id, obj) =>
+  Companias.updateOne({ _id: id }, obj, { runValidators: true }) //el runValidators sirve como validador para los updates
+    .then((r) => r)
+    .catch((e) => {
+      throw e;
+    });
 
 const deleteCompany = (id) =>
-    Companias.deleteOne({_id: id})
-    .then(r => r )
-    .catch(e => { throw e })
+  Companias.deleteOne({ _id: id })
+    .then((r) => r)
+    .catch((e) => {
+      throw e;
+    });
 
-
-module.exports = { 
-    createCompany, 
-    findCompanies,
-    modifyCompany,
-    deleteCompany
+module.exports = {
+  createCompany,
+  findCompanies,
+  modifyCompany,
+  deleteCompany,
 };

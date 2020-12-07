@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const { Regiones, Paises, Ciudades } = require("../../database/schemas/Region");
 
 const companiaSchema = new mongoose.Schema({
   nombre: {
@@ -7,15 +9,21 @@ const companiaSchema = new mongoose.Schema({
     required: true,
   },
   region: {
-    type: String,
+    //type: String,
+    type: Schema.Types.ObjectId,
+    ref: "Regiones",
     required: true,
   },
   pais: {
-    type: String,
+    //type: String,
+    type: Schema.Types.ObjectId,
+    ref: "Regiones",
     required: true,
   },
   ciudad: {
-    type: String,
+    //type: String,
+    type: Schema.Types.ObjectId,
+    ref: "Regiones",
     required: true,
   },
   direccion: {

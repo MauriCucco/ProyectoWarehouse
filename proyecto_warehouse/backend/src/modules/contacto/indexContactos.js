@@ -15,12 +15,36 @@ const crearCanal = require("../../controllers/contacto/canal/crearCanal");
 const eliminarContacto = require("../../controllers/contacto/eliminarContacto");
 const eliminarCanal = require("../../controllers/contacto/canal/eliminarCanal");
 
-contacto.post("/canales/:id", validarCreateCanal, validarCuentaContacto, crearCanal);
-contacto.put("/canales/:id", validarModifyCanal, validarCuentaContacto, modificarCanal);
+contacto.post(
+  "/canales/:id",
+  validarCreateCanal,
+  validarCuentaContacto,
+  crearCanal
+);
+contacto.put(
+  "/canales/:id",
+  validarModifyCanal,
+  validarCuentaContacto,
+  modificarCanal
+);
 contacto.delete("/canales/:id", eliminarCanal);
-contacto.put("/:id", validarModifyContacto, validarCompania, validarLocacion, modificarContacto);
-contacto.delete("/:id", eliminarContacto);
-contacto.post("/", validarCreateContacto, validarCompania, validarLocacion, validarCuentaContacto, crearContacto);
+contacto.put(
+  "/:id",
+  validarModifyContacto,
+  validarCompania,
+  validarLocacion,
+  validarCuentaContacto,
+  modificarContacto
+);
+contacto.delete("/", eliminarContacto);
+contacto.post(
+  "/",
+  validarCreateContacto,
+  validarCompania,
+  validarLocacion,
+  validarCuentaContacto,
+  crearContacto
+);
 contacto.get("/", obtenerContactos);
 
 module.exports = contacto;

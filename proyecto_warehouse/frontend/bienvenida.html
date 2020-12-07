@@ -1,33 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Warehouse</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css">
-</head>
-<body>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body id="body-bienvenida">
     <header>
-        <a id="logo" href="index.html">WAREHOUSE</a>
+      <a id="logo" href="index.html">WAREHOUSE</a>
     </header>
     <main>
-        <div id="login">
-            <h2>Bienvenido</h2>
-            <form id="form-login" class="central-column">
-                <div class="central-column">
-                    <input id="email-input" type="email" name="email" placeholder="Email">
-                    <small id="email-small"></small>
-                </div>
-                <div class="central-column">
-                    <input id="password-input" type="password" name="password" placeholder="Contraseña">
-                    <small id="password-small"></small>
-                </div>        
-                <button id="submit-button" class="primary-button" type="button">Ingresar</button>
-                <small id="data-small"></small>
-            </form>
-        </div>
+      <div id="login">
+        <h2>Bienvenido</h2>
+        <form id="form-login" class="central-column">
+          <div class="central-column">
+            <input
+              id="email-input"
+              type="email"
+              name="email"
+              placeholder="Email"
+            />
+            <small id="email-small"></small>
+          </div>
+          <div class="central-column">
+            <input
+              id="password-input"
+              type="password"
+              name="password"
+              placeholder="Contraseña"
+            />
+            <small id="password-small"></small>
+          </div>
+          <button id="submit-button" class="primary-button" type="button">
+            Ingresar
+          </button>
+          <small id="data-small"></small>
+        </form>
+      </div>
     </main>
     <script src="./js/bienvenida.js" type="module"></script>
-</body>
+  </body>
 </html>

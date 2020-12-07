@@ -5,7 +5,6 @@ import {
   seccionUsuarios,
   seccionContactos,
   seccionCompanias,
-  divSinPermiso,
   seccionRegiones,
   resetDots,
   createIcons,
@@ -38,7 +37,6 @@ regionesItem.addEventListener("click", () => {
   seccionUsuarios.style.display = "none";
   seccionContactos.style.display = "none";
   seccionCompanias.style.display = "none";
-  divSinPermiso.style.display = "none";
   modalModifyCompany.style.display = "none";
   seccionRegiones.style.display = "unset";
 });

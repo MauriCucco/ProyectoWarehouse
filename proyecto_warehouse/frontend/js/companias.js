@@ -4,13 +4,13 @@ import {
   removeActive,
   seccionUsuarios,
   seccionContactos,
-  divSinPermiso,
   seccionRegiones,
   resetDots,
   createIcons,
   modalBg,
   modalCrud,
   modalSucces,
+  modalModifyCompany,
   processInvalid,
   resetModal,
   checkInputs,
@@ -18,18 +18,19 @@ import {
   processAdminTable,
   resetInputsValues,
   crearModalCrud,
-  modalModifyCompany,
+  getLocations,
+  resetOptions,
+  regionCompany,
+  regionCompanyModify,
+  paisCompany,
+  paisCompanyModify,
+  ciudadCompany,
+  ciudadCompanyModify,
 } from "./modules/indexModules.js";
 
 const companiasItem = document.getElementById("companias-item");
 const botonCompania = document.getElementById("boton-compania");
 const divCompania = document.getElementById("div-nueva-compania");
-const regionCompany = document.getElementById("region-company");
-const regionCompanyModify = document.getElementById("region-modify-company");
-const paisCompany = document.getElementById("country-company");
-const paisCompanyModify = document.getElementById("country-modify-company");
-const ciudadCompany = document.getElementById("city-company");
-const ciudadCompanyModify = document.getElementById("city-modify-company");
 const botonAgregarCompania = document.querySelector(
   ".primary-button.create.company"
 );
@@ -59,7 +60,6 @@ companiasItem.addEventListener("click", () => {
 
   seccionUsuarios.style.display = "none";
   seccionContactos.style.display = "none";
-  divSinPermiso.style.display = "none";
   seccionRegiones.style.display = "none";
   divCompania.style.display = "none";
   botonCompania.style.display = "block";
@@ -94,70 +94,7 @@ botonCompania.addEventListener("click", () => {
   getLocations(`http://${host}/regiones/nombres`, "region");
 });
 
-//función que obtiene los nombres de las locaciones existentes
-
-const getLocations = async (url, locacion, obj = {}) => {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(obj),
-  });
-
-  const data = await response.json();
-
-  response.status === 200
-    ? crearOptions(data, locacion)
-    : window.open("bienvenida.html", "_self");
-};
-
-//función para crear las options de los selects de regiones, países y ciudades
-
-const crearOptions = (array, locacion) => {
-  if (
-    locacion === "region-modify" ||
-    locacion === "pais-modify" ||
-    locacion === "ciudad-modify"
-  ) {
-    array.forEach((element) => {
-      const option = document.createElement("option");
-      option.innerHTML = element;
-      option.className = `${locacion}-company`;
-      if (locacion === "region-modify") {
-        regionCompanyModify.appendChild(option);
-      }
-      if (locacion === "pais-modify") {
-        paisCompanyModify.appendChild(option);
-        paisCompanyModify.disabled = false;
-      }
-      if (locacion === "ciudad-modify") {
-        ciudadCompanyModify.appendChild(option);
-        ciudadCompanyModify.disabled = false;
-      }
-    });
-    return;
-  }
-  array.forEach((element) => {
-    const option = document.createElement("option");
-    option.innerHTML = element;
-    option.className = `${locacion}-company`;
-    if (locacion === "region") {
-      regionCompany.appendChild(option);
-    }
-    if (locacion === "pais") {
-      paisCompany.disabled = false;
-      paisCompany.appendChild(option);
-    }
-    if (locacion === "ciudad") {
-      ciudadCompany.disabled = false;
-      ciudadCompany.appendChild(option);
-    }
-  });
-};
-
-//EventListener para las options de las regiones y los paises
+//EventListeners para las options de las regiones y los paises
 
 regionCompany.addEventListener("click", (e) => {
   resetOptions("pais");
@@ -204,14 +141,6 @@ paisCompanyModify.addEventListener("click", (e) => {
         }
       );
 });
-
-//función que resetea los options
-
-const resetOptions = (locacion) => {
-  document
-    .querySelectorAll(`.${locacion}-company`)
-    .forEach((option) => option.remove());
-};
 
 //EventListener para el botón que agrega una compañia nueva
 
@@ -324,20 +253,43 @@ const chargeCompanyInfo = async (elemento) => {
   document.getElementById("direccion-compania-modify").value =
     elemento.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.innerHTML;
   await getLocations(`http://${host}/regiones/nombres`, "region-modify");
-  regionCompanyModify.value =
-    elemento.parentElement.parentElement.firstElementChild.nextElementSibling.lastElementChild.innerHTML;
+  if (
+    !elemento.parentElement.parentElement.firstElementChild.nextElementSibling
+      .lastElementChild.innerHTML
+  ) {
+    regionCompanyModify.value = "none";
+  } else {
+    regionCompanyModify.value =
+      elemento.parentElement.parentElement.firstElementChild.nextElementSibling.lastElementChild.innerHTML;
+  }
+
   await getLocations(`http://${host}/regiones/paises/nombres`, "pais-modify", {
     nombreRegion: regionCompanyModify.value,
   });
-  paisCompanyModify.value =
-    elemento.parentElement.parentElement.firstElementChild.nextElementSibling.firstElementChild.innerHTML;
-  await getLocations(
-    `http://${host}/regiones/ciudades/nombres`,
-    "ciudad-modify",
-    { nombrePais: paisCompanyModify.value }
-  );
-  ciudadCompanyModify.value =
-    elemento.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.innerHTML;
+  if (
+    !elemento.parentElement.parentElement.firstElementChild.nextElementSibling
+      .firstElementChild.innerHTML
+  ) {
+    paisCompanyModify.value = "none";
+  } else {
+    paisCompanyModify.value =
+      elemento.parentElement.parentElement.firstElementChild.nextElementSibling.firstElementChild.innerHTML;
+  }
+
+  if (
+    !elemento.parentElement.parentElement.firstElementChild.nextElementSibling
+      .nextElementSibling.innerHTML
+  ) {
+    ciudadCompanyModify.value = "none";
+  } else {
+    await getLocations(
+      `http://${host}/regiones/ciudades/nombres`,
+      "ciudad-modify",
+      { nombrePais: paisCompanyModify.value }
+    );
+    ciudadCompanyModify.value =
+      elemento.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.innerHTML;
+  }
   document.getElementById("email-compania-modify").value =
     elemento.parentElement.previousElementSibling.previousElementSibling.innerHTML;
   document.getElementById("telefono-compania-modify").value =

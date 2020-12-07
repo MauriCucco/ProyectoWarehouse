@@ -1,17 +1,24 @@
-const { modifyChannels } = require("../../../models/contacto");
+const { modifyChannel } = require("../../../models/contacto");
 
-const modificarCanales = (req, res) => {
+const modificarCanales = async (req, res) => {
+  try {
+    const arrayCanales = req.body;
+    console.log(arrayCanales);
+    for (let canal of arrayCanales) {
+      const { idCanal, ...otrasPropiedades } = canal;
 
-    const { idCanal, ...otrasPropiedades } = req.body;
-    
-    modifyChannels(req.params.id, idCanal, otrasPropiedades)
-    .then(r => res.status(200).send({_id: r}))
-    .catch(e => {
+      await modifyChannel(req.params.id, idCanal, otrasPropiedades);
+    }
 
-        if(e.path === "_id") return res.status(422).send({error: "El id del contacto es incorrecto"});
-        
-        res.status(500).send({error: e});
-    })
-}
+    res.status(200).send({ mensaje: "La operación fue exitosa" });
+  } catch (e) {
+    if (e.path === "_id")
+      return res
+        .status(422)
+        .send({ error: "El id del contacto es incorrecto" });
+
+    res.status(500).send({ error: e });
+  }
+};
 
 module.exports = modificarCanales;

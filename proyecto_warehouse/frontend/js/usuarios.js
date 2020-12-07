@@ -15,9 +15,11 @@ import {
   crearModalCrud,
   modalBg,
   modalCrud,
+  modalModifyCompany,
   modalSucces,
   resetModal,
   processAdminTable,
+  seccionUsuarios,
 } from "./modules/indexModules.js";
 
 let usuariosItem = document.getElementById("usuarios-item");
@@ -82,6 +84,8 @@ usuariosItem.addEventListener("click", () => {
 
   usuariosItem.classList.add("item-habilitado");
 
+  seccionUsuarios.style.display = "unset";
+  modalModifyCompany.style.display = "none";
   seccionContactos.style.display = "none";
   seccionRegiones.style.display = "none";
   seccionCompanias.style.display = "none";
@@ -185,11 +189,17 @@ const processResponse = async (response) => {
 //ELIMINAR Y MODIFICAR USUARIOS
 
 document.addEventListener("click", (event) => {
-  if (event.target.className === "fas fa-ellipsis-h dots") {
+  if (event.target.localName === "select") {
+    if (event.target.value !== "none") {
+      event.target.classList.add("select-definitivo");
+    } else {
+      event.target.classList.remove("select-definitivo");
+    }
+  } else if (event.target.className === "fas fa-ellipsis-h dots usuarios") {
     userId = event.target.id;
     resetDots();
     createIcons(event.target);
-  } else if (event.target.className === "fas fa-trash") {
+  } else if (event.target.className === "fas fa-trash usuarios") {
     const userName = `${event.target.parentElement.parentElement.firstElementChild.innerHTML} ${event.target.parentElement.parentElement.firstElementChild.nextElementSibling.innerHTML}`;
     modalBg.classList.add("bg-activate");
     crearModalCrud("deleteUser", userName);
@@ -204,6 +214,7 @@ document.addEventListener("click", (event) => {
       resetModal();
     } else {
       modalBg.classList.remove("bg-activate");
+      modalModifyCompany.style.display = "none";
       modalModificar.style.display = "none";
       resetInputsStyles();
     }
@@ -211,7 +222,7 @@ document.addEventListener("click", (event) => {
     event.target.className === "primary-button crud eliminar usuario"
   ) {
     deleteUser(event.target.id); //ELIMINAR
-  } else if (event.target.className === "fas fa-pen") {
+  } else if (event.target.className === "fas fa-pen usuarios") {
     resetInputsStyles();
     chargeUserInfo(event.target);
     modalBg.classList.add("bg-activate");
@@ -245,7 +256,12 @@ const deleteUser = (id) =>
 
 document.querySelectorAll(".tabla th").forEach((headerCell) => {
   headerCell.addEventListener("click", (e) => {
-    if (e.target.localName === "p") return;
+    if (
+      e.target.localName === "p" ||
+      e.target.className === "checkmark main" ||
+      e.target.localName === "input"
+    )
+      return;
     const tableElement = headerCell.parentElement.parentElement.parentElement;
     const headerIndex = Array.prototype.indexOf.call(
       headerCell.parentElement.children,

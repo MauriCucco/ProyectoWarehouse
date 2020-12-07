@@ -1,5 +1,4 @@
 const { findRegions } = require("../../models/region");
-const { modifyCompany } = require("../../models/compania");
 
 const verificarLocaciones = async (response) => {
   for (let obj of response) {

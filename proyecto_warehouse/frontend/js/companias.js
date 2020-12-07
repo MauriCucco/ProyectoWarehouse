@@ -101,11 +101,11 @@ regionCompany.addEventListener("click", (e) => {
   resetOptions("ciudad");
   paisCompany.disabled = true;
   ciudadCompany.disabled = true;
-  e.target.value === "none"
-    ? console.log("Debe elegir una región")
-    : getLocations(`http://${host}/regiones/paises/nombres`, "pais", {
-        nombreRegion: e.target.value,
-      });
+  if (e.target.value !== "none") {
+    getLocations(`http://${host}/regiones/paises/nombres`, "pais", {
+      nombreRegion: e.target.value,
+    });
+  }
 });
 
 regionCompanyModify.addEventListener("click", (e) => {
@@ -113,33 +113,29 @@ regionCompanyModify.addEventListener("click", (e) => {
   resetOptions("ciudad-modify");
   paisCompanyModify.disabled = true;
   ciudadCompanyModify.disabled = true;
-  e.target.value === "none"
-    ? console.log("Debe elegir una región")
-    : getLocations(`http://${host}/regiones/paises/nombres`, "pais-modify", {
-        nombreRegion: e.target.value,
-      });
+  if (e.target.value !== "none") {
+    getLocations(`http://${host}/regiones/paises/nombres`, "pais-modify", {
+      nombreRegion: e.target.value,
+    });
+  }
 });
 
 paisCompany.addEventListener("click", (e) => {
   resetOptions("ciudad");
-  e.target.value === "none"
-    ? console.log("Debe elegir un país")
-    : getLocations(`http://${host}/regiones/ciudades/nombres`, "ciudad", {
-        nombrePais: e.target.value,
-      });
+  if (e.target.value !== "none") {
+    getLocations(`http://${host}/regiones/ciudades/nombres`, "ciudad", {
+      nombrePais: e.target.value,
+    });
+  }
 });
 
 paisCompanyModify.addEventListener("click", (e) => {
   resetOptions("ciudad-modify");
-  e.target.value === "none"
-    ? console.log("Debe elegir un país")
-    : getLocations(
-        `http://${host}/regiones/ciudades/nombres`,
-        "ciudad-modify",
-        {
-          nombrePais: e.target.value,
-        }
-      );
+  if (e.target.value !== "none") {
+    getLocations(`http://${host}/regiones/ciudades/nombres`, "ciudad-modify", {
+      nombrePais: e.target.value,
+    });
+  }
 });
 
 //EventListener para el botón que agrega una compañia nueva

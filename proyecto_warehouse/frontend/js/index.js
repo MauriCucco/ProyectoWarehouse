@@ -326,7 +326,7 @@ document.addEventListener("click", (e) => {
     createIcons(e.target);
   } else if (e.target.className === "fas fa-pen contacto") {
     //MODIFICAR CONTACTO
-    modifyContact(contactoId);
+    modifyContact(contactoId, e.target);
   } else if (e.target.id === "canal-contacto") {
     if (e.target.value === "none")
       cuentaContacto.setAttribute("placeholder", "");
@@ -1105,11 +1105,11 @@ const processResponseContact = async (response) => {
 
 //MODIFICAR CONTACTO
 
-const modifyContact = (idModify) => {
+const modifyContact = (idModify, penIcon) => {
   const modifyContact = contactosServidor.find(
     (contacto) => contacto._id === idModify
   );
-  loadInfo(modifyContact);
+  loadInfo(modifyContact, penIcon);
   modalBgContacto.classList.add("bg-activate");
   modalBgContacto.classList.add("modal-bg-modify");
   divNuevoContacto.style.display = "flex";
@@ -1122,14 +1122,25 @@ const modifyContact = (idModify) => {
 
 //función que carga la info del contacto
 
-const loadInfo = async (contacto) => {
+const loadInfo = async (contacto, penIcon) => {
   nombreContacto.value = contacto.nombre;
   apellidoContacto.value = contacto.apellido;
   cargoContacto.value = contacto.cargo;
   emailContacto.value = contacto.email;
-  companiaContacto.value = contacto.compania;
+  if (
+    penIcon.parentElement.parentElement.firstElementChild.nextElementSibling
+      .nextElementSibling.nextElementSibling.innerText === ""
+  ) {
+    companiaContacto.value = "none";
+  } else {
+    companiaContacto.value = contacto.compania;
+  }
+
   companiaContacto.classList.add("select-definitivo");
-  if (contacto.region) {
+  if (
+    penIcon.parentElement.parentElement.firstElementChild.nextElementSibling
+      .nextElementSibling.lastElementChild.innerText !== ""
+  ) {
     regionContacto.value = contacto.region;
     await getLocations(
       `http://${host}/regiones/paises/nombres`,
@@ -1141,18 +1152,24 @@ const loadInfo = async (contacto) => {
     regionContacto.classList.add("select-definitivo");
     paisContacto.disabled = false;
     paisContacto.value = contacto.pais;
+    paisContacto.value = "none";
     paisContacto.classList.add("select-definitivo");
-    ciudadContacto.disabled = false;
-    await getLocations(
-      `http://${host}/regiones/ciudades/nombres`,
-      "ciudad-contacto",
-      {
-        nombrePais: contacto.pais,
-      }
-    );
-    ciudadContacto.value = contacto.ciudad;
-    ciudadContacto.classList.add("select-definitivo");
-    direccionContacto.disabled = false;
+    if (
+      penIcon.parentElement.parentElement.firstElementChild.nextElementSibling
+        .nextElementSibling.firstElementChild.innerText !== ""
+    ) {
+      ciudadContacto.disabled = false;
+      await getLocations(
+        `http://${host}/regiones/ciudades/nombres`,
+        "ciudad-contacto",
+        {
+          nombrePais: contacto.pais,
+        }
+      );
+      ciudadContacto.value = contacto.ciudad;
+      ciudadContacto.classList.add("select-definitivo");
+      direccionContacto.disabled = false;
+    }
   }
   if (contacto.direccion) {
     direccionContacto.disabled = false;

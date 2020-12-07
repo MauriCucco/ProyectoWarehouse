@@ -15,14 +15,6 @@ const createCompany = async (obj) => {
 
 const findCompanies = (obj, proyection = {}) =>
   Companias.find(obj, proyection)
-    .populate({
-      path: "region",
-      select: { _id: 0, nombreRegion: 1 },
-    })
-    .populate({
-      path: "pais",
-    })
-    .populate({ path: "ciudad" })
     .then((r) => r)
     .catch((e) => {
       throw e;

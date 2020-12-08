@@ -3,7 +3,7 @@ const { createCity } = require("../../../models/region");
 const crearCiudad = (req, res) => {
   const { idPais, ciudades } = req.body;
 
-  createCity(req.params.id, idPais, ciudades)
+  createCity(idPais, ciudades)
     .then((r) => res.status(200).send({ mensaje: "La operación fue exitosa" }))
     .catch((e) => {
       if (e.path === "_id")

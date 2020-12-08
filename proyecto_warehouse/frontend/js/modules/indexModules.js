@@ -799,9 +799,6 @@ export const getLocations = async (url, locacion, obj = {}) => {
   const data = await response.json();
 
   crearOptions(data, locacion);
-  /*response.status === 200
-    ? crearOptions(data, locacion)
-    : window.open("bienvenida.html", "_self");*/
 };
 
 //función para crear las options de los selects de regiones, países y ciudades
@@ -839,29 +836,35 @@ const crearOptions = (array, locacion) => {
   ) {
     array.forEach((element) => {
       const option = document.createElement("option");
-      option.innerHTML = element;
+      option.id = element.id;
       locacion.includes("contacto")
         ? (option.className = `${locacion}`)
         : (option.className = `${locacion}-company`);
       if (locacion === "region") {
+        option.innerHTML = element.nombreRegion;
         regionCompany.appendChild(option);
       }
       if (locacion === "pais") {
+        option.innerHTML = element.nombrePais;
         paisCompany.disabled = false;
         paisCompany.appendChild(option);
       }
       if (locacion === "ciudad") {
+        option.innerHTML = element.nombreCiudad;
         ciudadCompany.disabled = false;
         ciudadCompany.appendChild(option);
       }
       if (locacion === "region-contacto") {
+        option.innerHTML = element.nombreRegion;
         regionContacto.appendChild(option);
       }
       if (locacion === "pais-contacto") {
+        option.innerHTML = element.nombrePais;
         paisContacto.disabled = false;
         paisContacto.appendChild(option);
       }
       if (locacion === "ciudad-contacto") {
+        option.innerHTML = element.nombreCiudad;
         ciudadContacto.disabled = false;
         ciudadContacto.appendChild(option);
       }

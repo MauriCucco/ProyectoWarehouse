@@ -271,7 +271,7 @@ document.addEventListener("click", (event) => {
   } else if (
     event.target.className === "primary-button crud eliminar ciudades"
   ) {
-    const ciudad = { idPais, idCiudad };
+    const ciudad = { idCiudad };
     crud(ciudad, `http://${host}/regiones/ciudades/${idRegion}`, "DELETE");
   }
 });
@@ -351,7 +351,9 @@ const crud = (obj, url, operacion) =>
     },
     body: JSON.stringify(obj),
   })
-    .then((r) => processResponseRegion(r))
+    .then((r) => {
+      processResponseRegion(r);
+    })
     .catch((e) => console.error(e));
 
 //función que chequea los inputs y reune su información antes de mandarla al servidor
@@ -419,7 +421,7 @@ const checkAll = (elemento) => {
     } else if (
       elemento.className === "primary-button crud modificar ciudades"
     ) {
-      const ciudad = { idPais, idCiudad, nombreCiudad: inputCities[0].value };
+      const ciudad = { idCiudad, nombreCiudad: inputCities[0].value };
 
       return ciudad;
     }

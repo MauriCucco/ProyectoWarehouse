@@ -33,18 +33,6 @@ A continuación se brindarán una serie de pasos para poder instalar las depende
    ```bash
    use warehouse
    ```
-   ```bash
-   db.createCollection("usuarios")
-   ```
-   ```bash
-   db.createCollection("regiones")
-   ```
-   ```bash
-   db.createCollection("companias")
-   ```
-   ```bash
-   db.createCollection("contactos")
-   ```
 6. En la consola de VSC, verificar que se esté DENTRO de la carpeta "src" y escribir lo siguiente para inicializar la aplicación:
    ```bash
    node app

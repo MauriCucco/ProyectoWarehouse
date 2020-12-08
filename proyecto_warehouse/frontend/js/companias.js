@@ -146,9 +146,9 @@ botonAgregarCompania.addEventListener("click", () => {
 
   const compania = {
     nombre: nombreCompania.value,
-    region: regionCompany.value,
-    pais: paisCompany.value,
-    ciudad: ciudadCompany.value,
+    region: regionCompany.id,
+    pais: paisCompany.id,
+    ciudad: ciudadCompany.id,
     direccion: direccionCompania.value,
     email: emailInput.value,
     telefono: telefonoCompania.value,

@@ -51,7 +51,10 @@ A continuación se brindarán una serie de pasos para poder instalar las depende
    ```
 7. Si todo sale bien debe aparecer en la consola del VSC lo siguiente:
 
-![](/preview.jpg)
+   ```bash
+   SERVER UP!!!
+   Conectado a la base de datos!!
+   ```
 
 8. Ahora debemos crear un usuario que sea administrador, para que pueda crear a otros usuarios y a las demás colecciones. Para ello, abrimos Postman y le pegamos a la ruta "http://localhost:3000/usuarios/registro" con un "POST" y el siguiente objeto:
 

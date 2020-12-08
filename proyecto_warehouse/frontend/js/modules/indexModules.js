@@ -51,6 +51,30 @@ export const processAdminTable = async (response, seccion) => {
     if (data.error === "No se encontró un token de autorización")
       return window.open("bienvenida.html", "_self");
 
+    if (data.length === 0) {
+      if (seccion === "companias") {
+        document.getElementById("sin-companias").style.display = "block";
+        document.getElementById("tabla-companias").style.display = "none";
+        document.getElementById("div-companias").style.width = "fit-content";
+      }
+      if (seccion === "contactos") {
+        document.getElementById("sin-contactos").style.display = "block";
+        document.getElementById("tabla-contactos").style.display = "none";
+        document.getElementById("div-paginado").style.display = "none";
+      }
+    } else {
+      if (seccion === "companias") {
+        document.getElementById("sin-companias").style.display = "none";
+        document.getElementById("tabla-companias").style.display = "flex";
+        document.getElementById("div-companias").style.width = "88.3%;";
+      }
+      if (seccion === "contactos") {
+        document.getElementById("sin-contactos").style.display = "none";
+        document.getElementById("tabla-contactos").style.display = "flex";
+        document.getElementById("div-paginado").style.display = "flex";
+      }
+    }
+
     if (seccion === "companias") {
       seccionCompanias.style.display = "unset";
     } else if (seccion === "contactos") {
@@ -654,6 +678,11 @@ export const crearModalCrud = (operacion, name = {}) => {
       h2Crud.innerHTML = "¿Está seguro de eliminar ésta compañia?";
       buttonCrud.className = "primary-button crud eliminar compania";
     }
+
+    if (document.querySelector(".h2-name")) {
+      document.querySelector(".h2-name").remove();
+    }
+
     h2Name.innerHTML = `"${name}"`;
     h2Crud.after(h2Name);
     buttonCrud.innerHTML = "Eliminar";

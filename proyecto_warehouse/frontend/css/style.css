@@ -1100,6 +1100,7 @@ td.acciones {
 /* Remove default bullets */
 ul,
 #arbol-regiones {
+  display: none;
   font-size: 1.5rem;
   list-style-type: none;
   margin: 2rem 0rem 0rem 0rem;
@@ -1193,7 +1194,7 @@ li:last-child {
   width: 88.3%;
 }
 #tabla-companias {
-  display: flex;
+  display: none;
   flex-direction: column;
   margin-top: 2rem;
 }
@@ -1217,4 +1218,16 @@ th.fila {
 }
 #div-nueva-compania {
   display: none;
+}
+
+/*LENGHT 0 DE COMPAÑIAS, CONTACTOS Y REGIONES*/
+
+.lenght-zero {
+  border: 0.2rem solid #0683f9;
+  border-radius: 0.3rem;
+  display: none;
+  margin: 4rem auto;
+  padding: 1rem;
+  text-align: center;
+  width: 51rem;
 }

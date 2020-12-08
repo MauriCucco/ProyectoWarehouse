@@ -62,6 +62,14 @@ const getRegiones = () =>
 const crearArbol = async (response) => {
   const data = await response.json();
 
+  if (data.length === 0) {
+    document.getElementById("sin-regiones").style.display = "block";
+    document.getElementById("arbol-regiones").style.display = "none";
+  } else {
+    document.getElementById("sin-regiones").style.display = "none";
+    document.getElementById("arbol-regiones").style.display = "block";
+  }
+
   data.forEach((region) => {
     crearRama(region);
   });

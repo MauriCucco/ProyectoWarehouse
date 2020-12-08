@@ -221,7 +221,7 @@ document.addEventListener("click", (event) => {
   } else if (
     event.target.className === "primary-button crud eliminar usuario"
   ) {
-    deleteUser(event.target.id); //ELIMINAR
+    deleteUser(userId); //ELIMINAR
   } else if (event.target.className === "fas fa-pen usuarios") {
     resetInputsStyles();
     chargeUserInfo(event.target);

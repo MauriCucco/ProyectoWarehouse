@@ -34,16 +34,16 @@ A continuación se brindarán una serie de pasos para poder instalar las depende
    use warehouse
    ```
    ```bash
-   db.collection("usuarios")
+   db.createCollection("usuarios")
    ```
    ```bash
-   db.collection("regiones")
+   db.createCollection("regiones")
    ```
    ```bash
-   db.collection("companias")
+   db.createCollection("companias")
    ```
    ```bash
-   db.collection("contactos")
+   db.createCollection("contactos")
    ```
 6. En la consola de VSC, abir otra terminal (Ctrl + Shift + ñ). Verificar que se esté DENTRO de la carpeta "src" y escribir lo siguiente para inicializar la aplicación:
    ```bash
@@ -69,12 +69,12 @@ A continuación se brindarán una serie de pasos para poder instalar las depende
 
 > Las contraseñas requieren 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial (!, @, #, etc).
 
-9. Si el usuario se insertó correctamente se nos devolverá un id del usuario.
+9. Si el usuario se insertó correctamente se nos devolverá el id del usuario.
 
 10. Dentro de src/middlewares/globales.js, debemos comentar la siguiente línea de código:
 
 ![](/preview2.jpg)
 
-11. Por último, dentro de src/modules/usuario/indexUsuarios.js debemos descomentar en la línea 14 lo siguiente:
+11. Por último, dentro de src/modules/usuario/indexUsuarios.js debemos DESCOMENTAR en la línea 14 lo siguiente:
 
 ![](/preview3.jpg)

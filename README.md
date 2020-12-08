@@ -4,7 +4,7 @@
 
 ## Instalación
 
-A continuación se brindarán una serie de pasos para poder instalar las dependencias necesarias e iniciar tanto el servidor como la base de datos para comenzar a manipular la página.
+A continuación se brindarán una serie de pasos para poder instalar las dependencias necesarias e iniciar tanto el servidor como la base de datos para comenzar a interactuar con la página.
 
 ### IMPORTANTE:
 

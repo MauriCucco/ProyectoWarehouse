@@ -58,6 +58,7 @@ const h2Contacto = document.getElementById("h2-contacto");
 const eliminarContactos = document.getElementById("div-delete");
 const divEliminarContacto = document.getElementById("eliminar-contacto");
 const cancelDelete = document.getElementById("cancel-delete");
+const divPaginado = document.getElementById("div-paginado");
 let contactosSeleccionados = [];
 let contactoId;
 
@@ -137,7 +138,8 @@ function search() {
   }
   const arrayBusqueda = filtrar();
   if (arrayBusqueda[0] === undefined) {
-    tablaContactos.style.visibility = "hidden";
+    tablaContactos.style.display = "none";
+    divPaginado.style.display = "none";
     divSinResultados.style.display = "unset";
   }
   deleteRows("contactos");
@@ -185,6 +187,17 @@ const filterBySearch = (contacto) => {
     return false;
   }
 };
+
+//EventListener del input para buscar contactos
+
+inputContactos.addEventListener("keyup", (e) => {
+  if (inputContactos.value === "") {
+    getContactos();
+    tablaContactos.style.display = "flex";
+    divPaginado.style.display = "flex";
+    divSinResultados.style.display = "none";
+  }
+});
 
 //evento para cuando el usuario presiona ENTER para buscar un contacto
 

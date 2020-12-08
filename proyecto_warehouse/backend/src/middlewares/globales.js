@@ -24,7 +24,7 @@ module.exports = function (app) {
 
   app.use(
     expressJwt({ secret: jwtClave, algorithms: ["HS256"] }).unless({
-      path: ["/usuarios/login", "/usuarios/registro"],
+      path: ["/usuarios/login" /*, "/usuarios/registro"*/],
     })
   );
 };

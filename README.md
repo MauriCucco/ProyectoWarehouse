@@ -45,7 +45,7 @@ A continuación se brindarán una serie de pasos para poder instalar las depende
    ```bash
    db.createCollection("contactos")
    ```
-6. En la consola de VSC, abir otra terminal (Ctrl + Shift + ñ). Verificar que se esté DENTRO de la carpeta "src" y escribir lo siguiente para inicializar la aplicación:
+6. En la consola de VSC, verificar que se esté DENTRO de la carpeta "src" y escribir lo siguiente para inicializar la aplicación:
    ```bash
    node app
    ```

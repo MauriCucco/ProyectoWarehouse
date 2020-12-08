@@ -4,11 +4,11 @@
 
 ## Instalación
 
-A continuación se brindarán una serie de pasos para poder instalar las dependencias necesarias e iniciar tanto el servidor como la base de datos para comenzar a manipular la página:
+A continuación se brindarán una serie de pasos para poder instalar las dependencias necesarias e iniciar tanto el servidor como la base de datos para comenzar a manipular la página.
 
 ### IMPORTANTE:
 
-Se debe tener instalado Mongo DB (https://www.mongodb.com/es) y Postman (https://www.postman.com/)
+> Se debe tener instalado Mongo DB (https://www.mongodb.com/es) y Postman (https://www.postman.com/)
 
 1. En Visual Studio Code (VSC) posicionarse dentro de la siguiente ruta: proyecto_warehouse/backend/src
 
@@ -67,7 +67,7 @@ Se debe tener instalado Mongo DB (https://www.mongodb.com/es) y Postman (https:/
 
 ### IMPORTANTE:
 
-Las contraseñas requieren 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial (!, @, #, etc).
+> Las contraseñas requieren 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial (!, @, #, etc).
 
 9. Si el usuario se insertó correctamente se nos devolverá un id del usuario.
 

@@ -290,6 +290,7 @@ document.addEventListener("click", (e) => {
     tresCuartosBarra.className = "barra";
     barraInteres.className = "barra";
   } else if (e.target.className === "button-canal delete") {
+    //Eliminar un canal de contacto al modificarlo
     if (
       h2Contacto.innerHTML === "Modificar contacto" &&
       botonGuardar.innerText === "Modificar contacto"
@@ -313,6 +314,7 @@ document.addEventListener("click", (e) => {
     }
     e.target.parentElement.parentElement.remove();
   } else if (e.target.className === "button-canal modify") {
+    //Modificar un canal de contacto
     const favouriteModify = document.querySelector(".fas.fa-heart.icon-modify");
     const banModify = document.querySelector(".fas.fa-ban.icon-modify");
     e.target.parentElement.firstElementChild.firstElementChild.disabled = false;
@@ -428,7 +430,8 @@ const crearOptionsCompanies = (array) => {
   array.forEach((element) => {
     const option = document.createElement("option");
     const selectCompania = document.getElementById("compania-contacto");
-    option.innerHTML = element;
+    option.innerHTML = element.nombreCompania;
+    option.id = element.id;
     option.className = `option-company`;
     selectCompania.appendChild(option);
   });
@@ -574,6 +577,7 @@ const infoCanal = () => {
     preferencia: preferenciasContacto.value,
   };
 };
+
 //función para agregar otro canal de contacto
 
 const crearOtroCanal = (infoCanal) => {
@@ -847,6 +851,7 @@ const crearIconsPreferencias = (elemento) => {
     if (favouriteModify) elemento.nextElementSibling.remove();
   }
 };
+
 //GUARDAR UN CONTACTO NUEVO
 
 botonGuardar.addEventListener("click", (e) => {
@@ -969,18 +974,22 @@ const getInfo = (schema = "") => {
   const canalesModify = document.getElementsByClassName(
     "select-definitivo canal-modify"
   );
+  const companiaIndex = companiaContacto.selectedIndex;
+  const regionIndex = regionContacto.selectedIndex;
+  const paisIndex = paisContacto.selectedIndex;
+  const ciudadIndex = ciudadContacto.selectedIndex;
 
   const contacto = {
     nombre: nombreContacto.value,
     apellido: apellidoContacto.value,
     cargo: cargoContacto.value,
     email: emailContacto.value,
-    compania: companiaContacto.value,
+    compania: companiaContacto.options.item(companiaIndex).id,
   };
   if (regionContacto.value !== "none") {
-    contacto.region = regionContacto.value;
-    contacto.pais = paisContacto.value;
-    contacto.ciudad = ciudadContacto.value;
+    contacto.region = regionContacto.options.item(regionIndex).id;
+    contacto.pais = paisContacto.options.item(paisIndex).id;
+    contacto.ciudad = ciudadContacto.options.item(ciudadIndex).id;
   }
   if (direccionContacto.value !== "")
     contacto.direccion = direccionContacto.value;
@@ -1097,7 +1106,7 @@ const ABMContact = (url, metodo, obj = {}) => {
 
 const processResponseContact = async (response) => {
   const data = await response.json();
-
+  console.log(data);
   if (response.status === 200) {
     if (data.mensaje === "El canal fue eliminado exitósamente")
       return console.log(data.mensaje);
@@ -1122,6 +1131,7 @@ const modifyContact = (idModify, penIcon) => {
   const modifyContact = contactosServidor.find(
     (contacto) => contacto._id === idModify
   );
+
   loadInfo(modifyContact, penIcon);
   modalBgContacto.classList.add("bg-activate");
   modalBgContacto.classList.add("modal-bg-modify");
@@ -1146,7 +1156,7 @@ const loadInfo = async (contacto, penIcon) => {
   ) {
     companiaContacto.value = "none";
   } else {
-    companiaContacto.value = contacto.compania;
+    companiaContacto.value = contacto.compania.nombre;
   }
 
   companiaContacto.classList.add("select-definitivo");
@@ -1154,17 +1164,17 @@ const loadInfo = async (contacto, penIcon) => {
     penIcon.parentElement.parentElement.firstElementChild.nextElementSibling
       .nextElementSibling.lastElementChild.innerText !== ""
   ) {
-    regionContacto.value = contacto.region;
+    regionContacto.value = contacto.region.nombreRegion;
     await getLocations(
-      `http://${host}/regiones/paises/nombres`,
+      `http://${host}/regiones/paises/nombres`, //Obtengo los nombres de los países
       "pais-contacto",
       {
-        nombreRegion: contacto.region,
+        nombreRegion: contacto.region.nombreRegion,
       }
     );
     regionContacto.classList.add("select-definitivo");
     paisContacto.disabled = false;
-    paisContacto.value = contacto.pais;
+    paisContacto.value = contacto.pais.nombrePais;
     paisContacto.value = "none";
     paisContacto.classList.add("select-definitivo");
     if (
@@ -1176,10 +1186,10 @@ const loadInfo = async (contacto, penIcon) => {
         `http://${host}/regiones/ciudades/nombres`,
         "ciudad-contacto",
         {
-          nombrePais: contacto.pais,
+          nombrePais: contacto.pais.nombrePais,
         }
       );
-      ciudadContacto.value = contacto.ciudad;
+      ciudadContacto.value = contacto.ciudad.nombreCiudad;
       ciudadContacto.classList.add("select-definitivo");
       direccionContacto.disabled = false;
     }

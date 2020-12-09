@@ -143,12 +143,15 @@ paisCompanyModify.addEventListener("click", (e) => {
 botonAgregarCompania.addEventListener("click", () => {
   resetInputsStyles();
   const emptyInput = checkInputs("companias");
+  const regionIndex = regionCompany.selectedIndex;
+  const paisIndex = paisCompany.selectedIndex;
+  const ciudadIndex = ciudadCompany.selectedIndex;
 
   const compania = {
     nombre: nombreCompania.value,
-    region: regionCompany.id,
-    pais: paisCompany.id,
-    ciudad: ciudadCompany.id,
+    region: regionCompany.options.item(regionIndex).id,
+    pais: paisCompany.options.item(paisIndex).id,
+    ciudad: ciudadCompany.options.item(ciudadIndex).id,
     direccion: direccionCompania.value,
     email: emailInput.value,
     telefono: telefonoCompania.value,

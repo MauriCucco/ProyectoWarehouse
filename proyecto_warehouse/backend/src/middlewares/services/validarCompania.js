@@ -5,7 +5,7 @@ const validarCompania = (req, res, next) => {
 
   if (!compania) return next();
 
-  findCompanies({ nombre: compania })
+  findCompanies({ _id: compania })
     .then(([r]) => {
       if (r === undefined)
         return res.status(422).send({ mensaje: "La compañia no es válida" });

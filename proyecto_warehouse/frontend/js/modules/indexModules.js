@@ -61,6 +61,7 @@ export const processAdminTable = async (response, seccion) => {
         document.getElementById("sin-contactos").style.display = "block";
         document.getElementById("tabla-contactos").style.display = "none";
         document.getElementById("div-paginado").style.display = "none";
+        document.getElementById("div-select-delete").style.display = "none";
       }
     } else {
       if (seccion === "companias") {
@@ -149,9 +150,9 @@ export const createRows = (data, seccion) => {
       emailP.className = "email-p contactos";
       tdRegionPais.className = "td-region-pais contactos";
       regionP.className = "region-p contactos";
-      if (element.region) regionP.innerHTML = element.region;
-      if (element.pais) paisP.innerHTML = element.pais;
-      tdCompania.innerHTML = element.compania;
+      if (element.region) regionP.innerHTML = element.region.nombreRegion;
+      if (element.pais) paisP.innerHTML = element.pais.nombrePais;
+      tdCompania.innerHTML = element.compania.nombre;
       tdCargo.innerHTML = element.cargo;
       if (element.canalesContacto)
         element.canalesContacto.map((canal) => {
@@ -212,9 +213,9 @@ export const createRows = (data, seccion) => {
         tdRegionPais.className = "td-region-pais";
         regionP.className = "region-p";
         tdPerfil.innerHTML = element.perfil;
-        regionP.innerHTML = element.region;
-        paisP.innerHTML = element.pais;
-        tdCiudad.innerHTML = element.ciudad;
+        regionP.innerHTML = element.region.nombreRegion;
+        paisP.innerHTML = element.pais.nombrePais;
+        tdCiudad.innerHTML = element.ciudad.nombreCiudad;
         tdDireccion.innerHTML = element.direccion;
         tdTelefono.innerHTML = element.telefono;
         tablaBodyCompania.appendChild(tr);

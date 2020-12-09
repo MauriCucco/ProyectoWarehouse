@@ -6,18 +6,18 @@ const validarLocacion = async (req, res, next) => {
 
     if (!region && !pais && !ciudad) return next();
 
-    const [matchRegion] = await findRegions({ nombreRegion: region });
+    const [matchRegion] = await findRegions({ _id: region });
 
     if (matchRegion === undefined) throw "La región es inválida";
 
     const [matchPais] = await findCountry({
-      nombrePais: pais,
+      _id: pais,
     });
 
     if (matchPais === undefined) throw "El país es inválido";
 
     const [matchCiudad] = await findCity({
-      nombreCiudad: ciudad,
+      _id: ciudad,
     });
 
     if (matchCiudad === undefined) throw "La ciudad es inválida";

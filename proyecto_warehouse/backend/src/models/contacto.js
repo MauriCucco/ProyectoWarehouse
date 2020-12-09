@@ -36,6 +36,26 @@ const createChannel = async (idContacto, obj) => {
 
 const findContacts = (obj) =>
   Contactos.find(obj)
+    .populate({
+      path: "compania",
+      model: "Companias",
+      select: { nombre: 1, _id: 0 },
+    })
+    .populate({
+      path: "region",
+      model: "Regiones",
+      select: { nombreRegion: 1, _id: 0 },
+    })
+    .populate({
+      path: "pais",
+      model: "Paises",
+      select: { nombrePais: 1, _id: 0 },
+    })
+    .populate({
+      path: "ciudad",
+      model: "Ciudades",
+      select: { nombreCiudad: 1, _id: 0 },
+    })
     .then((r) => r)
     .catch((e) => {
       throw e;

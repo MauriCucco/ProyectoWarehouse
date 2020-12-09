@@ -1,5 +1,4 @@
 const { Companias } = require("../database/schemas/Compania");
-const { Regiones, Paises, Ciudades } = require("../database/schemas/Region");
 
 const createCompany = async (obj) => {
   try {
@@ -15,6 +14,21 @@ const createCompany = async (obj) => {
 
 const findCompanies = (obj, proyection = {}) =>
   Companias.find(obj, proyection)
+    .populate({
+      path: "region",
+      model: "Regiones",
+      select: { nombreRegion: 1, _id: 0 },
+    })
+    .populate({
+      path: "pais",
+      model: "Paises",
+      select: { nombrePais: 1, _id: 0 },
+    })
+    .populate({
+      path: "ciudad",
+      model: "Ciudades",
+      select: { nombreCiudad: 1, _id: 0 },
+    })
     .then((r) => r)
     .catch((e) => {
       throw e;

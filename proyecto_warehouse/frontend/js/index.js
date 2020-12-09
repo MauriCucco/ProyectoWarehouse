@@ -18,7 +18,6 @@ import {
   paisContacto,
   ciudadContacto,
   canalContacto,
-  contactosServidor,
 } from "./modules/indexModules.js";
 
 let contactosItem = document.getElementById("contactos-item");
@@ -1128,7 +1127,7 @@ const processResponseContact = async (response) => {
 //MODIFICAR CONTACTO
 
 const modifyContact = (idModify, penIcon) => {
-  const modifyContact = contactosServidor.find(
+  const modifyContact = arrayContactos.find(
     (contacto) => contacto._id === idModify
   );
 

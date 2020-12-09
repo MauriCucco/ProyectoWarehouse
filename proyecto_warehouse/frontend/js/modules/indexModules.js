@@ -163,7 +163,7 @@ export const createRows = (data, seccion) => {
       regionP.className = "region-p contactos";
       if (element.region) regionP.innerHTML = element.region.nombreRegion;
       if (element.pais) paisP.innerHTML = element.pais.nombrePais;
-      tdCompania.innerHTML = element.compania.nombre;
+      if (element.compania) tdCompania.innerHTML = element.compania.nombre;
       tdCargo.innerHTML = element.cargo;
       if (element.canalesContacto)
         element.canalesContacto.map((canal) => {
@@ -224,9 +224,9 @@ export const createRows = (data, seccion) => {
         tdRegionPais.className = "td-region-pais";
         regionP.className = "region-p";
         tdPerfil.innerHTML = element.perfil;
-        regionP.innerHTML = element.region.nombreRegion;
-        paisP.innerHTML = element.pais.nombrePais;
-        tdCiudad.innerHTML = element.ciudad.nombreCiudad;
+        if (element.region) regionP.innerHTML = element.region.nombreRegion;
+        if (element.pais) paisP.innerHTML = element.pais.nombrePais;
+        if (element.ciudad) tdCiudad.innerHTML = element.ciudad.nombreCiudad;
         tdDireccion.innerHTML = element.direccion;
         tdTelefono.innerHTML = element.telefono;
         tablaBodyCompania.appendChild(tr);

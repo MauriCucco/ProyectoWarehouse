@@ -299,10 +299,7 @@ document.addEventListener("click", (e) => {
       });
     }
     e.target.parentElement.remove();
-  } else if (
-    e.target.className === "p-delete-contacto" ||
-    e.target.className === "fas fa-trash contactos"
-  ) {
+  } else if (e.target.className === "fas fa-trash contactos") {
     if (
       h2Contacto.innerHTML === "Modificar contacto" &&
       botonGuardar.innerHTML === "Modificar contacto"
@@ -322,10 +319,7 @@ document.addEventListener("click", (e) => {
     if (favouriteModify)
       favouriteModify.className = "fas fa-heart icon-modify-active";
     if (banModify) banModify.className = "fas fa-ban icon-modify-active";
-  } else if (
-    e.target.className === "p-modify-contacto" ||
-    e.target.className === "fas fa-pen contactos"
-  ) {
+  } else if (e.target.className === "fas fa-pen contactos") {
     const favouriteModify = document.querySelector(".fas.fa-heart.icon-modify");
     const banModify = document.querySelector(".fas.fa-ban.icon-modify");
     e.target.parentElement.parentElement.firstElementChild.firstElementChild.disabled = false;
@@ -602,10 +596,8 @@ const crearOtroCanal = (infoCanal) => {
   const banIcon = document.createElement("i");
   const buttonEditar = document.createElement("button");
   const iButtonEditar = document.createElement("i");
-  const pButtonEditar = document.createElement("p");
   const buttonEliminar = document.createElement("button");
   const iButtonEliminar = document.createElement("i");
-  const pButtonEliminar = document.createElement("p");
 
   divCanal.className = "canal crud";
   divInputCanal.className = "div-input-contacto";
@@ -641,14 +633,10 @@ const crearOtroCanal = (infoCanal) => {
   buttonEditar.className = "button-canal modify";
   buttonEditar.setAttribute("type", "button");
   iButtonEditar.className = "fas fa-pen contactos";
-  pButtonEditar.className = "p-modify-contacto";
-  pButtonEditar.innerHTML = "Editar canal";
   buttonEliminar.setAttribute("type", "button");
   buttonEliminar.className = "button-canal delete";
   buttonEliminar.id = `${infoCanal._id}`;
   iButtonEliminar.className = "fas fa-trash contactos";
-  pButtonEliminar.className = "p-delete-contacto";
-  pButtonEliminar.innerHTML = "Eliminar canal";
 
   divInferior.appendChild(divCanal);
   divCanal.appendChild(divInputCanal);
@@ -667,11 +655,14 @@ const crearOtroCanal = (infoCanal) => {
   selectPreferencia.appendChild(optionFavoritoPreferencia);
   selectPreferencia.appendChild(optionNoMolestarPreferencia);
   divCanal.appendChild(buttonEditar);
-  buttonEditar.appendChild(iButtonEditar);
-  buttonEditar.appendChild(pButtonEditar);
   divCanal.appendChild(buttonEliminar);
+
+  buttonEditar.appendChild(iButtonEditar);
+  const editarText = document.createTextNode("Editar canal");
+  buttonEditar.appendChild(editarText);
   buttonEliminar.appendChild(iButtonEliminar);
-  buttonEliminar.appendChild(pButtonEliminar);
+  const eliminarText = document.createTextNode("Eliminar canal");
+  buttonEliminar.appendChild(eliminarText);
 
   selectCanal.value = infoCanal.nombreCanal;
   selectPreferencia.value = infoCanal.preferencia;

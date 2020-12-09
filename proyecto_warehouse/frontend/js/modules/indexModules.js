@@ -27,9 +27,15 @@ export const regionContacto = document.getElementById("region-contacto");
 export const paisContacto = document.getElementById("pais-contacto");
 export const ciudadContacto = document.getElementById("ciudad-contacto");
 export const canalContacto = document.getElementById("canal-contacto");
-let emptyInput = false;
 export let arrayContactos;
-export let contactosServidor;
+const sinCompanias = document.getElementById("sin-companias");
+const tablaCompanias = document.getElementById("tabla-companias");
+const divCompanias = document.getElementById("div-companias");
+const sinContactos = document.getElementById("sin-contactos");
+const tablaContactos = document.getElementById("tabla-contactos");
+const divPaginado = document.getElementById("div-paginado");
+const divSelectDelete = document.getElementById("div-select-delete");
+let emptyInput = false;
 
 //FUNCIÓN PARA DEJAR DE RESALTAR UNA SECCIÓN DEL NAV
 
@@ -51,34 +57,11 @@ export const processAdminTable = async (response, seccion) => {
     if (data.error === "No se encontró un token de autorización")
       return window.open("bienvenida.html", "_self");
 
-    if (data.length === 0) {
-      if (seccion === "companias") {
-        document.getElementById("sin-companias").style.display = "block";
-        document.getElementById("tabla-companias").style.display = "none";
-        document.getElementById("div-companias").style.width = "fit-content";
-      }
-      if (seccion === "contactos") {
-        document.getElementById("sin-contactos").style.display = "block";
-        document.getElementById("tabla-contactos").style.display = "none";
-        document.getElementById("div-paginado").style.display = "none";
-      }
-    } else {
-      if (seccion === "companias") {
-        document.getElementById("sin-companias").style.display = "none";
-        document.getElementById("tabla-companias").style.display = "flex";
-        document.getElementById("div-companias").style.width = "88.3%;";
-      }
-      if (seccion === "contactos") {
-        document.getElementById("sin-contactos").style.display = "none";
-        document.getElementById("tabla-contactos").style.display = "flex";
-        document.getElementById("div-paginado").style.display = "flex";
-      }
-    }
+    checkLength(data, seccion);
 
     if (seccion === "companias") {
       seccionCompanias.style.display = "unset";
     } else if (seccion === "contactos") {
-      contactosServidor = data;
       arrayContactos = data;
       seccionContactos.style.display = "block";
       divContactos.style.display = "block";
@@ -89,6 +72,35 @@ export const processAdminTable = async (response, seccion) => {
     createRows(data, seccion);
   } catch (error) {
     console.error(error);
+  }
+};
+
+//función que chequea si se obtuvo info del servidor
+
+const checkLength = (data, seccion) => {
+  if (data.length === 0) {
+    if (seccion === "companias") {
+      sinCompanias.style.display = "block";
+      tablaCompanias.style.display = "none";
+      divCompanias.style.width = "fit-content";
+    }
+    if (seccion === "contactos") {
+      sinContactos.style.display = "block";
+      tablaContactos.style.display = "none";
+      divPaginado.style.display = "none";
+      divSelectDelete.style.display = "none";
+    }
+  } else {
+    if (seccion === "companias") {
+      sinCompanias.style.display = "none";
+      tablaCompanias.style.display = "flex";
+      divCompanias.style.width = "88.3%;";
+    }
+    if (seccion === "contactos") {
+      sinContactos.style.display = "none";
+      tablaContactos.style.display = "flex";
+      divPaginado.style.display = "flex";
+    }
   }
 };
 
@@ -149,9 +161,9 @@ export const createRows = (data, seccion) => {
       emailP.className = "email-p contactos";
       tdRegionPais.className = "td-region-pais contactos";
       regionP.className = "region-p contactos";
-      if (element.region) regionP.innerHTML = element.region;
-      if (element.pais) paisP.innerHTML = element.pais;
-      tdCompania.innerHTML = element.compania;
+      if (element.region) regionP.innerHTML = element.region.nombreRegion;
+      if (element.pais) paisP.innerHTML = element.pais.nombrePais;
+      tdCompania.innerHTML = element.compania.nombre;
       tdCargo.innerHTML = element.cargo;
       if (element.canalesContacto)
         element.canalesContacto.map((canal) => {
@@ -212,9 +224,9 @@ export const createRows = (data, seccion) => {
         tdRegionPais.className = "td-region-pais";
         regionP.className = "region-p";
         tdPerfil.innerHTML = element.perfil;
-        regionP.innerHTML = element.region;
-        paisP.innerHTML = element.pais;
-        tdCiudad.innerHTML = element.ciudad;
+        regionP.innerHTML = element.region.nombreRegion;
+        paisP.innerHTML = element.pais.nombrePais;
+        tdCiudad.innerHTML = element.ciudad.nombreCiudad;
         tdDireccion.innerHTML = element.direccion;
         tdTelefono.innerHTML = element.telefono;
         tablaBodyCompania.appendChild(tr);
@@ -280,7 +292,7 @@ export const checkInputs = (seccion = "") => {
   const ciudadCompany = document.getElementById("city-company");
   const ciudadCompanyModify = document.getElementById("city-modify-company");
   const inputsModifyUser = document.querySelectorAll("input-form-modify");
-  const divCompania = document.getElementById("div-nueva-compania");
+  const divNuevaCompania = document.getElementById("div-nueva-compania");
   const dataSmall = document.querySelectorAll(".small-data-empty");
 
   if (seccion === "regiones") {
@@ -298,7 +310,7 @@ export const checkInputs = (seccion = "") => {
       }
     }
   } else if (seccion === "companias") {
-    if (divCompania.style.display === "flex") {
+    if (divNuevaCompania.style.display === "flex") {
       for (let input of inputsCompania) {
         if (input.value === "") {
           input.classList.add("invalid");
@@ -799,9 +811,6 @@ export const getLocations = async (url, locacion, obj = {}) => {
   const data = await response.json();
 
   crearOptions(data, locacion);
-  /*response.status === 200
-    ? crearOptions(data, locacion)
-    : window.open("bienvenida.html", "_self");*/
 };
 
 //función para crear las options de los selects de regiones, países y ciudades
@@ -814,16 +823,19 @@ const crearOptions = (array, locacion) => {
   ) {
     array.forEach((element) => {
       const option = document.createElement("option");
-      option.innerHTML = element;
+      option.id = element.id;
       option.className = `${locacion}-company`;
       if (locacion === "region-modify") {
+        option.innerHTML = element.nombreRegion;
         regionCompanyModify.appendChild(option);
       }
       if (locacion === "pais-modify") {
+        option.innerHTML = element.nombrePais;
         paisCompanyModify.appendChild(option);
         paisCompanyModify.disabled = false;
       }
       if (locacion === "ciudad-modify") {
+        option.innerHTML = element.nombreCiudad;
         ciudadCompanyModify.appendChild(option);
         ciudadCompanyModify.disabled = false;
       }
@@ -839,29 +851,35 @@ const crearOptions = (array, locacion) => {
   ) {
     array.forEach((element) => {
       const option = document.createElement("option");
-      option.innerHTML = element;
+      option.id = element.id;
       locacion.includes("contacto")
         ? (option.className = `${locacion}`)
         : (option.className = `${locacion}-company`);
       if (locacion === "region") {
+        option.innerHTML = element.nombreRegion;
         regionCompany.appendChild(option);
       }
       if (locacion === "pais") {
+        option.innerHTML = element.nombrePais;
         paisCompany.disabled = false;
         paisCompany.appendChild(option);
       }
       if (locacion === "ciudad") {
+        option.innerHTML = element.nombreCiudad;
         ciudadCompany.disabled = false;
         ciudadCompany.appendChild(option);
       }
       if (locacion === "region-contacto") {
+        option.innerHTML = element.nombreRegion;
         regionContacto.appendChild(option);
       }
       if (locacion === "pais-contacto") {
+        option.innerHTML = element.nombrePais;
         paisContacto.disabled = false;
         paisContacto.appendChild(option);
       }
       if (locacion === "ciudad-contacto") {
+        option.innerHTML = element.nombreCiudad;
         ciudadContacto.disabled = false;
         ciudadContacto.appendChild(option);
       }

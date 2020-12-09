@@ -20,8 +20,6 @@ const schemaRegion = {
   }),
   modify: Joi.object().keys({
     nombreRegion: Joi.string().optional(),
-    nombrePais: Joi.string().optional(),
-    nombreCiudad: Joi.string().optional(),
   }),
 };
 

@@ -17,7 +17,6 @@ const ciudadSchema = {
       ),
   }),
   modify: Joi.object().keys({
-    idPais: Joi.string().alphanum().min(24).required(),
     idCiudad: Joi.string().alphanum().min(24).required(),
     nombreCiudad: Joi.string()
       .required()
@@ -25,7 +24,6 @@ const ciudadSchema = {
       .message("El nombre de la ciudad es inválido"),
   }),
   delete: Joi.object().keys({
-    idPais: Joi.string().alphanum().min(24).required(),
     idCiudad: Joi.string().alphanum().min(24).required(),
   }),
 };

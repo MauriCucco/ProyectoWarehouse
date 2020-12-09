@@ -136,33 +136,27 @@ submitButton.addEventListener("click", () => {
 
   const emptyInput = checkInputs("usuarios-create");
 
-  if (emptyInput) {
-    return "Hay inputs vacíos";
-  } else {
-    createUser(data);
-  }
+  if (!emptyInput) ABMUser(`http://${host}/usuarios/registro`, "POST", data);
 });
 
-//función que crea un usuario
+//función que crea, elimina o modifica (ABM) un usuario
 
-const createUser = (obj) =>
-  fetch(`http://${host}/usuarios/registro`, {
-    method: "POST",
+const ABMUser = (url, metodo, obj = {}) =>
+  fetch(url, {
+    method: metodo,
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(obj),
   })
-    .then((r) => processResponse(r))
+    .then((r) => processResponseUser(r, metodo))
     .catch((e) => console.error(e));
 
 //función que procesa las respuestas del servidor
 
-const processResponse = async (response) => {
+const processResponseUser = async (response, metodo) => {
   try {
-    dataSmall.innerHTML = "";
-
     const jsonResponse = await response.json();
 
     if (response.status === 200) {
@@ -179,7 +173,8 @@ const processResponse = async (response) => {
     } else if (response.status === 401) {
       window.open("bienvenida.html", "_self");
     } else if (response.status === 422) {
-      processInvalid(jsonResponse, inputs, smalls);
+      if (metodo === "POST") processInvalid(jsonResponse, inputs, smalls);
+      if (metodo === "PUT") processInvalid(data, inputsModify, smallsModify);
     }
   } catch (error) {
     console.error(error);
@@ -189,17 +184,12 @@ const processResponse = async (response) => {
 //ELIMINAR Y MODIFICAR USUARIOS
 
 document.addEventListener("click", (event) => {
-  if (event.target.localName === "select") {
-    if (event.target.value !== "none") {
-      event.target.classList.add("select-definitivo");
-    } else {
-      event.target.classList.remove("select-definitivo");
-    }
-  } else if (event.target.className === "fas fa-ellipsis-h dots usuarios") {
+  if (event.target.className === "fas fa-ellipsis-h dots usuarios") {
     userId = event.target.id;
     resetDots();
     createIcons(event.target);
   } else if (event.target.className === "fas fa-trash usuarios") {
+    //ELIMINAR USUARIO
     const userName = `${event.target.parentElement.parentElement.firstElementChild.innerHTML} ${event.target.parentElement.parentElement.firstElementChild.nextElementSibling.innerHTML}`;
     modalBg.classList.add("bg-activate");
     crearModalCrud("deleteUser", userName);
@@ -221,36 +211,27 @@ document.addEventListener("click", (event) => {
   } else if (
     event.target.className === "primary-button crud eliminar usuario"
   ) {
-    deleteUser(userId); //ELIMINAR
+    ABMUser(`http://${host}/usuarios/${userId}`, "DELETE");
   } else if (event.target.className === "fas fa-pen usuarios") {
+    //MODIFICAR USUARIO
     resetInputsStyles();
     chargeUserInfo(event.target);
     modalBg.classList.add("bg-activate");
     modalModificar.style.display = "flex";
   } else if (event.target.className === "primary-button modificar") {
-    modifyUser(userId); //MODIFICAR
+    const modifiedUser = {
+      nombre: nombreInputModify.value,
+      apellido: apellidoInputModify.value,
+      email: emailInputModify.value,
+      perfil: perfilSelectModify.value,
+    };
+
+    const emptyInput = checkInputs();
+
+    if (!emptyInput)
+      modifyUser(`http://${host}/usuarios/${userId}`, "PUT", modifiedUser);
   }
 });
-
-//función para eliminar un usuario
-
-const deleteUser = (id) =>
-  fetch(`http://${host}/usuarios/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  })
-    .then((r) => {
-      if (r.status === 200) {
-        getUsuarios();
-        modalBg.classList.remove("bg-activate");
-      } else if (r.status === 401) {
-        window.open("bienvenida.html", "_self");
-      }
-    })
-    .catch((e) => console.error(e));
 
 //Llamo a la función sorTableByColumn al tocar una imagen .sort
 
@@ -273,49 +254,6 @@ document.querySelectorAll(".tabla th").forEach((headerCell) => {
   });
 });
 
-//función para modificar un usuario
-
-const modifyUser = async (id) => {
-  const obj = {
-    nombre: nombreInputModify.value,
-    apellido: apellidoInputModify.value,
-    email: emailInputModify.value,
-    perfil: perfilSelectModify.value,
-  };
-
-  const emptyInput = checkInputs();
-
-  if (emptyInput) {
-    return "Hay inputs vacíos";
-  } else {
-    const response = await fetch(`http://${host}/usuarios/${id}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(obj),
-    });
-
-    const data = await response.json();
-
-    if (response.status === 200) {
-      modalModificar.style.display = "none";
-      modalSucces.classList.add("bg-activate");
-
-      setTimeout(() => {
-        modalBg.classList.remove("bg-activate");
-        modalSucces.classList.remove("bg-activate");
-        usuariosItem.click();
-      }, 2000);
-    } else if (response.status === 401) {
-      window.open("bienvenida.html", "_self");
-    } else if (response.status === 422) {
-      processInvalid(data, inputsModify, smallsModify);
-    }
-  }
-};
-
 //event listener para cuando alguien escribe en los inputs
 
 Object.values(inputs).forEach((input) =>
@@ -332,7 +270,7 @@ Object.values(inputsModify).forEach((inputModify) =>
   })
 );
 
-//función para cargar la info del usuario al querer modificarlo
+//función para cargar la info del usuario para luego modificarlo
 
 const chargeUserInfo = (elemento) => {
   document.getElementById("nombre-input-modify").value =

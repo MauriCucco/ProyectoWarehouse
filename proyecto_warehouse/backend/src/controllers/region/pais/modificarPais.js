@@ -3,7 +3,7 @@ const { modifyCountry } = require("../../../models/region");
 const modificarPais = (req, res) => {
   const { idPais, nombrePais } = req.body;
 
-  modifyCountry(req.params.id, idPais, nombrePais)
+  modifyCountry(idPais, nombrePais)
     .then((r) => res.status(200).send({ _id: r }))
     .catch((e) => {
       if (e.path === "_id")

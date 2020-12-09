@@ -143,12 +143,15 @@ paisCompanyModify.addEventListener("click", (e) => {
 botonAgregarCompania.addEventListener("click", () => {
   resetInputsStyles();
   const emptyInput = checkInputs("companias");
+  const regionIndex = regionCompany.selectedIndex;
+  const paisIndex = paisCompany.selectedIndex;
+  const ciudadIndex = ciudadCompany.selectedIndex;
 
   const compania = {
     nombre: nombreCompania.value,
-    region: regionCompany.value,
-    pais: paisCompany.value,
-    ciudad: ciudadCompany.value,
+    region: regionCompany.options.item(regionIndex).id,
+    pais: paisCompany.options.item(paisIndex).id,
+    ciudad: ciudadCompany.options.item(ciudadIndex).id,
     direccion: direccionCompania.value,
     email: emailInput.value,
     telefono: telefonoCompania.value,
@@ -157,7 +160,7 @@ botonAgregarCompania.addEventListener("click", () => {
   if (!emptyInput) ABMCompany(`http://${host}/companias`, "POST", compania);
 });
 
-//función para el AVM de companias
+//función para el ABM de companias
 
 const ABMCompany = (url, method, obj = {}) => {
   fetch(url, {
@@ -213,13 +216,17 @@ document.addEventListener("click", (event) => {
     modalBg.classList.add("bg-activate");
     modalModifyCompany.style.display = "unset";
   } else if (event.target.className === "primary-button modificar company") {
+    //MODIFICAR COMPAÑIA
     resetInputsStyles();
     const emptyInput = checkInputs("companias");
+    const regionIndexModify = regionCompanyModify.selectedIndex;
+    const paisIndexModify = paisCompanyModify.selectedIndex;
+    const ciudadIndexModify = ciudadCompanyModify.selectedIndex;
     const nuevaCompania = {
       nombre: nombreCompaniaModify.value,
-      region: regionCompanyModify.value,
-      pais: paisCompanyModify.value,
-      ciudad: ciudadCompanyModify.value,
+      region: regionCompanyModify.options.item(regionIndexModify).id,
+      pais: paisCompanyModify.options.item(paisIndexModify).id,
+      ciudad: ciudadCompanyModify.options.item(ciudadIndexModify).id,
       direccion: direccionCompaniaModify.value,
       email: emailInputModify.value,
       telefono: telefonoCompaniaModify.value,
@@ -228,6 +235,7 @@ document.addEventListener("click", (event) => {
     if (!emptyInput)
       ABMCompany(`http://${host}/companias/${idCompany}`, "PUT", nuevaCompania);
   } else if (event.target.className === "fas fa-trash company") {
+    //ELIMINAR COMPAÑIA
     modalBg.classList.add("bg-activate");
     modalCrud.style.display = "flex";
     crearModalCrud(

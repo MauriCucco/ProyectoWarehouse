@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const canalSchema = new mongoose.Schema({
   nombreCanal: {
@@ -38,7 +39,8 @@ const contactoSchema = new mongoose.Schema({
     required: true,
   },
   compania: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "Companias",
     required: true,
   },
   interes: {
@@ -46,15 +48,18 @@ const contactoSchema = new mongoose.Schema({
     enum: [0, 25, 50, 75, 100],
   },
   region: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "Regiones",
     required: false,
   },
   pais: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "Paises",
     required: false,
   },
   ciudad: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "Ciudades",
     required: false,
   },
   direccion: {

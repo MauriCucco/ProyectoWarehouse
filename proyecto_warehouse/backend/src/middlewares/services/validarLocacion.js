@@ -1,4 +1,4 @@
-const { findRegions } = require("../../models/region");
+const { findRegions, findCountry, findCity } = require("../../models/region");
 
 const validarLocacion = async (req, res, next) => {
   try {
@@ -6,21 +6,18 @@ const validarLocacion = async (req, res, next) => {
 
     if (!region && !pais && !ciudad) return next();
 
-    const [matchRegion] = await findRegions({ nombreRegion: region });
+    const [matchRegion] = await findRegions({ _id: region });
 
     if (matchRegion === undefined) throw "La región es inválida";
 
-    const [matchPais] = await findRegions({
-      nombreRegion: region,
-      "paises.nombrePais": pais,
+    const [matchPais] = await findCountry({
+      _id: pais,
     });
 
     if (matchPais === undefined) throw "El país es inválido";
 
-    const [matchCiudad] = await findRegions({
-      nombreRegion: region,
-      "paises.nombrePais": pais,
-      "paises.ciudades.nombreCiudad": ciudad,
+    const [matchCiudad] = await findCity({
+      _id: ciudad,
     });
 
     if (matchCiudad === undefined) throw "La ciudad es inválida";

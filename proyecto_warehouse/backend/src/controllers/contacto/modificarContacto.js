@@ -1,19 +1,30 @@
 const { modifyContact } = require("../../models/contacto");
+const { imgFile } = require("../../middlewares/services/fileHandler");
 
-const modificarContacto = (req, res) =>
-  modifyContact(req.params.id, req.body)
-    .then((r) =>
+const modificarContacto = async (req, res) => {
+  try {
+    const infoContacto = JSON.parse(req.body.newContact);
+
+    if (req.file) {
+      const uidImagen = imgFile(req.file);
+      await modifyContact(req.params.id, { ...infoContacto, uidImagen });
       res
         .status(200)
-        .send({ mensaje: "El contacto fue modificado exitósamente" })
-    )
+        .send({ mensaje: "El contacto fue modificado exitósamente" });
+    } else {
+      await modifyContact(req.params.id, infoContacto);
+      res
+        .status(200)
+        .send({ mensaje: "El contacto fue modificado exitósamente" });
+    }
+  } catch (e) {
+    console.log(e);
+    if (e.kind === "ObjectId") {
+      return res.status(422).send({ error: "El id es incorrecto" });
+    }
 
-    .catch((e) => {
-      if (e.kind === "ObjectId") {
-        return res.status(422).send({ error: "El id es incorrecto" });
-      }
-
-      res.status(500).send(e);
-    });
+    res.status(500).send({ error: e });
+  }
+};
 
 module.exports = modificarContacto;

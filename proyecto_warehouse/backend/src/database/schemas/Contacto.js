@@ -29,6 +29,10 @@ const contactoSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  uidImagen: {
+    type: String,
+    unique: true,
+  },
   email: {
     type: String,
     unique: true,

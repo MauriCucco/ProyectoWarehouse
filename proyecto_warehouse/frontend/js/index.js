@@ -58,6 +58,9 @@ const eliminarContactos = document.getElementById("div-delete");
 const divEliminarContacto = document.getElementById("eliminar-contacto");
 const cancelDelete = document.getElementById("cancel-delete");
 const divPaginado = document.getElementById("div-paginado");
+const inputFile = document.getElementById("input-file");
+const userIcon = document.querySelector(".fas.fa-user.contacto");
+const divImagenContacto = document.getElementById("imagen-contacto");
 let contactosSeleccionados = [];
 let contactoId;
 
@@ -751,6 +754,10 @@ cancelarContacto.addEventListener("click", () => {
         canal.remove();
       }
     }
+    if (userIcon.style.display === "none") {
+      divImagenContacto.lastChild.remove();
+      userIcon.style.display = "unset";
+    }
     resetInputsValues();
     cancelarContacto.classList.remove("cancelar-activado");
     cancelarContacto.innerHTML = "Cancelar";
@@ -874,11 +881,10 @@ botonGuardar.addEventListener("click", (e) => {
         guardarContacto();
       } else {
         const contactoModificado = getInfo("modifyContacto");
-        ABMContact(
-          `http://${host}/contactos/${contactoId}`,
-          "PUT",
-          contactoModificado
-        );
+        const formdata = new FormData();
+        formdata.append("uidImagen", inputFile.files[0]);
+        formdata.append("newContact", JSON.stringify(contactoModificado));
+        ABMContact(`http://${host}/contactos/${contactoId}`, "PUT", formdata);
         chargeChannels();
       }
     }
@@ -954,8 +960,10 @@ ciudadContacto.addEventListener("change", () => {
 
 const guardarContacto = () => {
   const contacto = getInfo();
-
-  ABMContact(`http://${host}/contactos`, "POST", contacto);
+  const formdata = new FormData();
+  formdata.append("uidImagen", inputFile.files[0]);
+  formdata.append("newContact", JSON.stringify(contacto));
+  ABMContact(`http://${host}/contactos`, "POST", formdata);
 };
 
 //función que guarda la info de los inputs para crear o modificar un contacto (menos los canales)
@@ -1061,6 +1069,7 @@ const chargeChannels = () => {
       }
     }
   }
+
   if (newChannels[0]) {
     ABMContact(
       `http://${host}/contactos/canales/${contactoId}`,
@@ -1079,24 +1088,38 @@ const chargeChannels = () => {
 
 //función de CRUD para un contacto
 
-const ABMContact = (url, metodo, obj = {}) => {
-  fetch(url, {
-    method: metodo,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(obj),
-  })
-    .then((r) => processResponseContact(r))
-    .catch((e) => console.error(e));
+const ABMContact = async (url, metodo, obj = {}) => {
+  try {
+    if ((metodo === "POST" || metodo === "PUT") && obj instanceof FormData) {
+      const response = await fetch(url, {
+        method: metodo,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: obj,
+      });
+      processResponseContact(response);
+    } else {
+      const response = await fetch(url, {
+        method: metodo,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(obj),
+      });
+      processResponseContact(response);
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 //función que procesa las respuestas del servidor
 
 const processResponseContact = async (response) => {
   const data = await response.json();
-  console.log(data);
+
   if (response.status === 200) {
     if (data.mensaje === "El canal fue eliminado exitósamente")
       return console.log(data.mensaje);
@@ -1121,7 +1144,8 @@ const modifyContact = (idModify, penIcon) => {
   const modifyContact = arrayContactos.find(
     (contacto) => contacto._id === idModify
   );
-
+  resetOptions("pais", "contactos");
+  resetOptions("ciudad", "contactos");
   loadInfo(modifyContact, penIcon);
   modalBgContacto.classList.add("bg-activate");
   modalBgContacto.classList.add("modal-bg-modify");
@@ -1136,6 +1160,14 @@ const modifyContact = (idModify, penIcon) => {
 //función que carga la info del contacto
 
 const loadInfo = async (contacto, penIcon) => {
+  if (contacto.uidImagen) {
+    const imagen = document.createElement("img");
+    userIcon.style.display = "none";
+    imagen.className = "imagen-contacto";
+    imagen.src = `../backend/src/public/images/${contacto.uidImagen}`;
+    divImagenContacto.appendChild(imagen);
+  }
+
   nombreContacto.value = contacto.nombre;
   apellidoContacto.value = contacto.apellido;
   cargoContacto.value = contacto.cargo;
@@ -1165,7 +1197,6 @@ const loadInfo = async (contacto, penIcon) => {
     regionContacto.classList.add("select-definitivo");
     paisContacto.disabled = false;
     paisContacto.value = contacto.pais.nombrePais;
-    paisContacto.value = "none";
     paisContacto.classList.add("select-definitivo");
     if (
       penIcon.parentElement.parentElement.firstElementChild.nextElementSibling
@@ -1247,4 +1278,15 @@ document.getElementById("confirm-delete").addEventListener("click", (e) => {
   ABMContact(`http://${host}/contactos`, "DELETE", contactosSeleccionados);
   cancelDelete.click();
   getContactos();
+});
+
+//SUBIR UNA IMAGEN
+
+inputFile.addEventListener("change", () => {
+  const imagen = document.createElement("img");
+
+  userIcon.style.display = "none";
+  imagen.className = "imagen-contacto";
+  imagen.src = URL.createObjectURL(inputFile.files[0]);
+  divImagenContacto.appendChild(imagen);
 });

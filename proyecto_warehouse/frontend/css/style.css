@@ -267,6 +267,11 @@ input:disabled::placeholder {
   margin-right: 0.86rem;
   width: 2.4rem;
 }
+.img-div-imagen {
+  border-radius: 1.2rem;
+  height: 2.4rem;
+  width: 2.4rem;
+}
 progress::-webkit-progress-bar {
   background: #dddddd;
   border-radius: 4rem;
@@ -373,6 +378,11 @@ progress[value="0"] {
 }
 .fila-contacto.fila-elegida:hover {
   background-color: #e6f3fe;
+}
+.imagen-contacto {
+  border-radius: 50%;
+  height: 8.3rem;
+  width: 8.3rem;
 }
 
 /*INPUT CHECKBOX CUSTOM*/

@@ -35,7 +35,7 @@ A continuación se brindarán una serie de pasos para poder instalar las depende
    ```
 6. En la consola de VSC, verificar que se esté DENTRO de la carpeta "src" y escribir lo siguiente para inicializar la aplicación:
    ```bash
-   node app
+   nodemon npm start
    ```
 7. Si todo sale bien debe aparecer en la consola del VSC lo siguiente:
 

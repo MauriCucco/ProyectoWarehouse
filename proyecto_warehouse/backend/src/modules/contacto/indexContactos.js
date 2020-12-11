@@ -1,5 +1,7 @@
 const express = require("express");
 const contacto = express.Router();
+const multer = require("multer");
+const upload = multer({ dest: "./public/tmp" });
 const validarLocacion = require("../../middlewares/services/validarLocacion");
 const validarCompania = require("../../middlewares/services/validarCompania");
 const validarCuentaContacto = require("../../middlewares/contacto/canal/validarCuentaContacto");
@@ -30,6 +32,7 @@ contacto.put(
 contacto.delete("/canales/:id", eliminarCanal);
 contacto.put(
   "/:id",
+  upload.single("uidImagen"),
   validarModifyContacto,
   validarCompania,
   validarLocacion,
@@ -39,6 +42,7 @@ contacto.put(
 contacto.delete("/", eliminarContacto);
 contacto.post(
   "/",
+  upload.single("uidImagen"),
   validarCreateContacto,
   validarCompania,
   validarLocacion,

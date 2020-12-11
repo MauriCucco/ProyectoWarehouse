@@ -1,7 +1,7 @@
 const { findCompanies } = require("../../models/compania");
 
 const validarCompania = (req, res, next) => {
-  const { compania } = req.body;
+  const { compania } = JSON.parse(req.body.newContact);
 
   if (!compania) return next();
 

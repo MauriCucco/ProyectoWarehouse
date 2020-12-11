@@ -119,6 +119,7 @@ export const createRows = (data, seccion) => {
     let tdContacto = document.createElement("td");
     let divImagen = document.createElement("div");
     let userI = document.createElement("i");
+    let imageUser = document.createElement("img");
     let divInfoContacto = document.createElement("div");
     let nombreP = document.createElement("p");
     let emailP = document.createElement("p");
@@ -156,6 +157,7 @@ export const createRows = (data, seccion) => {
       tdContacto.className = "td-contacto";
       divImagen.classList.add("div-imagen");
       userI.className = "fas fa-user";
+      imageUser.className = "img-div-imagen";
       nombreP.innerHTML = `${element.nombre} ${element.apellido}`;
       emailP.innerHTML = element.email;
       emailP.className = "email-p contactos";
@@ -189,7 +191,15 @@ export const createRows = (data, seccion) => {
       labelCheck.appendChild(spanCheck);
       tr.appendChild(tdContacto);
       tdContacto.appendChild(divImagen);
-      divImagen.appendChild(userI);
+      if (element.uidImagen) {
+        imageUser.setAttribute(
+          "src",
+          `../backend/src/public/images/${element.uidImagen}`
+        );
+        divImagen.appendChild(imageUser);
+      } else {
+        divImagen.appendChild(userI);
+      }
       tdContacto.appendChild(divInfoContacto);
       divInfoContacto.appendChild(nombreP);
       divInfoContacto.appendChild(emailP);

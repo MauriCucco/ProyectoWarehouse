@@ -2,7 +2,11 @@ const { findRegions, findCountry, findCity } = require("../../models/region");
 
 const validarLocacion = async (req, res, next) => {
   try {
-    const { region, pais, ciudad } = JSON.parse(req.body.newContact);
+    if (req.body.newContact) {
+      var { region, pais, ciudad } = JSON.parse(req.body.newContact);
+    } else {
+      var { region, pais, ciudad } = req.body;
+    }
 
     if (!region && !pais && !ciudad) return next();
 

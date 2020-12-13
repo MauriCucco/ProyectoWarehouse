@@ -4,15 +4,14 @@ const { imgFile } = require("../../middlewares/services/fileHandler");
 const crearContacto = async (req, res) => {
   try {
     const infoContacto = JSON.parse(req.body.newContact);
-
+    let id;
     if (req.file) {
       const uidImagen = imgFile(req.file);
-      const id = await createContact({ ...infoContacto, uidImagen });
-      res.status(200).send({ id });
+      id = await createContact({ ...infoContacto, uidImagen });
     } else {
-      const id = await createContact(infoContacto);
-      res.status(200).send({ id });
+      id = await createContact(infoContacto);
     }
+    res.status(200).send({ id });
   } catch (e) {
     console.log(e);
     if (e.keyPattern) {

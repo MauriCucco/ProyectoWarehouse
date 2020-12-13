@@ -8,17 +8,13 @@ const modificarContacto = async (req, res) => {
     if (req.file) {
       const uidImagen = imgFile(req.file);
       await modifyContact(req.params.id, { ...infoContacto, uidImagen });
-      res
-        .status(200)
-        .send({ mensaje: "El contacto fue modificado exitósamente" });
     } else {
       await modifyContact(req.params.id, infoContacto);
-      res
-        .status(200)
-        .send({ mensaje: "El contacto fue modificado exitósamente" });
     }
+    res
+      .status(200)
+      .send({ mensaje: "El contacto fue modificado exitósamente" });
   } catch (e) {
-    console.log(e);
     if (e.kind === "ObjectId") {
       return res.status(422).send({ error: "El id es incorrecto" });
     }

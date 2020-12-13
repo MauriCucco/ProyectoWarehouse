@@ -142,7 +142,11 @@ function search() {
   if (arrayBusqueda[0] === undefined) {
     tablaContactos.style.display = "none";
     divPaginado.style.display = "none";
-    divSinResultados.style.display = "unset";
+    return (divSinResultados.style.display = "unset");
+  } else {
+    tablaContactos.style.display = "flex";
+    divPaginado.style.display = "flex";
+    divSinResultados.style.display = "none";
   }
   deleteRows("contactos");
   createRows(arrayBusqueda, "contactos");
@@ -157,15 +161,34 @@ const filterBySearch = (contacto) => {
   const apellido = contacto.apellido.toLowerCase();
   const email = contacto.email.toLowerCase();
   const cargo = contacto.cargo.toLowerCase();
-  const compania = contacto.compania.toLowerCase();
   const interes = contacto.interes;
-  const region = contacto.region.toLowerCase();
-  const pais = contacto.pais.toLowerCase();
-  const ciudad = contacto.ciudad.toLowerCase();
-
+  const regiones = document.querySelectorAll(".region-p.contactos");
+  const paises = document.querySelectorAll(".pais-p.contactos");
+  const companias = document.querySelectorAll(".compania-contacto");
   const canalesContacto = contacto.canalesContacto.map(
     (canal) => canal.nombreCanal
   );
+
+  for (let compania of companias) {
+    if (compania.innerText.toString().toLowerCase().includes(texto)) {
+      const idContacto = compania.className.slice(18);
+      if (idContacto === contacto._id) return contacto;
+    }
+  }
+
+  for (let region of regiones) {
+    if (region.innerText.toString().toLowerCase().includes(texto)) {
+      const idContacto = region.className.slice(19);
+      if (idContacto === contacto._id) return contacto;
+    }
+  }
+
+  for (let pais of paises) {
+    if (pais.innerText.toString().toLowerCase().includes(texto)) {
+      const idContacto = pais.className.slice(17);
+      if (idContacto === contacto._id) return contacto;
+    }
+  }
 
   for (let canal of canalesContacto) {
     if (canal.toString().toLowerCase().includes(texto)) {
@@ -177,10 +200,10 @@ const filterBySearch = (contacto) => {
     nombre.includes(texto) ||
     apellido.includes(texto) ||
     email.includes(texto) ||
-    region.includes(texto) ||
+    /*region.includes(texto) ||
     pais.includes(texto) ||
     ciudad.includes(texto) ||
-    compania.includes(texto) ||
+    compania.includes(texto) ||*/
     cargo.includes(texto) ||
     interes.toString().includes(texto)
   ) {
@@ -684,6 +707,7 @@ const resetCanal = () => {
   const ban = document.querySelector(".fas.fa-ban.create");
 
   canalContacto.value = "none";
+  canalContacto.className = "select-info";
   cuentaContacto.value = "";
   cuentaContacto.disabled = true;
   cuentaContacto.setAttribute("placeholder", "");
@@ -737,6 +761,16 @@ document.addEventListener("change", (e) => {
   ) {
     //crea los icons del select de preferencias que se pueden modificar
     crearIconsPreferencias(e.target);
+  }
+
+  if (e.target.localName === "select") {
+    if (e.target.value === "none") {
+      e.target.classList.remove("select-definitivo");
+      e.target.classList.add("select-info");
+    } else {
+      e.target.classList.remove("select-info");
+      e.target.classList.add("select-definitivo");
+    }
   }
 });
 
@@ -1144,6 +1178,7 @@ const modifyContact = (idModify, penIcon) => {
   const modifyContact = arrayContactos.find(
     (contacto) => contacto._id === idModify
   );
+
   resetOptions("pais", "contactos");
   resetOptions("ciudad", "contactos");
   loadInfo(modifyContact, penIcon);
@@ -1164,6 +1199,7 @@ const loadInfo = async (contacto, penIcon) => {
     const imagen = document.createElement("img");
     userIcon.style.display = "none";
     imagen.className = "imagen-contacto";
+    imagen.alt = "Imagen del contacto";
     imagen.src = `../backend/src/public/images/${contacto.uidImagen}`;
     divImagenContacto.appendChild(imagen);
   }
@@ -1287,6 +1323,7 @@ inputFile.addEventListener("change", () => {
 
   userIcon.style.display = "none";
   imagen.className = "imagen-contacto";
+  imagen.alt = "Imagen del contacto";
   imagen.src = URL.createObjectURL(inputFile.files[0]);
   divImagenContacto.appendChild(imagen);
 });

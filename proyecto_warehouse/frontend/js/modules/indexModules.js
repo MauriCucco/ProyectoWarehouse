@@ -119,7 +119,7 @@ export const createRows = (data, seccion) => {
     let tdContacto = document.createElement("td");
     let divImagen = document.createElement("div");
     let userI = document.createElement("i");
-    let imageUser = document.createElement("img");
+    let imageContact = document.createElement("img");
     let divInfoContacto = document.createElement("div");
     let nombreP = document.createElement("p");
     let emailP = document.createElement("p");
@@ -157,14 +157,17 @@ export const createRows = (data, seccion) => {
       tdContacto.className = "td-contacto";
       divImagen.classList.add("div-imagen");
       userI.className = "fas fa-user";
-      imageUser.className = "img-div-imagen";
+      imageContact.className = "img-div-imagen";
+      imageContact.alt = "Imagen del contacto en miniatura";
       nombreP.innerHTML = `${element.nombre} ${element.apellido}`;
       emailP.innerHTML = element.email;
       emailP.className = "email-p contactos";
       tdRegionPais.className = "td-region-pais contactos";
-      regionP.className = "region-p contactos";
+      paisP.className = `pais-p contactos ${element._id}`;
+      regionP.className = `region-p contactos ${element._id}`;
       if (element.region) regionP.innerHTML = element.region.nombreRegion;
       if (element.pais) paisP.innerHTML = element.pais.nombrePais;
+      tdCompania.className = `compania-contacto ${element._id}`;
       if (element.compania) tdCompania.innerHTML = element.compania.nombre;
       tdCargo.innerHTML = element.cargo;
       if (element.canalesContacto)
@@ -192,11 +195,11 @@ export const createRows = (data, seccion) => {
       tr.appendChild(tdContacto);
       tdContacto.appendChild(divImagen);
       if (element.uidImagen) {
-        imageUser.setAttribute(
+        imageContact.setAttribute(
           "src",
           `../backend/src/public/images/${element.uidImagen}`
         );
-        divImagen.appendChild(imageUser);
+        divImagen.appendChild(imageContact);
       } else {
         divImagen.appendChild(userI);
       }
@@ -550,7 +553,7 @@ export const resetDots = () => {
   const dots = document.getElementsByClassName("fas fa-ellipsis-h dots");
   const trashIcons = document.querySelectorAll(".fas.fa-trash");
   const modifyIcons = document.querySelectorAll(".fas.fa-pen");
-  const addIcons = document.querySelectorAll("fas fa-plus");
+  const addIcons = document.querySelectorAll(".fas.fa-plus");
 
   for (let dot of dots) {
     dot.style.display = "unset";
@@ -579,36 +582,47 @@ export const createIcons = (target) => {
 
   if (target.className === "fas fa-ellipsis-h dots usuarios") {
     editar.className = "fas fa-pen usuarios";
+    editar.title = "Modificar usuario";
   } else if (target.className === "fas fa-ellipsis-h dots regiones") {
     editar.className = "fas fa-pen regiones";
+    editar.title = "Modificar región";
   } else if (target.className === "fas fa-ellipsis-h dots paises") {
     editar.className = "fas fa-pen paises";
+    editar.title = "Modificar país";
   } else if (target.className === "fas fa-ellipsis-h dots ciudades") {
     editar.className = "fas fa-pen ciudades";
+    editar.title = "Modificar ciudad";
   } else if (target.className === "fas fa-ellipsis-h dots company") {
     editar.className = "fas fa-pen company";
+    editar.title = "Modificar compañia";
   } else if (target.className === "fas fa-ellipsis-h dots contactos") {
     editar.className = "fas fa-pen contacto";
+    editar.title = "Modificar contacto";
   }
 
   if (target.className === "fas fa-ellipsis-h dots usuarios") {
     eliminar.className = "fas fa-trash usuarios";
+    eliminar.title = "Eliminar usuario";
   } else if (target.className === "fas fa-ellipsis-h dots regiones") {
     eliminar.className = "fas fa-trash regiones";
+    eliminar.title = "Eliminar región";
   } else if (target.className === "fas fa-ellipsis-h dots paises") {
     eliminar.className = "fas fa-trash paises";
+    eliminar.title = "Eliminar país";
   } else if (target.className === "fas fa-ellipsis-h dots ciudades") {
     eliminar.className = "fas fa-trash ciudades";
+    eliminar.title = "Eliminar ciudad";
   } else if (target.className === "fas fa-ellipsis-h dots company") {
     eliminar.className = "fas fa-trash company";
+    eliminar.title = "Eliminar compañia";
   }
 
-  if (target.className === "fas fa-ellipsis-h dots usuarios") {
-    agregar.className = "fas fa-plus usuarios";
-  } else if (target.className === "fas fa-ellipsis-h dots regiones") {
+  if (target.className === "fas fa-ellipsis-h dots regiones") {
     agregar.className = "fas fa-plus regiones";
+    agregar.title = "Agregar región";
   } else if (target.className === "fas fa-ellipsis-h dots paises") {
     agregar.className = "fas fa-plus paises";
+    agregar.title = "Agregar país y ciudades";
   }
 
   target.style.display = "none";

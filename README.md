@@ -1,6 +1,24 @@
 # WAREHOUSE
 
-Ésta aplicación corresponde al cuarto proyecto de mi cursada en Acámica, en el cual tuve que construir tanto el frontend como el backend de la página de una empresa de marketing utilizada para administrar sus contactos.
+Ésta aplicación corresponde al cuarto proyecto y final de mi cursada en Acámica, en el cual tuve que construir tanto el frontend como el backend de la página de una empresa de marketing utilizada para administrar sus contactos.
+
+- La base de datos utilizada fue _MongoDB_.
+- Como ODM utilicé _Mongoose_.
+- Utilicé _Node.js_ con _Express_ y los siguientes módulos:
+  - "body-parser".
+  - "cors".
+  - "dotenv".
+  - "express".
+  - "express-jwt".
+  - "express-rate-limit".
+  - "helmet".
+  - "joi".
+  - "jsonwebtoken".
+  - "mongoose".
+  - "multer".
+  - "nodemon".
+  - "sha1".
+  - "uuid".
 
 ## Instalación
 
@@ -20,9 +38,9 @@ A continuación se brindarán una serie de pasos para poder instalar las depende
 
    De esta forma se instalan todas las dependencias del archivo package.json necesarias.
 
-3. Dentro de la carpeta "src", en VSC, abrir el archivo ".env.example". Eligir un password para la propiedad TKS y cambiar el nombre del archivo a ".env".
+3. Dentro de la carpeta "src", en VSC, abrir el archivo ".env.example". Eligir un password a elección para la propiedad TKS y cambiar el nombre del archivo a ".env".
 
-4. Ir a la carpeta donde se encuentra instalado Mongo DB, generalmente C:/Program Files/MongoDB/Server/4.4/bin, y abrir la consola de Windows dentro de ella. Luego escribir:
+4. Ir a la carpeta donde se encuentra instalado Mongo DB, generalmente C:/Program Files/MongoDB/Server/4.4/bin, y abrir la consola de Windows dentro de ella. Luego, para inicializar la base de datos, escribir:
    ```bash
    mongod
    ```
@@ -60,7 +78,7 @@ A continuación se brindarán una serie de pasos para poder instalar las depende
 
 > Las contraseñas requieren 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial (!, @, #, etc).
 
-9. Si el usuario se insertó correctamente se nos devolverá el id del usuario.
+9. Si el usuario se insertó correctamente se nos devolverá un id.
 
 10. Dentro de src/middlewares/globales.js, debemos comentar la siguiente línea de código:
 

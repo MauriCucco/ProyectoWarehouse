@@ -108,8 +108,7 @@ select,
   padding-left: 1.55rem;
   width: 23rem;
 }
-#form-login input::placeholder,
-#form-registro input::placeholder {
+input::placeholder {
   font-style: italic;
 }
 .invalid {
@@ -128,7 +127,7 @@ small {
 .small-success {
   color: rgb(9, 112, 9);
 }
-select {
+.select-info {
   color: #9c9c9c;
   font-style: italic;
 }
@@ -814,7 +813,6 @@ td.acciones {
 #secundarios-superior .div-input-contacto input,
 .canal input,
 .canal select {
-  font-style: italic;
   margin-right: 1.6rem;
   padding-left: 0.86rem;
   width: 19rem;

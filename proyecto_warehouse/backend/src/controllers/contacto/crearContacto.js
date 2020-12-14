@@ -13,7 +13,6 @@ const crearContacto = async (req, res) => {
     }
     res.status(200).send({ id });
   } catch (e) {
-    console.log(e);
     if (e.keyPattern) {
       if (e.keyPattern.email === 1)
         return res

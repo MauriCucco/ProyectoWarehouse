@@ -997,6 +997,7 @@ const guardarContacto = () => {
   const formdata = new FormData();
   formdata.append("uidImagen", inputFile.files[0]);
   formdata.append("newContact", JSON.stringify(contacto));
+  console.log("CONTACTO: ", contacto);
   ABMContact(`http://${host}/contactos`, "POST", formdata);
 };
 
@@ -1051,7 +1052,6 @@ const getInfo = (schema = "") => {
   if (canalesModify[0]) {
     for (let canal of canalesModify) {
       const nuevoCanal = {
-        idCanal: canal.parentElement.parentElement.lastChild.id,
         nombreCanal: canal.value,
         cuentaUsuario:
           canal.parentElement.nextElementSibling.lastElementChild
@@ -1160,6 +1160,7 @@ const processResponseContact = async (response) => {
     cerrarDivNuevoContacto.click();
     contactosItem.click();
   } else if (response.status === 422) {
+    console.log(data);
     if (data.mensaje === "Este email ya ha sido registrado") {
       emailContacto.classList.add("invalid");
       smallEmailContacto.innerHTML = data.mensaje;

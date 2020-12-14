@@ -4,9 +4,14 @@ const crearCanal = async (req, res) => {
   try {
     const arrayCanales = req.body;
 
-    for (let canal of arrayCanales) {
+    /*for (let canal of arrayCanales) {
       await createChannel(req.params.id, canal);
-    }
+    }*/
+    const results = arrayCanales.map((canal) =>
+      createChannel(req.params.id, canal)
+    );
+
+    await Promise.all(results);
 
     res.status(200).send({ mensaje: "La operación fue exitosa" });
   } catch (e) {

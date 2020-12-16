@@ -27,7 +27,7 @@ module.exports = function (app) {
       secret: jwtClave,
       algorithms: ["HS256"],
     }).unless({
-      path: ["/usuarios/login", "/usuarios/registro"],
+      path: ["/usuarios/login" /*, "/usuarios/registro"*/],
     })
   );
 };

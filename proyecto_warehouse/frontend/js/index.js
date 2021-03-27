@@ -1,25 +1,25 @@
 "use strict";
 
 import {
+  arrayContactos,
+  canalContacto,
+  ciudadContacto,
+  createIcons,
+  createRows,
+  deleteRows,
+  getLocations,
   host,
-  token,
+  paisContacto,
+  processAdminTable,
+  regionContacto,
   removeActive,
-  seccionUsuarios,
+  resetDots,
+  resetInputsValues,
+  resetOptions,
   seccionCompanias,
   seccionRegiones,
-  resetDots,
-  createIcons,
-  processAdminTable,
-  resetInputsValues,
-  arrayContactos,
-  deleteRows,
-  createRows,
-  getLocations,
-  resetOptions,
-  regionContacto,
-  paisContacto,
-  ciudadContacto,
-  canalContacto,
+  seccionUsuarios,
+  token,
 } from "./modules/indexModules.js";
 
 let contactosItem = document.getElementById("contactos-item");
@@ -1203,7 +1203,7 @@ const loadInfo = async (contacto, penIcon) => {
     userIcon.style.display = "none";
     imagen.className = "imagen-contacto";
     imagen.alt = "Imagen del contacto";
-    imagen.src = `../backend/src/public/images/${contacto.uidImagen}`;
+    imagen.src = `http://localhost:3000/images/${contacto.uidImagen}`;
     divImagenContacto.appendChild(imagen);
   }
 

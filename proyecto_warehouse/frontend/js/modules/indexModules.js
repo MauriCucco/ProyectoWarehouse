@@ -197,7 +197,7 @@ export const createRows = (data, seccion) => {
       if (element.uidImagen) {
         imageContact.setAttribute(
           "src",
-          `../backend/src/public/images/${element.uidImagen}`
+          `http://localhost:3000/images/${element.uidImagen}`
         );
         divImagen.appendChild(imageContact);
       } else {

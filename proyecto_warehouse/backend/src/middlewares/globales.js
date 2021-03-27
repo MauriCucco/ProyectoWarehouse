@@ -1,6 +1,6 @@
+const express = require("express");
 const expressJwt = require("express-jwt");
 const cors = require("cors");
-const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const { jwtClave } = require("../config/config.js"); //importo la key
@@ -14,9 +14,13 @@ let limiter = rateLimit({
 module.exports = function (app) {
   app.use(cors());
 
-  app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
+  app.use(express.json()); // parse application/json
 
-  app.use(bodyParser.json()); // parse application/json
+  app.use(
+    express.urlencoded({
+      extended: false,
+    })
+  ); // parse application/x-www-form-urlencoded
 
   app.use(helmet());
 
@@ -27,7 +31,7 @@ module.exports = function (app) {
       secret: jwtClave,
       algorithms: ["HS256"],
     }).unless({
-      path: ["/usuarios/login" /*, "/usuarios/registro"*/],
+      path: ["/usuarios/login", "/usuarios/registro"],
     })
   );
 };

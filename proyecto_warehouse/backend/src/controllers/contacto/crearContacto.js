@@ -1,5 +1,5 @@
 const { createContact } = require("../../models/contacto");
-const { imgFile } = require("../../middlewares/services/fileHandler");
+const { imgFile } = require("../../services/fileHandler");
 
 const crearContacto = async (req, res) => {
   try {

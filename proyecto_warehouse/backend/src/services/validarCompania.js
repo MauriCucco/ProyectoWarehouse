@@ -1,4 +1,4 @@
-const { findCompanies } = require("../../models/compania");
+const { findCompanies } = require("../models/compania");
 
 const validarCompania = (req, res, next) => {
   const { compania } = JSON.parse(req.body.newContact);

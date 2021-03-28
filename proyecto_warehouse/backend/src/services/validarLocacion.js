@@ -1,4 +1,4 @@
-const { findRegions, findCountry, findCity } = require("../../models/region");
+const { findRegions, findCountry, findCity } = require("../models/region");
 
 const validarLocacion = async (req, res, next) => {
   try {

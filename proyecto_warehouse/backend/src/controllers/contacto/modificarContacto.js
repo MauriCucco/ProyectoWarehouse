@@ -1,5 +1,5 @@
 const { modifyContact } = require("../../models/contacto");
-const { imgFile } = require("../../middlewares/services/fileHandler");
+const { imgFile } = require("../../services/fileHandler");
 
 const modificarContacto = async (req, res) => {
   try {

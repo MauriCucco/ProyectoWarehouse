@@ -1,5 +1,5 @@
 const { findUser } = require("../../models/usuario");
-const { crearToken } = require("../../middlewares/services/crearToken");
+const { crearToken } = require("../../services/crearToken");
 const sha1 = require("sha1");
 
 const loginUsuario = (req, res) => {

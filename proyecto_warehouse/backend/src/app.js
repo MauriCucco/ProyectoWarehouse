@@ -4,7 +4,7 @@ const path = require("path");
 const { puerto } = require("./config/config");
 const middlewaresGlobales = require("./middlewares/globales");
 const { notFound, errorServidor } = require("./middlewares/errores");
-const routes = require("./config/routes");
+const routes = require("./routes/routes");
 
 //SIRVO EL CONTENIDO ESTÁTICO DE LA CARPETA PUBLIC
 app.use(express.static(path.join(__dirname, "public")));
@@ -19,4 +19,4 @@ routes(app);
 app.use(notFound, errorServidor);
 
 //INICIALIZANDO PUERTO
-app.listen(puerto, () => console.log("SERVER UP!!!"));
+app.listen(puerto, () => console.log(`SERVER UP ON PORT ${puerto}!!!`));

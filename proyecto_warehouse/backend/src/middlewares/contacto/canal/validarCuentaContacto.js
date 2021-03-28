@@ -1,4 +1,4 @@
-const { testCanalContacto } = require("../../../models/testCanalContacto");
+const { testCanalContacto } = require("../../services/testCanalContacto");
 
 const validarCuentaContacto = (req, res, next) => {
   const { canalesContacto, nombreCanal, cuentaUsuario } = req.body;
